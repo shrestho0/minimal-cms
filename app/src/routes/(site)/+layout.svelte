@@ -1,11 +1,10 @@
 <script>
-	import Hero from '@/ui/Hero.svelte';
-	import Navbar from '@/ui/Navbar.svelte';
+	import Hero from '@/ui/HeroWrapper.svelte';
+	import Navbar from '@/ui/NavbarHomePage.svelte';
+	import { ModeWatcher } from 'mode-watcher';
 </script>
 
-<div class="mx-auto max-w-screen-xl px-5">
-	<Navbar />
-	<Hero />
-
+<div class=" mx-auto max-w-screen-xl dark:bg-stone-950">
 	<slot />
 </div>
+<ModeWatcher />
