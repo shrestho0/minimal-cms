@@ -20,7 +20,7 @@
 	let openedIdx: number | null = null;
 </script>
 
-<div class="mx-auto max-w-5xl select-none px-6 py-24 sm:py-36 lg:px-8 lg:py-52 dark:bg-stone-950">
+<div id="faqs" class="mx-auto max-w-5xl select-none px-6 py-24 sm:py-36 lg:px-8 lg:py-52 dark:bg-stone-950">
 	<div class="mx-auto divide-y divide-gray-900/10 dark:divide-gray-100/10">
 		<h2 class="text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white">FAQs</h2>
 		<dl class="mt-10 space-y-6 divide-y divide-gray-900/10 dark:divide-gray-100/10">

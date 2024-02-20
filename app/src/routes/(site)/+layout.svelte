@@ -1,6 +1,4 @@
-<script>
-	import Hero from '@/ui/HeroWrapper.svelte';
-	import Navbar from '@/ui/NavbarHomePage.svelte';
+<script> 
 	import { ModeWatcher } from 'mode-watcher';
 </script>
 

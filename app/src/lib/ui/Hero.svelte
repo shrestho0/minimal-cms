@@ -21,14 +21,15 @@
 				</div>
 			</div>
 			<div class="mt-4 flex items-center justify-center md:mt-8">
-				<img
+				<!-- <img
 					src="/blogging-bro.svg"
 					alt=""
 					class="mt-12 inline-block md:mt-20"
 					width={600}
 					height={600}
 					loading="eager"
-				/>
+				/> -->
+				There will be something
 			</div>
 		</div>
 	</div>

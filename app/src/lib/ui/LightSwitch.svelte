@@ -5,11 +5,12 @@
 	// import { Sun, Moon } from "radix-icons-svelte";
 
 	import { toggleMode } from 'mode-watcher';
+	import { fly } from 'svelte/transition';
 	export let className = '';
 </script>
 
-<Button on:click={toggleMode} variant="outline" size="icon" class={className}>
-	<Sun
+<Button on:click={toggleMode} variant="outline" size="icon" class={className}  >
+	<Sun 
 		class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 "
 	/>
 	<Moon
