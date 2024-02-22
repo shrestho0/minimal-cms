@@ -1,7 +1,9 @@
-<script>
+<script lang="ts">
 	import Button from '@/components/ui/button/button.svelte';
+	export let formClasses: string = '';
+	export let btnClasses: string = '';
 </script>
 
-<form action="/logout" method="post">
-	<Button type="submit" class="">Logout</Button>
+<form class={formClasses} action="/logout" method="post">
+	<Button class={btnClasses} type="submit">Logout</Button>
 </form>
