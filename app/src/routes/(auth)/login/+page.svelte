@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '@/components/ui/input';
 	import { Label } from '@/components/ui/label';
@@ -11,34 +11,51 @@
 	import { AppLinks } from '@/utils/app-links';
 	import Hero from '@/ui/HeroWrapper.svelte';
 	import HeroWrapper from '@/ui/HeroWrapper.svelte';
+	import type { ActionResult } from '@sveltejs/kit';
+	import dummyData from '@/dev/dummyData';
+	import DummyDataSection from '@/dev/dummyDataSection.svelte';
+	import { ErrorMessages, SuccessMessages } from '@/utils/messages';
 
 	let isLoading = false;
 	let simpleError = ''; // could've done it better, but, that should be fine for this project.
 
 	function enhancedSubmission() {
 		isLoading = true;
-		return async ({ result }: any) => {
+		return async ({ result }: { result: ActionResult }) => {
 			console.log(result);
 			switch (result.type) {
 				case 'failure': {
 					console.log('failure');
-					simpleError = result?.data?.message ?? 'Some error occured!';
+					simpleError = result?.data?.message ?? ErrorMessages.DEFAULT_ERROR;
 					break;
 				}
 				case 'redirect': {
-					toast.success(result?.data?.message ?? "You're logged in!");
+					toast.success(SuccessMessages.LOGIN_SUCCESS);
 					console.log('redirect');
+					// goto(result.location);
+					window.location.href = result.location;
 					break;
 				}
 			}
 
 			isLoading = false;
 
-			await applyAction(result);
 			invalidateAll();
+			await applyAction(result);
 		};
 	}
 
+	const fields = [
+		{ name: 'email', placeholder: 'Email', type: 'email', value: '' },
+		{ name: 'password', placeholder: 'Password', type: 'password', value: '' }
+	];
+
+	function populateRandomData(idx: number) {
+		const randomData = dummyData[idx];
+
+		fields[0].value = randomData.email;
+		fields[1].value = randomData.password;
+	}
 	function onSubmit() {
 		// setTimeout(() => {
 		// isLoading = true;
@@ -53,6 +70,8 @@
 			<p class="text-muted-foreground text-sm">Enter email and password below to login</p>
 		</div>
 
+		<DummyDataSection {populateRandomData} />
+
 		<div class="">
 			<form method="post" action="" on:submit={onSubmit} use:enhance={enhancedSubmission}>
 				<div class="grid gap-2">
@@ -61,6 +80,7 @@
 						<Input
 							name="email"
 							id="email"
+							bind:value={fields[0].value}
 							placeholder="hello@example.com"
 							type="email"
 							disabled={isLoading}
@@ -72,6 +92,7 @@
 						<Input
 							name="password"
 							id="password"
+							bind:value={fields[1].value}
 							placeholder="***********"
 							type="password"
 							disabled={isLoading}
@@ -90,7 +111,9 @@
 					{/if}
 					<Button type="submit" disabled={isLoading}>
 						{#if isLoading}
-							<CircleDotDashed color="white" class="mr-2 h-4 w-4 animate-spin" />
+							<CircleDotDashed
+								class="mr-2 h-4 w-4 animate-spin stroke-white dark:stroke-stone-950"
+							/>
 						{/if}
 						Sign In
 					</Button>

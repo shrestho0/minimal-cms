@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { AppLinks } from '@/utils/app-links';
-	import Logo from '../../lib/ui/Logo.svelte';
+	import Logo from '@/ui/Logo.svelte';
 	import Button from '@/components/ui/button/button.svelte';
-	import LightSwitch from '../../lib/ui/LightSwitch.svelte';
+	import LightSwitch from '@/ui/LightSwitch.svelte';
 	import { toast } from 'svelte-sonner';
 	import { browser } from '$app/environment';
 	import { fly, slide } from 'svelte/transition';
+	import { page } from '$app/stores';
 
 	let open = true;
 	function toggleMobileMenu() {
 		open = !open;
 	}
+
+	export let showMenuItems = true;
 
 	export const menuitems = [
 		{
@@ -28,7 +31,8 @@
 		{
 			title: 'Contact',
 			id: 'contact'
-		}
+		},
+		{ title: 'Debug', id: 'debug' }
 	] as Array<{ title: string; id: string }>;
 
 	let innerWidth: number;
@@ -62,23 +66,20 @@
 
 		const anchor = document.getElementById(anchorId);
 
-
-
 		if (anchor) {
 			// Find id from the list
-			menuitems.forEach((el, idx)=>{
+			menuitems.forEach((el, idx) => {
 				// if(el.id) ==
-				if(el.id==anchorId){
-					selectedIdx = idx
-				} 
-			return;
-			})
+				if (el.id == anchorId) {
+					selectedIdx = idx;
+				}
+				return;
+			});
 
 			scrollToPosTop(anchor.offsetTop);
 			return;
 		}
-		
-		
+
 		const end = link?.href?.split('/')?.pop();
 		if (end == '') {
 			selectedIdx = -1;
@@ -96,9 +97,11 @@
 <div
 	class="fixed z-50 mx-auto flex w-full max-w-screen-xl flex-col {onMobile && navbareKajHobe
 		? 'bg-gray-50 dark:bg-stone-950'
-		: onMobile && open ? 'bg-gray-50 dark:bg-stone-950':''} px-4 md:flex-row md:items-center md:justify-between md:bg-transparent md:px-6 md:pt-2 lg:px-8"
+		: onMobile && open
+			? 'bg-gray-50 dark:bg-stone-950'
+			: ''} px-4 md:flex-row md:items-center md:justify-between md:bg-transparent md:px-6 md:pt-2 lg:px-8"
 >
-	<div class="flex flex-row items-center justify-between p-4 ">
+	<div class="flex flex-row items-center justify-between p-4">
 		<!-- Take Old Classes Back for dark mode -->
 		<a
 			on:click={handleAnchorClick}
@@ -107,7 +110,7 @@
 		>
 			<Logo mode="dark" />
 		</a>
-		<div class="flex items-center justify-center gap-2 ">
+		<div class="flex items-center justify-center gap-2">
 			<LightSwitch className="flex md:hidden" />
 			<button
 				class="relative h-10 w-10 text-gray-500 focus:outline-none md:hidden"
@@ -145,7 +148,9 @@
 
 	{#if open}
 		<nav
-			class="flex w-full  flex-grow flex-col gap-2 pb-4 transition-all ease-out md:mt-0 md:flex-row md:items-center md:justify-center md:pb-0 {!onMobile &&
+			class="{!showMenuItems
+				? 'hidden'
+				: ''} flex w-full flex-grow flex-col gap-2 pb-4 transition-all ease-out md:mt-0 md:flex-row md:items-center md:justify-center md:pb-0 {!onMobile &&
 			scrollY > 100
 				? 'rounded-xl border border-gray-900 bg-gray-50/80 md:mx-16 lg:mx-32 xl:mx-48 dark:border-gray-100 dark:bg-stone-950/80  '
 				: ''}"
@@ -167,17 +172,13 @@
 					}}
 					class="relative"
 				>
-
 					{#each menuitems as items, idx (items.title)}
-				 
-
 						<a
 							href={'#' + items.id}
 							on:click={handleAnchorClick}
-							class="rounded-md px-3 py-1.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 
-							{ selectedIdx!= undefined && selectedIdx == idx ? "underline": ''}
-							"
-							>{items.title}</a
+							class="rounded-md px-3 py-1.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+							{selectedIdx != undefined && selectedIdx == idx ? 'underline' : ''}
+							">{items.title}</a
 						>
 					{/each}
 				</div>
@@ -185,8 +186,8 @@
 		</nav>
 
 		<div
-in:fly
-out:fly
+			in:fly
+			out:fly
 			class=" my-4 flex flex-col gap-4 transition-all ease-out md:mt-0 md:flex-row"
 		>
 			<!-- Hide On Mobile -->
@@ -195,8 +196,16 @@ out:fly
 			</div>
 			<!-- <Link href="/login" style="outline">Login</Link> -->
 			<!-- <Link href="/register">Register</Link> -->
-			<Button href="/login" variant="default">Login</Button>
-			<Button href="/login" variant="outline">Register</Button>
+			{#if $page?.data.user}
+				<Button data-sveltekit-reload href={AppLinks.USER_DASHBOARD} variant="outline"
+					>Dashboard</Button
+				>
+			{:else if $page?.data.admin}
+				<Button href={AppLinks.ADMIN_DASHBOARD} variant="outline">Dashboard</Button>
+			{:else}
+				<Button href="/login" variant="default">Login</Button>
+				<Button href="/register" variant="outline">Register</Button>
+			{/if}
 		</div>
 	{/if}
 </div>

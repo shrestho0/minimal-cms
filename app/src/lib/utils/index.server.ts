@@ -1,5 +1,10 @@
 import type { SiteStyle } from "@/types/customizations";
 
+
+import { fail } from "@sveltejs/kit";
+ 
+
+
 export function jsonToCSS(json: SiteStyle) {
     let css = "";
     if (json.fontLoadUrl) {
@@ -18,3 +23,4 @@ export function jsonToCSS(json: SiteStyle) {
 
     return css;
 }
+

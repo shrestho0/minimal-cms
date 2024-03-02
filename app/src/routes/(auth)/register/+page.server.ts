@@ -1,17 +1,20 @@
-import { redirect, type Actions, fail } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import { AppLinks } from "@/utils/app-links";
 import { ErrorMessages } from "@/utils/messages";
 import { validRegex } from "@/utils/validations";
-import { AppLinks } from "@/utils/app-links";
+import { redirect, type Actions, fail } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
+import dbTables from "@/utils/db-tables";
+import defaultCssData from "@/utils/default-css-data";
+
 
 export const load: PageServerLoad = async ({ locals, parent }) => {
     await parent();
     if (locals.user) {
-        return redirect(302, AppLinks.USER_DASHBOARD);
+        return redirect(302, "/dashboard");
     }
 
     if (locals.admin) {
-        return redirect(302, AppLinks.ADMIN_ROUTER);
+        return redirect(302, "/_");
     }
 
 };
@@ -24,6 +27,7 @@ export const actions: Actions = {
             name: string,
             password: string,
             passwordConfirm: string,
+
         } as {
             [key: string]: string;
         };
@@ -71,39 +75,15 @@ export const actions: Actions = {
 
 
 
-        // Validations from server
-
-        // Check if email exists in database
-        // Check if username exists in database
-
-        const userWithEmail = null; // should be empty to create user
-        const userWithUsername = null; // should be empty to create user
-
-
-        if (userWithEmail) {
-            fieldErrors.email = ErrorMessages.EMAIL_EXISTS;
-        }
-        if (userWithUsername) {
-            fieldErrors.username = ErrorMessages.USERNAME_EXISTS;
+        const createUserRes = {
+            success: false,
+            fieldErrors: {
+                // will be returned from backend
+            }
         }
 
-        if (fieldErrors.email || fieldErrors.username) {
-            console.log(fieldErrors); // DEBUG
-            return fail(400, { fieldErrors });
-        }
-
-        // Create user
-        try {
-            const userX = null; // There will be newly created user;
-            throw new Error("Not implemented");
-
-        } catch (e: any) {
-            return fail(400, { message: e.message });
-        }
-        const newUser = null // Create user and return user object 
-
-        if (!newUser) {
-            return fail(400, { message: "Failed to create user" });
+        if(!createUserRes.success){
+            fail(500, ErrorMessages.SERVER_ERROR)
         }
 
         return redirect(302, AppLinks.USER_LOGIN);

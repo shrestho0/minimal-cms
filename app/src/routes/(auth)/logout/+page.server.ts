@@ -11,9 +11,11 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
     default: async ({ locals }) => {
         const goto = locals?.admin ? "/_/" : "/login";
-        // Logout Logic Here
-        // Call the logout endpoint
-        // Clear the cookies
+        /**
+         * TODOS:
+         *  Delete RefreshToken from DB
+         *  Clear Cookies 
+         */
         return redirect(302, goto);
     }
 };

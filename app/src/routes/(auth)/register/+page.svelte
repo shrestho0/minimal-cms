@@ -9,6 +9,8 @@
 	import * as Alert from '$lib/components/ui/alert';
 	import { toast } from 'svelte-sonner';
 	import { AppLinks } from '@/utils/app-links';
+	import dummyData from '@/dev/dummyData';
+	import DummyDataSection from '@/dev/dummyDataSection.svelte';
 
 	let isLoading = false;
 	let finalErrorMessage = '';
@@ -31,17 +33,28 @@
 	};
 
 	const fields = [
-		{ name: 'email', placeholder: 'Email', type: 'email' },
-		{ name: 'username', placeholder: 'Username', type: 'username' },
-		{ name: 'name', placeholder: 'John Doe', type: 'text' },
-		{ name: 'password', placeholder: 'Password', type: 'password' },
+		{ name: 'email', placeholder: 'Email', type: 'email', value: '' },
+		{ name: 'username', placeholder: 'Username', type: 'username', value: '' },
+		{ name: 'name', placeholder: 'John Doe', type: 'text', value: '' },
+		{ name: 'password', placeholder: 'Password', type: 'password', value: '' },
 		{
 			name: 'passwordConfirm',
 			placeholder: 'Confirm Password',
 			type: 'password',
-			error: fieldErrors.passwordConfirm
+			error: fieldErrors.passwordConfirm,
+			value: ''
 		}
 	];
+
+	function populateRandomData(idx: number) {
+		const randomData = dummyData[idx];
+
+		fields[0].value = randomData.email;
+		fields[1].value = randomData.username;
+		fields[2].value = randomData.name;
+		fields[3].value = randomData.password;
+		fields[4].value = randomData.password;
+	}
 
 	function enhancedSubmission() {
 		isLoading = true;
@@ -70,10 +83,10 @@
 				}
 			}
 
-			isLoading = false;
-
 			await applyAction(result);
 			invalidateAll();
+
+			isLoading = false;
 		};
 	}
 
@@ -90,8 +103,8 @@
 			<h1 class="text-2xl font-semibold tracking-tight">Create an account</h1>
 			<p class="text-muted-foreground text-sm">Fill out the form below to create your account</p>
 		</div>
+		<DummyDataSection {populateRandomData} />
 
-		<!-- <PreDebug data={{ fieldErrors }} /> -->
 		<div class="">
 			<form
 				method="post"
@@ -118,6 +131,7 @@
 							<Input
 								name={inputF.name}
 								id={inputF.name}
+								bind:value={inputF.value}
 								placeholder={inputF.placeholder}
 								type={inputF.type}
 								disabled={isLoading}
@@ -143,7 +157,9 @@
 					{/if}
 					<Button type="submit" disabled={isLoading}>
 						{#if isLoading}
-							<CircleDotDashed color="white" class="mr-2 h-4 w-4 animate-spin" />
+							<CircleDotDashed
+								class=" mr-2 h-4 w-4 animate-spin stroke-white dark:stroke-stone-950"
+							/>
 						{/if}
 						Sign Up
 					</Button>

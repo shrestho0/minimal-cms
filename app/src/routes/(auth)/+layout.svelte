@@ -24,4 +24,4 @@
 	</div>
 	<slot />
 </div>
-<ModeWatcher />
+<ModeWatcher defaultMode="dark"/>

@@ -5,15 +5,15 @@
 	const faqs = [
 		{
 			title: 'What is this?',
-			description: 'Something'
+			description: 'A website that will enable you to make and publish your webpages in ease'
 		},
 		{
 			title: "Why mCMS? Why don't just use something else?",
-			description: 'This is minimal'
+			description: 'The answer is it is minimial and user centric you don\'t have to think about a lot, "just make and publish"'
 		},
 		{
 			title: 'How to use?',
-			description: 'Just explore and use it'
+			description: 'Just signin and explore and use it'
 		}
 	];
 

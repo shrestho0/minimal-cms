@@ -1,3 +1,5 @@
+import { browser } from "$app/environment";
+import { PUBLIC_PB_HOST } from "$env/static/public";
 
 export function md5(inputString: string): string {
     /**
@@ -50,4 +52,53 @@ export function md5(inputString: string): string {
         b = ii(b, c, d, a, x[i + 9], 21, -343485551); a = ad(a, olda); b = ad(b, oldb); c = ad(c, oldc); d = ad(d, oldd);
     }
     return rh(a) + rh(b) + rh(c) + rh(d);
+}
+
+
+
+export async function copyToClipboard(textToCopy: string) {
+    if (!browser) return;
+
+    // Navigator clipboard api needs a secure context (https)
+    if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(textToCopy);
+    } else {
+        // Use the 'out of viewport hidden text area' trick
+        const textArea = document.createElement('textarea');
+        textArea.value = textToCopy;
+
+        // Move textarea out of the viewport so it's not visible
+        textArea.style.position = 'absolute';
+        textArea.style.left = '-999999px';
+
+        document.body.prepend(textArea);
+        textArea.select();
+
+        try {
+            document.execCommand('copy');
+        } catch (error) {
+            // don't do anything
+            // console.error(error);
+        } finally {
+            textArea.remove();
+        }
+    }
+}
+
+
+export function toTitleCase(string: string) {
+    if (!string) return '';
+    return string.toLowerCase().replace(/\b\w/g, (s) => s.toUpperCase());
+    // return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+export function beautiulDateTime(date: string) {
+    if (!date) return '';
+    let newDate = new Date(date);
+    return newDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' });
+}
+
+
+export function getLogoUrl(collectionId: string, recordId: string, fileName: string) {
+    return PUBLIC_PB_HOST + `/api/files/${collectionId}/${recordId}/${fileName}`
 }
