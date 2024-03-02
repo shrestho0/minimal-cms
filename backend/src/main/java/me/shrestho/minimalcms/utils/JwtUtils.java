@@ -23,8 +23,8 @@ public class JwtUtils {
 
     private String jwtSecret = "SOME-VERY-SECRET-KEY-THAT-SHOULD-NOT-BE-HERE";
 
-    private long jwtAccessExpirationMs = 5 * 60 * 1000; // 5 minutes
-    private long jwtRefreshExpirationMs = 1 * 60 * 60 * 1000; // 1 hour
+    private long jwtAccessExpirationMs = 10 * 60 * 1000; // 5 minutes
+    private long jwtRefreshExpirationMs = 432000000; // 5days
 
     public String generateToken(User userData, TokenType subject) {
         Algorithm algorithm = Algorithm.HMAC256(jwtSecret);

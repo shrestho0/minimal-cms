@@ -15,17 +15,20 @@ import me.shrestho.minimalcms.entity.User;
 import me.shrestho.minimalcms.services.UserService;
 
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/user")
+public class ProtectedUserController {
+
     @Autowired
     private UserService userService;
 
     @GetMapping("/")
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<?> get() {
 
-        List<User> users = userService.getAll();
+        Map<String, Object> resObj = new HashMap<String, Object>();
+        resObj.put("success", true);
+        resObj.put("message", "Welcome authenticated user!");
+        return new ResponseEntity<>(resObj, HttpStatus.OK);
 
-        return new ResponseEntity<>(users, HttpStatus.OK);
 
     }
 }

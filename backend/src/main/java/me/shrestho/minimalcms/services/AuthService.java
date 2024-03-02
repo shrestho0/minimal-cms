@@ -51,12 +51,8 @@ public class AuthService {
         user.setEmail((String) newUserData.get("email"));
         user.setPasswordHash(passwordHash);
 
-        if (newUserData.get("role").equals("user")) {
-            user.setRole(UserRoles.USER);
-        } else if (newUserData.get("role").equals("admin")) {
-            // ensureAdmin()
-            user.setRole(UserRoles.ADMIN);
-        }
+        // Only role USER is allowed here
+        user.setRole(UserRoles.USER);
 
         System.out.println(user);
 

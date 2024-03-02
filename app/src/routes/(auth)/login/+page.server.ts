@@ -1,9 +1,9 @@
 import { redirect, type Actions, fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { ErrorMessages } from "@/utils/messages";
-import { setPBSiteKey } from "@/utils/index.server";
-import { AppLinks } from "@/utils/app-links";
+import { AppLinks, BackendApiEndpoints } from "@/utils/app-links";
 import DBTables from "@/utils/db-tables";
+import { JWT_COOKIE_EXPIRES, JWT_COOKIE_NAME } from "$env/static/private";
 
 export const load: PageServerLoad = async ({ locals, parent }) => {
     if (locals.user) {
@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 
 
 export const actions: Actions = {
-    default: async ({ locals, request }) => {
+    default: async ({ locals, request, fetch, cookies }) => {
         const { email, password } = Object.fromEntries(await request.formData()) as {
             email: string;
             password: string;
@@ -28,28 +28,40 @@ export const actions: Actions = {
         // console.log(email, password); // DEBUG, this is illigal :3 :D
 
         if (!email || !password) return fail(400, { message: ErrorMessages.ALL_FIELDS_REQUIRED });
- 
+
 
         /**
          * Login User
          */
-        const loginUserRes = {
-            success: false,
-            message: "SOME MESSAGE"
-        }
+        const loginUser = await fetch(BackendApiEndpoints.LOGIN, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password })
 
-        if(!loginUserRes?.success){
+        })
+
+        const loginUserRes = await loginUser.json();
+        console.log("LOGIN USER RES:", loginUserRes);
+
+        if (!loginUserRes?.success) {
             fail(400, {
-                message: loginUserRes.message
+                message: loginUserRes.message,
             })
         }
-        
-        /**
-         * Set Cookie
-         * 
-        */  
-        
-        return redirect(302, AppLinks.USER_DASHBOARD);
+
+
+        // Safe here
+        // Set cookies
+        cookies.set(JWT_COOKIE_NAME, JSON.stringify(loginUserRes.tokens), {
+            maxAge: Number.parseInt(JWT_COOKIE_EXPIRES) / 1000,
+            path: "/",
+            httpOnly: true,
+            sameSite: "lax",
+        });
+
+        // return redirect(302, AppLinks.USER_DASHBOARD);
 
 
 

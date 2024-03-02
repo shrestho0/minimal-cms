@@ -1,4 +1,4 @@
-import { AppLinks } from "@/utils/app-links";
+import { AppLinks, BackendApiEndpoints } from "@/utils/app-links";
 import { ErrorMessages } from "@/utils/messages";
 import { validRegex } from "@/utils/validations";
 import { redirect, type Actions, fail } from "@sveltejs/kit";
@@ -20,7 +20,7 @@ export const load: PageServerLoad = async ({ locals, parent }) => {
 };
 
 export const actions: Actions = {
-    default: async ({ locals, request }) => {
+    default: async ({ locals, request, fetch }) => {
         const data = Object.fromEntries(await request.formData()) as {
             email: string,
             username: string,
@@ -75,15 +75,23 @@ export const actions: Actions = {
 
 
 
-        const createUserRes = {
-            success: false,
-            fieldErrors: {
-                // will be returned from backend
-            }
-        }
+        const createUser = await fetch(BackendApiEndpoints.REGISTER, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        })
 
-        if(!createUserRes.success){
-            fail(500, ErrorMessages.SERVER_ERROR)
+        const createUserRes = await createUser.json();
+
+        console.log(createUserRes); // DEBUG
+
+        if (!createUserRes.success) {
+            return fail(400, {
+                message: createUserRes.message,
+                fieldErrors: createUserRes.errors,
+            });
         }
 
         return redirect(302, AppLinks.USER_LOGIN);
