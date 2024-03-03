@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import me.shrestho.minimalcms.entity.User;
 import me.shrestho.minimalcms.utils.JwtUtils;
-import me.shrestho.minimalcms.utils.Utils;
 import me.shrestho.minimalcms.utils.enums.TokenType;
 import me.shrestho.minimalcms.utils.enums.UserRoles;
 import org.springframework.lang.Nullable;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
-import java.util.UUID;
 
 public class AuthInterceptor implements HandlerInterceptor {
 
@@ -46,7 +44,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
                 Map<String, Claim> payloadClaims = decodedJwt.getClaims();
                 User user = new User();
-                UUID id = UUID.fromString(payloadClaims.get("id").asString());
+                String id = payloadClaims.get("id").asString();
                 user.setId(id);
                 user.setName(payloadClaims.get("name").asString());
                 user.setUsername(payloadClaims.get("username").asString());
@@ -58,14 +56,14 @@ public class AuthInterceptor implements HandlerInterceptor {
                 // Request Url
                 System.out.println("Request URL" + " " + request.getRequestURI());
                 // if route is /user, check if user is user
-                if (request.getRequestURI().equals("/user/")) {
+                if (request.getRequestURI().startsWith("/user")) {
                     if (user.getRole() == UserRoles.USER) {
                         System.out.println("USER");
                     } else {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         throw new Exception("Unauthorized. User Role Required");
                     }
-                } else if (request.getRequestURI().equals("/admin/")) {
+                } else if (request.getRequestURI().startsWith("/admin")) {
                     if (user.getRole() == UserRoles.ADMIN) {
                         System.out.println("ADMIN");
                     } else {

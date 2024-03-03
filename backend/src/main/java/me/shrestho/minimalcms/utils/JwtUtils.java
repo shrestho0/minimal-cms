@@ -4,14 +4,6 @@ import me.shrestho.minimalcms.entity.User;
 import me.shrestho.minimalcms.utils.enums.TokenType;
 
 import java.sql.Date;
-import java.util.Base64;
-import java.util.Map;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -22,7 +14,7 @@ public class JwtUtils {
 
     private String jwtSecret = "SOME-VERY-SECRET-KEY-THAT-SHOULD-NOT-BE-HERE";
 
-    private long jwtAccessExpirationMs = 10 * 60 * 1000; // 10 minutes
+    private long jwtAccessExpirationMs = 30 * 60 * 1000; // 30 minutes
     private long jwtRefreshExpirationMs = 432000000; // 5days
 
     public String generateToken(User userData, TokenType subject) {

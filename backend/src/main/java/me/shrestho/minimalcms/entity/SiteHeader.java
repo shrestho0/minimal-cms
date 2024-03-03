@@ -1,7 +1,6 @@
 package me.shrestho.minimalcms.entity;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -40,8 +39,8 @@ import me.shrestho.minimalcms.utils.enums.PageStatus;
 public class SiteHeader {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @Column(name = "id", columnDefinition = "CHAR(36)")
+    private String id;
 
     @Column(name = "site_title", nullable = false)
     private String site_title;

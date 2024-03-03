@@ -18,6 +18,7 @@ import me.shrestho.minimalcms.utils.JwtUtils;
 import me.shrestho.minimalcms.utils.Utils;
 import me.shrestho.minimalcms.utils.enums.TokenType;
 import me.shrestho.minimalcms.utils.enums.UserRoles;
+import me.shrestho.minimalcms.utils.projections.UserProjection;
 
 @Service
 public class AuthService {
@@ -57,7 +58,7 @@ public class AuthService {
         System.out.println(user);
 
         // check if username exists
-        User userWithUsername = userRepository.findByUsername(user.getUsername());
+        UserProjection userWithUsername = userRepository.findByUsername(user.getUsername());
         if (userWithUsername != null) {
             errorObj.put("username", "Username already exists");
         }
@@ -85,6 +86,7 @@ public class AuthService {
         try {
             // user.setCreated(new java.sql.Date(System.currentTimeMillis()));
 
+            user.setId(UUID.randomUUID().toString());
             User newUser = userRepository.save(user);
             ResponseObj.put("success", true);
             ResponseObj.put("message", "User created successfully");
@@ -116,6 +118,7 @@ public class AuthService {
             ResponseObj.put("message", "User not found with email");
             return ResponseObj;
         }
+
         // match passwords
         Boolean passwordMatched = BCrypt.checkpw((String) reqData.get("password"), userWithEmail.getPasswordHash());
         if (!passwordMatched) {
@@ -184,10 +187,11 @@ public class AuthService {
         }
 
         // Dhuklei blacklist, we don't care
+        tokenBlacklisted.setId(UUID.randomUUID().toString());
         tokenBlacklistedRepository.save(tokenBlacklisted);
 
         // Check if user exists
-        UUID userId = UUID.fromString(tokenData.getClaim("id").asString());
+        String userId = tokenData.getClaim("id").asString();
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             ResponseObj.put("message", "User does not exist anymore");

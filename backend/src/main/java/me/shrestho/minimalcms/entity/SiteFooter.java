@@ -1,8 +1,8 @@
 package me.shrestho.minimalcms.entity;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,8 +40,8 @@ import me.shrestho.minimalcms.utils.enums.PageStatus;
 public class SiteFooter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @Column(name = "id", columnDefinition = "CHAR(36)")
+    private String id;
 
     @Column(name = "text", nullable = false)
     private String site_title;

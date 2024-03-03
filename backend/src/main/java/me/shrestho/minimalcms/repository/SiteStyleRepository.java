@@ -1,11 +1,9 @@
 package me.shrestho.minimalcms.repository;
 
-import java.util.UUID;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import me.shrestho.minimalcms.entity.TokenBlacklisted;
+import me.shrestho.minimalcms.entity.SiteStyle;
 
-public interface SiteStyleRepository extends JpaRepository<TokenBlacklisted, UUID> {
+public interface SiteStyleRepository extends JpaRepository<SiteStyle, String> {
 
 }

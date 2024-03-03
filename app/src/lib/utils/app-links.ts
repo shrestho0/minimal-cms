@@ -19,6 +19,7 @@ const _BackendApiEndpoints = {
     LOGIN: "/auth/tokens",
     TOKEN_REFRESH: "/auth/refresh", // requires refresh token as JWT
     LOGOUT: "/auth/logout", // requires refresh token as JWT
+    USER_PAGES: "/user/pages", // CRUD, requires ACCESS_TOKEN as JWT
 };
 
 

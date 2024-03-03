@@ -1,8 +1,9 @@
+import { JWT_COOKIE_NAME } from "$env/static/private";
 import type { SiteStyle } from "@/types/customizations";
 import { UserRole, type BaseUser, type Admin, type User } from "@/types/users";
 
 
-import { fail } from "@sveltejs/kit";
+import { fail, type Cookies } from "@sveltejs/kit";
 import type { JWTVerifyResult } from "jose";
 
 
@@ -57,4 +58,16 @@ export function parseUserFromJWTVerifyResult(verifiedAcsessToken: JWTVerifyResul
 
     return returnObj;
 
-} 
+}
+
+// parseTokenFromCookie
+export function parseTokenFromCookie(cookies: Cookies, tokenType: "access" | "refresh" = "access") {
+    const tokens = JSON.parse(cookies.get(JWT_COOKIE_NAME) ?? "{}");
+    if (!tokens.access || !tokens.refresh) new Error("No tokens in cookie");
+    if (tokenType == "access") {
+        return tokens.access;
+    } else {
+        return tokens.refresh;
+    }
+
+}

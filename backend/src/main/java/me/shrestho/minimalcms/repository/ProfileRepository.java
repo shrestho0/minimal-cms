@@ -4,8 +4,9 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import me.shrestho.minimalcms.entity.Profile;
 import me.shrestho.minimalcms.entity.TokenBlacklisted;
 
-public interface ProfileRepository extends JpaRepository<TokenBlacklisted, UUID> {
+public interface ProfileRepository extends JpaRepository<Profile, String> {
 
 }
