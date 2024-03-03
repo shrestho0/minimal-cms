@@ -6,6 +6,4 @@
 
 User dashboard Misc dashboard stuff will be here
 
-<Logout />
-
 <PreDebug {data} />

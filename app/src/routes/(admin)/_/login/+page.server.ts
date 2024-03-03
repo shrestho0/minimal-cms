@@ -1,7 +1,8 @@
-import { redirect, type Actions, fail } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
-import { ErrorMessages } from "@/utils/messages";
+
+import { fail, redirect } from "@sveltejs/kit";
+import type { PageServerLoad, Actions } from "./$types";
 import { AppLinks } from "@/utils/app-links";
+import { ErrorMessages } from "@/utils/messages";
 
 export const load: PageServerLoad = async ({ locals, parent }) => {
     await parent();
@@ -28,10 +29,12 @@ export const actions: Actions = {
 
         if (!email || !password) return fail(400, { message: ErrorMessages.ALL_FIELDS_REQUIRED });
 
-        const adminX = {
-            error: { message: "Not implemented" }
-        }
+        // setPBSiteKey(locals.pb); // To tell pb that this is from web app
 
+        const adminX = await locals.pb.admins.authWithPassword(email, password).catch((e) => {
+            // console.error(e);
+            return { error: { message: e.message } };
+        });
         if (adminX.error) return fail(400, { message: adminX.error.message });
 
 

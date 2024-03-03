@@ -1,9 +1,15 @@
 package me.shrestho.minimalcms.entity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,6 +21,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "BlackListedToken", indexes = {
         @Index(name = "refreshToken", columnList = "refreshToken", unique = true)
 })
@@ -29,5 +36,13 @@ public class TokenBlacklisted {
 
     @Column(name = "refreshToken", unique = true, nullable = false, length = 1000)
     private String refreshToken; // it already has a expiry date
+
+    @CreatedDate
+    @Column(name = "created")
+    private LocalDateTime created;
+
+    @LastModifiedDate
+    @Column(name = "updated")
+    private LocalDateTime updated;
 
 }

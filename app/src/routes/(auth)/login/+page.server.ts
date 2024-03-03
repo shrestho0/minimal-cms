@@ -2,7 +2,6 @@ import { redirect, type Actions, fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { ErrorMessages } from "@/utils/messages";
 import { AppLinks, BackendApiEndpoints } from "@/utils/app-links";
-import DBTables from "@/utils/db-tables";
 import { JWT_COOKIE_EXPIRES, JWT_COOKIE_NAME } from "$env/static/private";
 
 export const load: PageServerLoad = async ({ locals, parent }) => {
@@ -46,7 +45,7 @@ export const actions: Actions = {
         console.log("LOGIN USER RES:", loginUserRes);
 
         if (!loginUserRes?.success) {
-            fail(400, {
+            return fail(400, {
                 message: loginUserRes.message,
             })
         }
@@ -61,7 +60,7 @@ export const actions: Actions = {
             sameSite: "lax",
         });
 
-        // return redirect(302, AppLinks.USER_DASHBOARD);
+        return redirect(302, AppLinks.USER_DASHBOARD);
 
 
 

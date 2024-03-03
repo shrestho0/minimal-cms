@@ -3,7 +3,6 @@ import { ErrorMessages } from "@/utils/messages";
 import { validRegex } from "@/utils/validations";
 import { redirect, type Actions, fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import dbTables from "@/utils/db-tables";
 import defaultCssData from "@/utils/default-css-data";
 
 
@@ -94,7 +93,7 @@ export const actions: Actions = {
             });
         }
 
-        return redirect(302, AppLinks.USER_LOGIN);
+        return redirect(302, AppLinks.LOGIN);
 
 
 

@@ -27,12 +27,16 @@ export type SiteHeaderType = {
     site_title: string,
     logo: string,
     nav_json: SingleNavItem[]
+    updated: string
+    created: string
 };
 
 export type SiteFooterType = {
     id: string,
     text: string,
     social_json: SingleSocialItem[]
+    updated: string
+    created: string
 }
 
 export type SiteStyle = {

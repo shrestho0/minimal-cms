@@ -26,7 +26,6 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
 		"marked": "^12.0.0",
-		"pocketbase": "^0.15.3",
 		"postcss": "^8.4.32",
 		"postcss-load-config": "^5.0.2",
 		"prettier": "^3.1.1",
@@ -44,6 +43,7 @@
 	"dependencies": {
 		"bits-ui": "^0.16.0",
 		"clsx": "^2.1.0",
+		"jose": "^5.2.2",
 		"lucide-svelte": "^0.330.0",
 		"mode-watcher": "^0.2.1",
 		"svelte-sonner": "^0.3.11",

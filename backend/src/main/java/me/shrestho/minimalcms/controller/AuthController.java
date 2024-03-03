@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,9 +36,23 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshToken(@RequestBody TokenBlacklisted tokenBlacklisted) {
-        Map<String, Object> resMap = authService.refreshToken(tokenBlacklisted);
-        return new ResponseEntity<>(resMap, HttpStatus.OK);
+    public ResponseEntity<?> refreshToken(@RequestHeader("JWT") String jwtToken) {
+        TokenBlacklisted token = new TokenBlacklisted();
+        token.setRefreshToken(jwtToken);
+        Map<String, Object> resMap = authService.refreshToken(token);
+
+        return new ResponseEntity<>(resMap,
+                resMap.get("success").equals(true) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> invalidateRefreshToken(@RequestHeader("JWT") String jwtToken) {
+        TokenBlacklisted token = new TokenBlacklisted();
+        token.setRefreshToken(jwtToken);
+        Map<String, Object> resMap = authService.invalidateRefreshToken(token);
+
+        return new ResponseEntity<>(resMap,
+                resMap.get("success").equals(true) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
 }

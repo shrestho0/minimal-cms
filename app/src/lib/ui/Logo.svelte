@@ -2,13 +2,6 @@
 	import { page } from '$app/stores';
 	import { AppLinks } from '@/utils/app-links';
 
-	export let mode: 'dark' | 'light' = 'light';
-
-	const modeCSS = {
-		dark: 'text-white',
-		light: 'text-gray-900'
-	};
-
 	export let className = 'text-gray-900 dark:text-white';
 </script>
 

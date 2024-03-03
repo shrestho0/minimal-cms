@@ -4,11 +4,10 @@ import { PUBLIC_BACKEND_HOST } from "$env/static/public";
 export const AppLinks = {
     HOME: "/",
     ADMIN_ROUTER: "/_",
-    ADMIN_LOGIN: "/_/login",
     ADMIN_DASHBOARD: "/_/dashboard",
 
 
-    USER_LOGIN: "/login",
+    LOGIN: "/login",
     USER_REGISTER: "/register",
     USER_DASHBOARD: "/dashboard",
     USER_PAGES: "/pages",
@@ -18,7 +17,8 @@ export const AppLinks = {
 const _BackendApiEndpoints = {
     REGISTER: "/auth/register",
     LOGIN: "/auth/tokens",
-    REFRESH_TOKEN: "/auth/refresh",
+    TOKEN_REFRESH: "/auth/refresh", // requires refresh token as JWT
+    LOGOUT: "/auth/logout", // requires refresh token as JWT
 };
 
 

@@ -1,4 +1,10 @@
-export type User = {
+export enum UserRole {
+    ADMIN = "ADMIN",
+    USER = "USER",
+}
+
+
+export interface BaseUser {
     id: string;
     username: string;
     email: string;
@@ -9,7 +15,10 @@ export type User = {
     updated: string;
 }
 
-export type Admin = {
-    id: string;
-    email: string;
+export interface User extends BaseUser {
+    role: UserRole.USER;
+}
+
+export interface Admin extends BaseUser {
+    role: UserRole.ADMIN;
 }

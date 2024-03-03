@@ -18,10 +18,10 @@
 			{#if $page.url.pathname?.includes('login')}
 				<Button href={AppLinks.USER_REGISTER} variant="outline" class="">Register</Button>
 			{:else if $page.url.pathname?.includes('register')}
-				<Button href={AppLinks.USER_LOGIN} variant="outline" class="">Login</Button>
+				<Button href={AppLinks.LOGIN} variant="outline" class="">Login</Button>
 			{/if}
 		</div>
 	</div>
 	<slot />
 </div>
-<ModeWatcher defaultMode="dark"/>
+<ModeWatcher defaultMode="dark" />

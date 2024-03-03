@@ -17,6 +17,6 @@ export const load: PageServerLoad = async ({ locals }) => {
         return redirect(302, AppLinks.HOME);
     }
 
-    return redirect(302, AppLinks.ADMIN_LOGIN);
+    return redirect(302, AppLinks.LOGIN);
 
 };

@@ -1,8 +1,10 @@
 import type { SiteStyle } from "@/types/customizations";
+import { UserRole, type BaseUser, type Admin, type User } from "@/types/users";
 
 
 import { fail } from "@sveltejs/kit";
- 
+import type { JWTVerifyResult } from "jose";
+
 
 
 export function jsonToCSS(json: SiteStyle) {
@@ -24,3 +26,35 @@ export function jsonToCSS(json: SiteStyle) {
     return css;
 }
 
+export function parseUserFromJWTVerifyResult(verifiedAcsessToken: JWTVerifyResult) {
+    const buser: BaseUser = {
+        id: verifiedAcsessToken.payload['id'] as string,
+        username: verifiedAcsessToken.payload['username'] as string,
+        email: verifiedAcsessToken.payload['email'] as string,
+        name: verifiedAcsessToken.payload['name'] as string,
+        created: verifiedAcsessToken.payload['created'] as string,
+        updated: verifiedAcsessToken.payload['updated'] as string,
+    }
+
+    const returnObj: {
+        admin?: Admin,
+        user?: User,
+    } = {}
+
+    // const role = verifiedAcsessToken.payload['role'] == UserRole.USER ? UserRole.USER : verifiedAcsessToken.payload['role'] == UserRole.ADMIN ? UserRole.ADMIN : null;
+
+    if (verifiedAcsessToken.payload['role'] == UserRole.USER) {
+        returnObj.user = {
+            ...buser,
+            role: UserRole.USER
+        }
+    } else if (verifiedAcsessToken.payload['role'] == UserRole.ADMIN) {
+        returnObj.admin = {
+            ...buser,
+            role: UserRole.ADMIN
+        }
+    }
+
+    return returnObj;
+
+} 

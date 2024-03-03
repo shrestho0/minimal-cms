@@ -77,7 +77,7 @@
 					toast.success(result?.data?.message ?? 'Account created. Login to proceed!');
 					console.log('redirect');
 					setTimeout(() => {
-						document.location.href = AppLinks.USER_LOGIN;
+						document.location.href = AppLinks.LOGIN;
 					}, 1000);
 					break;
 				}
@@ -101,7 +101,7 @@
 	<div class="flex flex-col gap-8 md:gap-16">
 		<div class="flex flex-col space-y-2 text-center">
 			<h1 class="text-2xl font-semibold tracking-tight">Create an account</h1>
-			<p class="text-muted-foreground text-sm">Fill out the form below to create your account</p>
+			<p class="text-sm text-muted-foreground">Fill out the form below to create your account</p>
 		</div>
 		<DummyDataSection {populateRandomData} />
 
@@ -166,13 +166,13 @@
 				</div>
 			</form>
 		</div>
-		<p class="text-muted-foreground px-8 text-center text-sm">
+		<p class="px-8 text-center text-sm text-muted-foreground">
 			By clicking continue, you agree to our{' '}
-			<a href="/terms" class="hover:text-primary underline underline-offset-4">
+			<a href="/terms" class="underline underline-offset-4 hover:text-primary">
 				Terms of Service
 			</a>{' '}
 			and{' '}
-			<a href="/privacy" class="hover:text-primary underline underline-offset-4">
+			<a href="/privacy" class="underline underline-offset-4 hover:text-primary">
 				Privacy Policy
 			</a>
 			.

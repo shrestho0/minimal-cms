@@ -76,13 +76,15 @@ public class AuthService {
             return ResponseObj;
         }
 
-        System.out.println("User with username " + userWithUsername);
+        // System.out.println("User with username " + userWithUsername);
 
         // check if email exists
         // check if password and passwordConfirm matches
         // Simply return success:true or false,
 
         try {
+            // user.setCreated(new java.sql.Date(System.currentTimeMillis()));
+
             User newUser = userRepository.save(user);
             ResponseObj.put("success", true);
             ResponseObj.put("message", "User created successfully");
@@ -126,7 +128,7 @@ public class AuthService {
 
         // Return tokens
 
-        System.out.println("emailUser: " + userWithEmail + " ");
+        // System.out.println("emailUser: " + userWithEmail + " ");
 
         JwtUtils jwtUtils = new JwtUtils();
         String accessToken = jwtUtils.generateToken(userWithEmail, TokenType.ACCESS);
@@ -204,6 +206,44 @@ public class AuthService {
 
         return ResponseObj;
 
+    }
+
+    public Map<String, Object> invalidateRefreshToken(TokenBlacklisted token) {
+
+        Map<String, Object> ResponseObj = new HashMap<String, Object>(
+                Map.of("success", false));
+
+        if (token.getRefreshToken() == null) {
+            ResponseObj.put("message", "Refresh token header is required");
+            return ResponseObj;
+        }
+
+        // Verify token
+        JwtUtils jwtUtils = new JwtUtils();
+        DecodedJWT tokenData;
+        try {
+            tokenData = jwtUtils.verifyTokenAndReturnDecoded(token.getRefreshToken());
+            if (TokenType.valueOf(tokenData.getSubject()) != TokenType.REFRESH) {
+                ResponseObj.put("message", "Invalid token type");
+                return ResponseObj;
+            }
+        } catch (Exception e) {
+            ResponseObj.put("message", e.getMessage());
+            return ResponseObj;
+        }
+
+        // Check if tokens is blacklisted
+        TokenBlacklisted tb = tokenBlacklistedRepository.findByRefreshToken(token.getRefreshToken());
+        if (tb != null) {
+            ResponseObj.put("message", "Token is already blacklisted");
+            return ResponseObj;
+        }
+
+        tokenBlacklistedRepository.save(token);
+
+        ResponseObj.put("success", true);
+        ResponseObj.put("message", "Token blacklisted successfully");
+        return ResponseObj;
     }
 
 }

@@ -5,13 +5,6 @@ import type { LayoutServerLoad } from "./$types";
  */
 export const load: LayoutServerLoad = async ({ locals }) => {
 
-    // Debugging
-    if (locals.admin) {
-        console.log('Admin:', locals.admin);
-    } else if (locals.user) {
-        console.log('User:', locals.user);
-    }
-
     return {
         user: locals.user,
         admin: locals.admin

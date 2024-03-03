@@ -1,16 +1,13 @@
 package me.shrestho.minimalcms.entity;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +15,7 @@ import me.shrestho.minimalcms.utils.enums.UserRoles;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "User", indexes = {
         @Index(name = "username", columnList = "username", unique = true),
         @Index(name = "email", columnList = "email", unique = true)
@@ -45,5 +43,13 @@ public class User {
     @Column(name = "role", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoles role;
+
+    @CreatedDate
+    @Column(name = "created")
+    private LocalDateTime created;
+
+    @LastModifiedDate
+    @Column(name = "updated")
+    private LocalDateTime updated;
 
 }

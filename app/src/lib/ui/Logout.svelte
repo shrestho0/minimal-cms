@@ -1,9 +1,20 @@
 <script lang="ts">
 	import Button from '@/components/ui/button/button.svelte';
+	import { AppLinks } from '@/utils/app-links';
 	export let formClasses: string = '';
 	export let btnClasses: string = '';
+
+	async function handleLogoutSubmission() {
+		//
+		const response = await fetch('/api/auth/logout', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		window.location.href = AppLinks.LOGIN;
+	}
 </script>
 
-<form class={formClasses} action="/logout" method="post">
-	<Button class={btnClasses} type="submit">Logout</Button>
-</form>
+<Button class={btnClasses} on:click={handleLogoutSubmission}>Logout</Button>

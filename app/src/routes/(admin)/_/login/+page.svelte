@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '@/components/ui/input';
 	import { Label } from '@/components/ui/label';
@@ -13,13 +13,15 @@
 	import HeroWrapper from '@/ui/HeroWrapper.svelte';
 	import LightSwitch from '@/ui/LightSwitch.svelte';
 	import { ModeWatcher } from 'mode-watcher';
+	import type { ActionResult } from '@sveltejs/kit';
+	import { SuccessMessages } from '@/utils/messages';
 
 	let isLoading = false;
 	let simpleError = ''; // could've done it better, but, that should be fine for this project.
 
 	function enhancedSubmission() {
 		isLoading = true;
-		return async ({ result }: any) => {
+		return async ({ result }: { result: ActionResult }) => {
 			console.log(result);
 			switch (result.type) {
 				case 'failure': {
@@ -28,7 +30,8 @@
 					break;
 				}
 				case 'redirect': {
-					toast.success(result?.data?.message ?? "You're logged in!");
+					toast.success(SuccessMessages.LOGIN_SUCCESS);
+					goto(result.location);
 					console.log('redirect');
 					break;
 				}

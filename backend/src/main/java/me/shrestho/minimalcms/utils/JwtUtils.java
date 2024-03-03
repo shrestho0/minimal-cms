@@ -17,13 +17,12 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import com.google.gson.Gson;
 
 public class JwtUtils {
 
     private String jwtSecret = "SOME-VERY-SECRET-KEY-THAT-SHOULD-NOT-BE-HERE";
 
-    private long jwtAccessExpirationMs = 10 * 60 * 1000; // 5 minutes
+    private long jwtAccessExpirationMs = 10 * 60 * 1000; // 10 minutes
     private long jwtRefreshExpirationMs = 432000000; // 5days
 
     public String generateToken(User userData, TokenType subject) {
@@ -38,6 +37,8 @@ public class JwtUtils {
                 .withClaim("name", userData.getName())
                 .withClaim("username", userData.getUsername())
                 .withClaim("email", userData.getEmail())
+                .withClaim("created", userData.getCreated().toString())
+                .withClaim("updated", userData.getUpdated().toString())
                 .withClaim("role", userData.getRole().toString())
                 .withExpiresAt(new Date(exp))
                 .withSubject(subject.toString())
