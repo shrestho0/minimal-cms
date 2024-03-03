@@ -16,30 +16,29 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Map;
 import java.util.UUID;
 
-
 public class AuthInterceptor implements HandlerInterceptor {
 
     private JwtUtils jwtUtils = new JwtUtils();
-     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-         System.out.println("==============================");
-         System.out.println("Chole Ashchi" + " " +  request.getHeader("JWT"));
-         // Check If JWT Exists
-         String accessToken = request.getHeader("JWT");
-         if(accessToken!=null && !accessToken.isEmpty()){
 
-
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+        System.out.println("==============================");
+        System.out.println("Chole Ashchi" + " " + request.getHeader("JWT"));
+        // Check If JWT Exists
+        String accessToken = request.getHeader("JWT");
+        if (accessToken != null && !accessToken.isEmpty()) {
 
             System.out.println("OK");
-            try{
+            try {
                 DecodedJWT decodedJwt = jwtUtils.verifyTokenAndReturnDecoded(accessToken);
 
                 // Check token
-//                decodedJwt.get
-                System.out.println("Decoded JWT" + " "  + decodedJwt);
-                System.out.println("XXX" + decodedJwt.getSubject() + " "+ decodedJwt.getClaim("role"));
+                // decodedJwt.get
+                System.out.println("Decoded JWT" + " " + decodedJwt);
+                System.out.println("XXX" + decodedJwt.getSubject() + " " + decodedJwt.getClaim("role"));
 
                 // if token type is refresh, throw error with message
-                if( !(TokenType.valueOf(decodedJwt.getSubject()) == TokenType.ACCESS)){
+                if (!(TokenType.valueOf(decodedJwt.getSubject()) == TokenType.ACCESS)) {
                     throw new Exception("Invalid Token Type");
                 }
 
@@ -54,49 +53,69 @@ public class AuthInterceptor implements HandlerInterceptor {
                 user.setEmail(payloadClaims.get("email").asString());
                 user.setRole(UserRoles.valueOf(payloadClaims.get("role").asString()));
 
-
                 System.out.println("USER = " + user);
 
+                // Request Url
+                System.out.println("Request URL" + " " + request.getRequestURI());
+                // if route is /user, check if user is user
+                if (request.getRequestURI().equals("/user/")) {
+                    if (user.getRole() == UserRoles.USER) {
+                        System.out.println("USER");
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        throw new Exception("Unauthorized. User Role Required");
+                    }
+                } else if (request.getRequestURI().equals("/admin/")) {
+                    if (user.getRole() == UserRoles.ADMIN) {
+                        System.out.println("ADMIN");
+                    } else {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        throw new Exception("Unauthorized. Admin Role Required");
+                    }
+                }
 
+                request.setAttribute("auth_user", user);
 
-
-//                if(UserRoles.valueOf(String.valueOf(decodedJwt.getClaim("role"))) == UserRoles.ADMIN ){
-//                    System.out.println("ADMIN");
-//                }else if(UserRoles.valueOf(String.valueOf(decodedJwt.getClaim("role"))) == UserRoles.USER){
-//                    System.out.println("USER");
-//                }
+                // if(UserRoles.valueOf(String.valueOf(decodedJwt.getClaim("role"))) ==
+                // UserRoles.ADMIN ){
+                // System.out.println("ADMIN");
+                // }else if(UserRoles.valueOf(String.valueOf(decodedJwt.getClaim("role"))) ==
+                // UserRoles.USER){
+                // System.out.println("USER");
+                // }
 
                 // We are safe here
-//                User user = new User();
+                // User user = new User();
 
-
-//                response.ge
+                // response.ge
 
                 return true; // like a next() in express
 
-            } catch (Exception e){
+            } catch (Exception e) {
 
                 throw e;
 
             }
 
-         }
-         System.out.println("JWT Null Or Empty");
+        }
+        System.out.println("JWT Null Or Empty");
 
-         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-         throw new Exception("Unauthorized");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        throw new Exception("Unauthorized");
 
     }
 
-     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-         System.out.println("==============================");
-         System.out.println("Chole Jacchi");
-         System.out.println("==============================");
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+            @Nullable ModelAndView modelAndView) throws Exception {
+        System.out.println("==============================");
+        System.out.println("Chole Jacchi");
+        System.out.println("==============================");
     }
 
-     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
-         System.out.println("==============================");
-         System.out.println("AfterComplition" + " " + request.getRequestURI());
-         System.out.println("==============================");
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
+            @Nullable Exception ex) throws Exception {
+        System.out.println("==============================");
+        System.out.println("AfterComplition" + " " + request.getRequestURI());
+        System.out.println("==============================");
     }
 }

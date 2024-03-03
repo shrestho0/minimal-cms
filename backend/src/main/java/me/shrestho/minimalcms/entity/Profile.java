@@ -19,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -29,15 +30,15 @@ import me.shrestho.minimalcms.utils.enums.PageStatus;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "Page", indexes = {
+@Table(name = "Profile", indexes = {
 
-        // user and page slug should be unique
-        @Index(name = "unique_user_slug", columnList = "user, slug", unique = true)
+// user and page slug should be unique
+// add user_username as index
 
 })
 @NoArgsConstructor
 @AllArgsConstructor
-public class Page {
+public class Profile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -50,13 +51,10 @@ public class Page {
     @Enumerated(value = EnumType.STRING)
     private PageStatus status;
 
-    @Column(name = "slug", nullable = false)
-    private String slug;
-
     @Column(name = "content", nullable = false, length = 3000)
     private String content; // it already has a expiry date
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user", nullable = false)
     private User user;
 

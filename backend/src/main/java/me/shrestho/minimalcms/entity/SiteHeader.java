@@ -29,34 +29,27 @@ import me.shrestho.minimalcms.utils.enums.PageStatus;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "Page", indexes = {
+@Table(name = "SiteHeader", indexes = {
 
-        // user and page slug should be unique
-        @Index(name = "unique_user_slug", columnList = "user, slug", unique = true)
+// user and page slug should be unique
+// add user_username as index
 
 })
 @NoArgsConstructor
 @AllArgsConstructor
-public class Page {
+public class SiteHeader {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @Column(name = "site_title", nullable = false)
+    private String site_title;
 
-    @Column(name = "status", nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private PageStatus status;
+    @Column(name = "nav_json", nullable = false, length = 3000)
+    private String nav_json; // it'll be json
 
-    @Column(name = "slug", nullable = false)
-    private String slug;
-
-    @Column(name = "content", nullable = false, length = 3000)
-    private String content; // it already has a expiry date
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user", nullable = false)
     private User user;
 

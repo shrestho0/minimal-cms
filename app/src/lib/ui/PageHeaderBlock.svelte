@@ -142,11 +142,11 @@
 							</DropdownMenu.Item>
 						</DropdownMenu.Group>
 						<DropdownMenu.Separator />
-						<DropdownMenu.Item>
-							<form action="/logout" method="post">
+						<form action="/logout" method="post">
+							<DropdownMenu.Item>
 								<button class="w-full p-2" type="submit">Logout</button>
-							</form>
-						</DropdownMenu.Item>
+							</DropdownMenu.Item>
+						</form>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			</div>
