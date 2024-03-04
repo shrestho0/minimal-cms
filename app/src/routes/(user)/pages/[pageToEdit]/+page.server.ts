@@ -2,7 +2,7 @@ import { redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { AppLinks, BackendApiEndpoints } from "@/utils/app-links";
 import type { EditPageLoadData } from "@/types/load-data";
-import type { SinglePage } from "@/types/pages-and-stuff";
+import type { SinglePage } from "@/types/entity";
 import { parseTokenFromCookie } from "@/utils/index.server";
 
 /**

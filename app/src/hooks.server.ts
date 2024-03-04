@@ -6,7 +6,7 @@ import { PUBLIC_BACKEND_HOST } from "$env/static/public";
 import { JWT_COOKIE_NAME, JWT_SECRET_KEY, JWT_ISSUER, JWT_COOKIE_EXPIRES } from "$env/static/private"
 
 import * as jose from 'jose'
-import { UserRole, type User, type Admin, type BaseUser } from "@/types/users";
+import { UserRole, type User, type Admin, type BaseUser } from "@/types/entity";
 import { BackendApiEndpoints } from "@/utils/app-links";
 import { parseUserFromJWTVerifyResult } from "@/utils/index.server";
 

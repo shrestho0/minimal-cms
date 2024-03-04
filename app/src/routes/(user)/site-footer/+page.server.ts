@@ -1,60 +1,61 @@
 import type { Actions, PageServerLoad } from "./$types";
 import { fail } from "@sveltejs/kit";
 import type { SiteFooterType } from "@/types/customizations";
+import { BackendApiEndpoints } from "@/utils/app-links";
+import { parseTokenFromCookie } from "@/utils/index.server";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, fetch, cookies }) => {
 
     // TODO: Get site-footer 
-    const siteFooter: SiteFooterType = {
-        id: "",
-        text: "",
-        social_json: [],
-        updated: "",
-        created: ""
-    }
+    const siteFooterRes = await fetch(BackendApiEndpoints.USER_SITE_FOOTER, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "JWT": parseTokenFromCookie(cookies)
+        }
+    }).then(res => res.json()) as SiteFooterType & {
+        social_json: string
+    };
 
+    // const socialJson = siteFooterRes?.social_json || {};
+    siteFooterRes.social_json = JSON.parse(siteFooterRes?.social_json ?? "[]")
+
+    // console.log("Site Footer: ", siteFooterRes)
     return {
-        siteFooter: siteFooter
+        siteFooter: siteFooterRes
     }
 };
 
 
 export const actions: Actions = {
-    changeFooterText: async ({ request, locals }) => {
-        const formData = await request.formData();
 
-        // TODO: Update footer text
-        const updatedFooter = {
-            success: true,
-            footer_text: formData.get('footer_text')
+    updateFooter: async ({ locals, request, cookies }) => {
+        const { text, social_json } = Object.fromEntries(await request.formData())
+
+        console.log("Form Data", JSON.stringify(social_json))
+
+        const updateWithObj = {} as {
+            text?: string,
+            social_json?: string
         }
 
-        if (!updatedFooter?.success) {
-            return fail(400, { message: 'Failed to update footer' })
-        }
+        if (text) updateWithObj["text"] = text as string;
+        if (social_json) updateWithObj["social_json"] = social_json as string;
 
-        return {
-            message: 'Footer updated',
-        }
-    },
-    changeSocialLinks: async ({ locals, request }) => {
-        const { social_json, siteFooterId } = Object.fromEntries(await request.formData())
+        let message = "Updated Site Footer";
+        const updatedSiteFooter = await fetch(BackendApiEndpoints.USER_SITE_FOOTER, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "JWT": parseTokenFromCookie(cookies)
+            },
+            body: JSON.stringify(updateWithObj)
 
-        console.log("Form Data", social_json, siteFooterId)
+        }).then(res => res.json()).catch(err => {
+            message = "Failed to update site footer"
+        });
 
-
-        //TODO: Update social links
-        const updatedFooter = {
-            success: true,
-            social_json: social_json
-        }
-
-
-        if (!updatedFooter.success) return fail(500, { message: "Social links could not be updated" })
-
-        return {
-            message: "Social links updated",
-        }
+        return { message }
 
     }
 

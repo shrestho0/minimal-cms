@@ -1,11 +1,12 @@
 import { redirect, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
-import { AppLinks } from "@/utils/app-links";
+import { AppLinks, BackendApiEndpoints } from "@/utils/app-links";
 import type { EditPageLoadData } from "@/types/load-data";
-import type { SinglePage } from "@/types/pages-and-stuff";
+import type { SinglePage } from "@/types/entity";
 import { dummyPages } from "@/dev/dummyPages";
+import { parseTokenFromCookie } from "@/utils/index.server";
 
-export const load: PageServerLoad = async ({ locals, params }) => {
+export const load: PageServerLoad = async ({ locals, params, fetch, cookies }) => {
     if (!locals?.user) {
         redirect(307, AppLinks.LOGIN);
     }
@@ -17,17 +18,18 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     } as EditPageLoadData;
 
     // Find user's profile page
-    // let profilePage = await locals.pb.collection(dbTables.pages).getFirstListItem(`slug = "/" && user = "${locals.user.id}"`).catch((err) => {
-    //     console.log("Profile page could not be fetched");
-    //     return null;
-    // });
 
-    let profilePage = dummyPages[0]
+    const profilePage = await fetch(BackendApiEndpoints.USER_PROFILE, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "JWT": parseTokenFromCookie(cookies)
+        }
+    }).then(res => res.json());
 
-    if (!profilePage) {
-        console.log("User's profile page doesn't exist ")
+    console.log("Profile Page: ", profilePage);
 
-    }
+
 
     resObj.pageExists = true;
     resObj.page = structuredClone(profilePage) as unknown as SinglePage;

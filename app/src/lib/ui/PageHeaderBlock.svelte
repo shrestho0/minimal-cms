@@ -11,21 +11,17 @@
 	import { fly, slide } from 'svelte/transition';
 	import SidePanel from './SidePanel.svelte';
 	import { Alert } from '@/components/ui/alert';
-	import type { PageStatus } from '@/types/pages-and-stuff';
+	import { UserRole, type Admin, type PageStatus, type User } from '@/types/entity';
+	import Page from '../../routes/(site)/+page.svelte';
 
-	export let user: {
-		email: string;
-		name?: string;
-		collectionName?: string;
-		username?: string;
-	};
+	export let user: User | Admin;
 	export let title = '';
 	export let pageStatus: PageStatus | null = null;
 
 	let regularUser = false;
 
 	onMount(() => {
-		if (user?.name || user?.collectionName) {
+		if (user && user.role == UserRole.USER) {
 			regularUser = true;
 		}
 		console.log(user);

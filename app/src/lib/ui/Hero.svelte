@@ -7,17 +7,19 @@
 	<div class=" pt-20 sm:pt-32">
 		<div class="mx-auto max-w-7xl">
 			<div class="mx-auto max-w-2xl text-center">
-				<h1 class="text-4xl font-bold tracking-tight text-black sm:text-6xl dark:text-white">
+				<h1 class="text-4xl font-bold tracking-tight text-black dark:text-white sm:text-6xl">
 					mCMS
 				</h1>
-				<p class="mt-6 text-lg leading-8 text-gray-900 dark:text-gray-100">Make your place in the Internet</p>
+				<p class="mt-6 text-lg leading-8 text-gray-900 dark:text-gray-100">
+					Make your place in the Internet
+				</p>
 				<div class="mt-10 flex items-center justify-center gap-x-2 md:gap-x-6">
-					<Link href="https://github.com/shrestho0/p471">Github</Link>
+					<Link href="https://github.com/shrestho0/minimal-cms">Github</Link>
 
-					<Link href="https://p471.pockethost.io/_/">
+					<!-- <Link href="https://shrestho.me">
 						PocketBase
-						<!-- <span aria-hidden="true" class="pl-1 text-black dark:text-white"> → </span> -->
-					</Link>
+						<span aria-hidden="true" class="pl-1 text-black dark:text-white"> → </span>
+					</Link> -->
 				</div>
 			</div>
 			<div class="mt-4 flex items-center justify-center md:mt-8">

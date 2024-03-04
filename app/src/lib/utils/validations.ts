@@ -9,7 +9,7 @@ export const validRegex = {
 
     pageSlug: /^[a-zA-Z0-9\-\.]{3,20}$/,// a-z A-Z 0-9 of length 3-20 
     pageTitle: /^.{5,30}$/, // all characters of length 5 to 30
-    pageContent: /^[\s\S]{5,4000}$/
+    pageContent: /^[\s\S]{10,3000}$/
 
 
 }

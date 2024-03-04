@@ -7,7 +7,7 @@
 	import UserPanelItemWrapper from '@/ui/UserPanelItemWrapper.svelte';
 	import * as Table from '$lib/components/ui/table';
 	import { ChevronLeft, ChevronRight, ExternalLink, CircleDotDashed } from 'lucide-svelte';
-	import type { User } from '@/types/users';
+	import type { User } from '@/types/entity';
 	import { beautiulDateTime } from '@/utils/common';
 
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
@@ -160,7 +160,7 @@
 					<Label for="sort">Sort By</Label>
 					<select
 						bind:value={params.sort.value}
-						class="border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
 						name="sort"
 					>
 						{#each params.sort.options as option}
@@ -172,7 +172,7 @@
 					<Label for="limit">Limit</Label>
 					<select
 						bind:value={params.limit.value}
-						class="border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
 						name="limit"
 					>
 						{#each params.limit.options as option}

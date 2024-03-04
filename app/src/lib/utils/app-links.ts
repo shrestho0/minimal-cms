@@ -19,7 +19,23 @@ const _BackendApiEndpoints = {
     LOGIN: "/auth/tokens",
     TOKEN_REFRESH: "/auth/refresh", // requires refresh token as JWT
     LOGOUT: "/auth/logout", // requires refresh token as JWT
+
     USER_PAGES: "/user/pages", // CRUD, requires ACCESS_TOKEN as JWT
+    USER_PROFILE: "/user/profile", // GET, PATCH, requires ACCESS_TOKEN as JWT
+    USER_SITE_FOOTER: "/user/site-footer", // GET, PATCH, requires ACCESS_TOKEN as JWT
+    USER_SITE_HEADER: "/user/site-header", // GET, PATCH, requires ACCESS_TOKEN as JWT
+    USER_SITE_STYLE: "/user/site-style", // GET, PATCH, requires ACCESS_TOKEN as JWT
+    USER_CHANGE_PASSWORD: "/user/change-password", // PATCH, requires ACCESS_TOKEN as JWT
+    USER_DASHBOARD: "/user/dashboard", // GET, requires ACCESS_TOKEN as JWT
+
+    PUBLIC_DESIGN: "/design", // GET with /design/:username
+    PUBLIC_STUFF: "/stuff", // GET with /stuff/:username
+    PUBLIC_PAGE: "/page", // GET with /page/:username/:slug
+    PUBLIC_PROFILE: "/profile", // GET with /profile/:username
+
+    ADMIN_NEW_USER: "/admin/new-user", // POST, requires ADMIN_ACCESS_TOKEN as JWT
+    ADMIN_CHANGE_PASSWORD: "/admin/change-password", // PATCH, requires ACCESS_TOKEN as JWT
+    ADMIN_DASHBOARD: "/admin/dashboard", // GET, requires ADMIN_ACCESS_TOKEN as JWT
 };
 
 

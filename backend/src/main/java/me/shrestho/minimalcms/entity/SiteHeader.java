@@ -10,20 +10,13 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.shrestho.minimalcms.utils.enums.PageStatus;
 
 @Data
 @Entity
@@ -47,6 +40,9 @@ public class SiteHeader {
 
     @Column(name = "nav_json", nullable = false, length = 3000)
     private String nav_json; // it'll be json
+
+    @Column(name = "logo", nullable = true)
+    private String logo; // logo url for simplicity
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user", nullable = false)

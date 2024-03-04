@@ -6,9 +6,9 @@
 	import PreDebug from '@/dev/PreDebug.svelte';
 	import UserPanelItemWrapper from '@/ui/UserPanelItemWrapper.svelte';
 	import * as Table from '$lib/components/ui/table';
-	import type { SinglePage } from '@/types/pages-and-stuff';
+	import type { SinglePage } from '@/types/entity';
 	import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, CircleDotDashed } from 'lucide-svelte';
-	import type { User } from '@/types/users';
+	import type { User } from '@/types/entity';
 	import { beautiulDateTime } from '@/utils/common';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import type { ActionResult } from '@sveltejs/kit';
@@ -88,13 +88,6 @@
 	// let nextPageUrl = sanitizePaginationLink(data.page + 1);
 	// let prevPageUrl = sanitizePaginationLink(data.page);
 
-	let sortItems = [
-		{ name: 'Created (DESC)', value: '-created' },
-		{ name: 'Created (ASC)', value: 'created' },
-		{ name: 'Updated (DESC)', value: '-updated' },
-		{ name: 'Updated (ASC)', value: 'updated' }
-	];
-
 	let limitItems = [
 		{ name: '5', value: 5 },
 		{ name: '10', value: 10 },
@@ -134,7 +127,7 @@
 					</select>
 				</div>
 				<!-- order by -->
-				<div class="grid w-full max-w-sm items-center gap-1.5">
+				<!-- <div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label for="sort">Sort By</Label>
 					<select
 						class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
@@ -145,13 +138,9 @@
 							<option selected={$page.url.searchParams.get('sort') == item.value} value={item.value}
 								>{item.name}</option
 							>
-						{/each}
-						<!-- <option selected={$page.url.searchParams.get('sort') ==} value="-created">Created (DESC)</option>
-						<option value="created">Created (ASC)</option>
-						<option value="-updated">Updated (DESC)</option>
-						<option value="updated">Updated (ASC)</option> -->
+						{/each} 
 					</select>
-				</div>
+				</div> -->
 				<div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label for="limit">Limit</Label>
 					<select

@@ -27,8 +27,26 @@ public class AuthService {
     private UserRepository userRepository;
 
     @Autowired
+    private ProfileService profileService;
+
+    @Autowired
+    private SiteFooterService siteFooterService;
+
+    @Autowired
+    private SiteHeaderService siteHeaderService;
+
+    @Autowired
+    private SiteStyleService siteStyleService;
+
+    // @Autowired
+    // private SiteFooter
+
+    @Autowired
     private TokenBlacklistedRepository tokenBlacklistedRepository;
 
+    //////////////////////////////////
+    /// Auth Section
+    //////////////////////////////////
     public Map<String, Object> register(Map<String, Object> newUserData) {
         Map<String, Object> ResponseObj = new HashMap<String, Object>(
                 Map.of("success", false, "message", "All fields are required"));
@@ -58,7 +76,7 @@ public class AuthService {
         System.out.println(user);
 
         // check if username exists
-        UserProjection userWithUsername = userRepository.findByUsername(user.getUsername());
+        User userWithUsername = userRepository.findByUsername(user.getUsername());
         if (userWithUsername != null) {
             errorObj.put("username", "Username already exists");
         }
@@ -84,13 +102,23 @@ public class AuthService {
         // Simply return success:true or false,
 
         try {
-            // user.setCreated(new java.sql.Date(System.currentTimeMillis()));
 
             user.setId(UUID.randomUUID().toString());
             User newUser = userRepository.save(user);
             ResponseObj.put("success", true);
             ResponseObj.put("message", "User created successfully");
             ResponseObj.put("user", newUser);
+
+            // Misc Stuff
+            try {
+                profileService.addProfile(newUser);
+                siteFooterService.addSiteFooter(newUser);
+                siteHeaderService.addSiteHeader(newUser);
+                siteStyleService.addSiteStyle(newUser);
+            } catch (Exception e) {
+                // handle exception
+                System.out.println(e);
+            }
 
             return ResponseObj;
         } catch (Exception e) {
@@ -243,6 +271,7 @@ public class AuthService {
             return ResponseObj;
         }
 
+        token.setId(UUID.randomUUID().toString());
         tokenBlacklistedRepository.save(token);
 
         ResponseObj.put("success", true);

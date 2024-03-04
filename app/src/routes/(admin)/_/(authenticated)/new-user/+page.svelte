@@ -11,6 +11,7 @@
 	import { toast } from 'svelte-sonner';
 	import { AppLinks } from '@/utils/app-links';
 
+	let reqForm: HTMLFormElement;
 	let fieldErrors = {
 		email: '',
 		username: '',
@@ -63,11 +64,13 @@
 					break;
 				}
 				case 'success': {
+					toast.dismiss();
 					toast.success(result?.data?.message ?? 'New User Created', {
 						duration: 3000,
 						position: 'top-center',
 						class: 'mt-4'
 					});
+
 					typeof fieldErrors.reset == 'function' && fieldErrors.reset();
 					break;
 				}
@@ -81,6 +84,7 @@
 
 	function resetForm() {
 		typeof fieldErrors.reset == 'function' && fieldErrors.reset();
+		reqForm?.reset();
 		fields.forEach((field) => {
 			field.value = '';
 		});
@@ -107,6 +111,7 @@
 		<Button on:click={populateDummyData}>Populate</Button>
 	</div>
 	<form
+		bind:this={reqForm}
 		method="post"
 		action=""
 		class=" flex max-w-lg flex-col gap-4"

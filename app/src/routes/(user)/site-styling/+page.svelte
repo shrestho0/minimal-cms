@@ -6,7 +6,7 @@
 	import { Label } from '@/components/ui/label';
 	import { Select } from '@/components/ui/select';
 	import type { SiteStyle } from '@/types/customizations';
-	import type { User } from '@/types/users';
+	import type { User } from '@/types/entity';
 	import UserPanelItemWrapper from '@/ui/UserPanelItemWrapper.svelte';
 	import fontData from '@/utils/font-data';
 	import type { ActionResult } from '@sveltejs/kit';
@@ -74,7 +74,7 @@
 <UserPanelItemWrapper title="Font">
 	<div class="sec flex flex-col gap-3 py-3">
 		<form
-			action="?/changeFont"
+			action="?/updateStyle"
 			class="grid w-full max-w-sm items-center gap-1.5"
 			method="post"
 			use:enhance={enhancedFormSubmission}
@@ -126,7 +126,7 @@
 <UserPanelItemWrapper title="Colors and Font Sizes">
 	<div class="sec flex flex-col gap-3 py-3">
 		<form
-			action="?/changeStyle"
+			action="?/updateStyle"
 			class="grid w-full max-w-sm items-center gap-1.5"
 			method="post"
 			use:enhance={enhancedFormSubmission}

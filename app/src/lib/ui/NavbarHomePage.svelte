@@ -7,6 +7,7 @@
 	import { browser } from '$app/environment';
 	import { fly, slide } from 'svelte/transition';
 	import { page } from '$app/stores';
+	import Logout from './Logout.svelte';
 
 	let open = true;
 	function toggleMobileMenu() {
@@ -108,10 +109,10 @@
 			href={AppLinks.HOME}
 			class="focus:shadow-outline flex items-center gap-3 rounded-lg text-lg font-semibold tracking-widest text-gray-900 focus:outline-none"
 		>
-			<Logo mode="dark" />
+			<Logo />
 		</a>
 		<div class="flex items-center justify-center gap-2">
-			<LightSwitch className="flex md:hidden" />
+			<!-- <LightSwitch className="flex md:hidden" /> -->
 			<button
 				class="relative h-10 w-10 text-gray-500 focus:outline-none md:hidden"
 				on:click={toggleMobileMenu}
@@ -152,7 +153,7 @@
 				? 'hidden'
 				: ''} flex w-full flex-grow flex-col gap-2 pb-4 transition-all ease-out md:mt-0 md:flex-row md:items-center md:justify-center md:pb-0 {!onMobile &&
 			scrollY > 100
-				? 'rounded-xl border border-gray-900 bg-gray-50/80 md:mx-16 lg:mx-32 xl:mx-48 dark:border-gray-100 dark:bg-stone-950/80  '
+				? 'rounded-xl border border-gray-900 bg-gray-50/80 dark:border-gray-100 dark:bg-stone-950/80 md:mx-16 lg:mx-32 xl:mx-48  '
 				: ''}"
 			in:fly
 			out:fly
@@ -192,7 +193,7 @@
 		>
 			<!-- Hide On Mobile -->
 			<div class="">
-				<LightSwitch className="hidden md:flex" />
+				<!-- <LightSwitch className="hidden md:flex" /> -->
 			</div>
 			<!-- <Link href="/login" style="outline">Login</Link> -->
 			<!-- <Link href="/register">Register</Link> -->
@@ -200,6 +201,7 @@
 				<Button data-sveltekit-reload href={AppLinks.USER_DASHBOARD} variant="outline"
 					>Dashboard</Button
 				>
+				<Logout />
 			{:else if $page?.data.admin}
 				<Button href={AppLinks.ADMIN_DASHBOARD} variant="outline">Dashboard</Button>
 			{:else}

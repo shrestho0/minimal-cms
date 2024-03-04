@@ -1,26 +1,30 @@
 import { redirect, type Actions, fail } from "@sveltejs/kit";
 import { ErrorMessages } from "@/utils/messages";
+import { BackendApiEndpoints } from "@/utils/app-links";
+import { parseTokenFromCookie } from "@/utils/index.server";
 
 export const actions: Actions = {
-    changePassword: async ({ locals, request }) => {
+    changePassword: async ({ locals, request, fetch, cookies }) => {
         const data = Object.fromEntries(await request.formData());
         const { oldPassword, password, passwordConfirm } = data
 
-        try {
 
-            // Change Password 
-            // Return success message
+        const changePasswordRes = await fetch(BackendApiEndpoints.USER_CHANGE_PASSWORD, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "JWT": parseTokenFromCookie(cookies)
+            },
+            body: JSON.stringify({ oldPassword, password, passwordConfirm })
+        }).then(res => res.json()).catch(err => ({ success: false, message: ErrorMessages.SERVER_ERROR }));
 
 
-        } catch (err: any) {
-            if (err?.data?.data?.oldPassword) {
-                return fail(403, {
-                    message: err?.data?.data?.oldPassword?.message
-                });
-            }
-            return fail(500, {
-                message: ErrorMessages.DEFAULT_ERROR
-            })
+        if (!changePasswordRes.success) {
+            return fail(400, { message: changePasswordRes.message });
         }
+
+        return changePasswordRes;
+
+
     }
 };

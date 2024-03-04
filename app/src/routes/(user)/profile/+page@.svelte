@@ -107,6 +107,13 @@
 			// Redirect to the page
 			// window.location.href = resJson?.redirect_to;
 		} else {
+			if (resJson?.message) {
+				toast.error(resJson?.message, {
+					position: 'top-right',
+					class: 'my-8'
+				});
+			}
+
 			// Show the error
 			pageData.title.error = resJson?.errors?.title as string;
 			pageData.content.error = resJson?.errors?.content as string;

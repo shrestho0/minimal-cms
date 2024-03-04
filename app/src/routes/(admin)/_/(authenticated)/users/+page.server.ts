@@ -1,19 +1,12 @@
-import type { SinglePage } from "@/types/pages-and-stuff";
+import type { SinglePage } from "@/types/entity";
 import type { Actions, PageServerLoad } from "./$types";
-import type { User } from "@/types/users";
+import type { User } from "@/types/entity";
 import { fail } from "@sveltejs/kit";
 export const load: PageServerLoad = async ({ locals, url }) => {
     let page = Number.parseInt(url.searchParams.get('page') || '1')
     let limit = Number.parseInt(url.searchParams.get('limit') || '5')
-    let sort = url.searchParams.get('sort') || '-created'
+
     let q = url.searchParams.get('qu') || ''
-
-
-    let filter = '';
-    if (q) {
-        filter = `id~"${q}" || username ~"${q}" || email ~"${q}" || name ~"${q}"`
-    }
-
 
     const users = null
 

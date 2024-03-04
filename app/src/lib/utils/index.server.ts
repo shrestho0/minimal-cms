@@ -1,6 +1,6 @@
 import { JWT_COOKIE_NAME } from "$env/static/private";
 import type { SiteStyle } from "@/types/customizations";
-import { UserRole, type BaseUser, type Admin, type User } from "@/types/users";
+import { UserRole, type BaseUser, type Admin, type User } from "@/types/entity";
 
 
 import { fail, type Cookies } from "@sveltejs/kit";

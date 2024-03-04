@@ -1,18 +1,23 @@
 <script lang="ts">
-	import type { SiteHeaderType } from '@/types/customizations';
-	import { getLogoUrl } from '@/utils/common';
+	import type { SingleNavItem, SiteHeaderType } from '@/types/customizations';
+	import { onMount } from 'svelte';
 
 	export let headerData: SiteHeaderType;
+
+	// let loading = true;
+	// onMount(() => {
+	// 	console.log('mounted: header', headerData.nav_json);
+	// 	headerData.nav_json = JSON.parse((headerData.nav_json as unknown as string) || '[]');
+	// 	loading = false;
+	// });
 </script>
 
+<!-- {#if !loading} -->
 <header
 	class="flex flex-col items-center justify-center gap-3 bg-black p-4 text-gray-100 dark:bg-black dark:text-gray-100"
 >
 	{#if headerData.logo}
-		<img
-			src={getLogoUrl(headerData.collectionId, headerData.id, headerData.logo)}
-			alt={headerData.site_title}
-		/>
+		<img src={headerData.logo} alt={headerData.site_title} />
 	{:else}
 		<div class="text-2xl font-bold">{headerData.site_title}</div>
 	{/if}
@@ -28,3 +33,4 @@
 		</nav>
 	{/if}
 </header>
+<!-- {/if} -->

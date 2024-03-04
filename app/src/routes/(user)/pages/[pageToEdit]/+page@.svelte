@@ -16,7 +16,7 @@
 	import { onMount } from 'svelte';
 	import type { NewOrEditPageData, ResponseNewOrUpdatePage } from '@/types/load-data';
 	import { InternalApiEndpoints } from '@/utils/app-links';
-	import type { SinglePage } from '@/types/pages-and-stuff';
+	import type { SinglePage } from '@/types/entity';
 	import { invalidateAll } from '$app/navigation';
 	import { navigating } from '$app/stores';
 	import macros from '@/utils/macros';
@@ -90,8 +90,7 @@
 			},
 			body: JSON.stringify({
 				...dataX,
-				status,
-				oldSlug: data.page.slug
+				status
 			})
 		});
 		const resJson: ResponseNewOrUpdatePage = await res.json();
@@ -110,10 +109,11 @@
 			// Toast should be enough
 		} else {
 			// Show the error
-			// toast.error(resJson?.message, {
-			// 	position: 'top-center',
-			// 	class: 'mt-8'
-			// });
+			resJson?.message &&
+				toast.error(resJson?.message, {
+					position: 'top-center',
+					class: 'mt-8'
+				});
 			pageData.title.error = resJson?.errors?.title as string;
 			pageData.slug.error = resJson?.errors?.slug as string;
 			pageData.content.error = resJson?.errors?.content as string;

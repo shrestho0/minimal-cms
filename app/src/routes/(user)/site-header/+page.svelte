@@ -9,11 +9,10 @@
 
 	import UserPanelItemWrapper from '@/ui/UserPanelItemWrapper.svelte';
 	import type { SingleNavItem, SiteHeaderType } from '@/types/customizations';
-	import type { User } from '@/types/users';
+	import type { User } from '@/types/entity';
 	import { toast } from 'svelte-sonner';
-	import PreDebug from '@/dev/PreDebug.svelte';
-	import type { SinglePage } from '@/types/pages-and-stuff';
-	import { fly, slide } from 'svelte/transition';
+	import type { SinglePage } from '@/types/entity';
+	import { fly } from 'svelte/transition';
 
 	const loadingStuff = {
 		changeTitle: false,
@@ -22,24 +21,10 @@
 		updateNavLinks: false
 	};
 
-	const getLogoUrl = (...data: string[]) => {
-		return `/api/site-header/logo/${data.join('/')}`;
-	};
-
 	export let data: { siteHeader: SiteHeaderType; user: User };
 	const siteHeader = data?.siteHeader as SiteHeaderType;
 
-	let logoUrl = siteHeader.logo
-		? getLogoUrl(siteHeader?.collectionId, siteHeader.id, siteHeader.logo)
-		: '';
-
-	function enhancedLogoRemoval() {
-		return async ({ result }: { result: ActionResult }) => {
-			// Do Something
-			await applyAction(result);
-			invalidateAll();
-		};
-	}
+	let logoUrl = siteHeader.logo;
 
 	function enhancedFormSubmission() {
 		return async ({ result }: { result: ActionResult }) => {
@@ -55,12 +40,7 @@
 					await applyAction(result);
 					invalidateAll();
 					if (result?.data?.logo) {
-						logoUrl = getLogoUrl(siteHeader?.collectionId, siteHeader.id, result.data.logo);
-
-						noImageSelected = true;
-
-						// clear image field
-						imageField.value = '';
+						logoUrl = result.data.logo; // return { logo: LOGO_URL_AFTER_AFTER}
 					} else {
 						logoUrl = '';
 					}
@@ -137,7 +117,7 @@
 	<div class="sec flex flex-col gap-3 py-3">
 		<div class="user-logo">
 			<form
-				action="?/changeTitle"
+				action="?/updateHeader"
 				class="flex items-center gap-2 text-black dark:text-black"
 				method="post"
 				use:enhance={enhancedFormSubmission}
@@ -156,17 +136,17 @@
 	<div class="sec flex flex-col gap-3 py-3">
 		<div class="user-logo">
 			<form
-				action="?/removeLogo"
+				action="?/updateHeader"
 				class="flex items-center gap-2 text-black dark:text-black"
 				method="post"
 				use:enhance={enhancedFormSubmission}
 			>
-				<input type="hidden" name="siteHeaderId" value={siteHeader.id} />
 				{#key logoUrl}
 					{#if logoUrl}
 						<div class="flex flex-col gap-2 py-3">
 							<!-- [[LOGO IMAGE]] -->
 							<img src={logoUrl} alt="Site Logo" class="w-20 border bg-gray-200 p-2" />
+							<input type="hidden" name="logo" value="" />
 
 							<Button
 								type="submit"
@@ -184,54 +164,31 @@
 							</Button>
 						</div>
 					{:else}
-						<p class="py-2 text-black dark:text-black">No logo uploaded</p>
+						<p class="py-2 text-black dark:text-black">No logo url found</p>
 					{/if}
 				{/key}
 			</form>
-		</div>
 
-		<form
-			action="?/changeLogo"
-			class="grid w-full max-w-sm items-center gap-1.5"
-			method="post"
-			use:enhance={enhancedFormSubmission}
-			enctype="multipart/form-data"
-		>
-			<input type="hidden" name="siteHeaderId" value={siteHeader.id} />
-
-			<Label for="picture" class="py-2 text-black dark:text-black">Upload new logo</Label>
-
-			<input
-				bind:this={imageField}
-				on:change={() => {
-					noImageSelected = false;
+			<form
+				method="post"
+				use:enhance={enhancedFormSubmission}
+				action="?/updateHeader"
+				class="flex items-center gap-2 text-black dark:text-black"
+				on:submit={() => {
+					loadingStuff.changeLogo = true;
 				}}
-				required
-				name="logo"
-				id="picture"
-				type="file"
-				accept="image/*"
-				class="hover:file w-full rounded-sm border p-2 file:border-r file:border-transparent file:border-r-black file:bg-transparent"
-			/>
-
-			{#if !noImageSelected}
-				<button
-					type="submit"
-					on:click={(e) => {
-						loadingStuff.changeLogo = true;
-					}}
-					disabled={noImageSelected}
-					class="flex w-32 items-center justify-center rounded-md bg-black py-1 text-white transition-colors duration-300 ease-in-out hover:bg-gray-800"
-				>
+			>
+				<input type="url" required name="logo" class=" rounded border px-3 py-1" value={logoUrl} />
+				<Button type="submit" class="bg-black text-white">
 					{#if loadingStuff.changeLogo}
 						<CircleDashed class=" mr-2 h-4 w-4 animate-spin" />
-						Uploading
+						Updating Logo
 					{:else}
-						Upload
+						Update Logo
 					{/if}
-				</button>
-			{/if}
-		</form>
+				</Button>
+			</form>
+		</div>
 	</div>
 </UserPanelItemWrapper>
 
@@ -348,9 +305,7 @@
 			}}>{navLinks?.length > 0 ? 'Add another link' : 'Add link'}</Button
 		>
 		<!-- We'll send the ready json-->
-		<form action="?/changeNavLinks" method="post" use:enhance={enhancedFormSubmission}>
-			<input type="hidden" name="siteHeaderId" value={siteHeader.id} />
-
+		<form action="?/updateHeader" method="post" use:enhance={enhancedFormSubmission}>
 			<input type="hidden" name="nav_json" bind:value={nav_json_internal} />
 			<Button
 				type="submit"

@@ -1,4 +1,4 @@
-import type { PageStatus, SinglePage } from "./pages-and-stuff";
+import type { PageStatus, SinglePage } from "./entity";
 
 export type EditPageLoadData = {
     pageExists: boolean;

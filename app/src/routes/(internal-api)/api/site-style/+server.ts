@@ -1,11 +1,11 @@
 
 import type { SiteStyle } from '@/types/customizations';
-import dbTables from '@/utils/db-tables';
+import { BackendApiEndpoints } from '@/utils/app-links';
 import defaultCssData from '@/utils/default-css-data';
-import { jsonToCSS, setPBSiteKey } from '@/utils/index.server';
+import { jsonToCSS } from '@/utils/index.server';
 import type { RequestHandler } from '@sveltejs/kit';
 
-export const GET: RequestHandler = async ({ url, locals }) => {
+export const GET: RequestHandler = async ({ url, locals, fetch }) => {
     const u = url.searchParams.get('u');
     console.log("Site style request received", url.searchParams);
 
@@ -19,21 +19,32 @@ export const GET: RequestHandler = async ({ url, locals }) => {
         console.log("User found inside ", u);
 
         // find the actual design from the user
-        setPBSiteKey(locals.pb);
-        const ownerStyles = await locals.pb.collection(dbTables.style).getFirstListItem(`user.username = "${u}"`).catch((e) => {
-            return null;
-        });
+        const ownerStyles = await fetch(BackendApiEndpoints.PUBLIC_DESIGN + `/${u}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((res) => res.json()).catch((err) => { return null; });
 
-        if (ownerStyles && ownerStyles?.styleJson) {
 
-            styleCss = jsonToCSS(ownerStyles as unknown as SiteStyle);
-            console.log("Owner styles found", "styleCss", styleCss, "ownerStyles", ownerStyles);
+
+        if (ownerStyles?.siteStyle && ownerStyles?.siteStyle?.styleJson) {
+
+            // ownerStyles.SiteStyle.styleJson = JSON.parse(ownerStyles.siteStyle.styleJson);
+
+            ownerStyles.siteStyle.styleJson = JSON.parse(ownerStyles.siteStyle.styleJson);
+            // console.log("Owner styles found", "ownerStyles", ownerStyles.siteStyle.styleJson);
+
+            styleCss = jsonToCSS(ownerStyles.siteStyle as unknown as SiteStyle);
+            // console.log("Owner styles found", "styleCss", styleCss, "ownerStyles", ownerStyles?.siteStyle);
         }
 
     }
 
 
     if (!styleCss) {
+
+        console.log("No user found, using default styles");
         styleCss = jsonToCSS(defaultCssData);
     }
 

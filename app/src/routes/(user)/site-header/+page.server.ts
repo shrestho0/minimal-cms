@@ -1,88 +1,73 @@
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
-import { AppLinks } from "@/utils/app-links";
+import { AppLinks, BackendApiEndpoints } from "@/utils/app-links";
+import { parseTokenFromCookie } from "@/utils/index.server";
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, fetch, cookies }) => {
 
     // TODO: Get site-header
-    const siteHeader = {
+    const dummy = {
         id: "",
         site_title: "",
-        logo: "",
+        logo: "ss",
         nav_links_json: []
     }
+
+
+    const siteHeader = await fetch(BackendApiEndpoints.USER_SITE_HEADER, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "JWT": parseTokenFromCookie(cookies)
+        }
+    }).then(r => r.json()).catch(e => {
+        console.error(e)
+        return dummy
+    })
+    console.log(siteHeader, siteHeader.nav_json,)
+
+    siteHeader.nav_json = JSON.parse(siteHeader.nav_json)
+
     return {
-        siteHeader: structuredClone(siteHeader)
+        siteHeader
     }
 };
 
 
 export const actions: Actions = {
-    changeTitle: async ({ locals, request }) => {
-        // if (!locals.user) return redirect(307, AppLinks.LOGIN)
+    updateHeader: async ({ request, fetch, locals, cookies }) => {
 
-        const { siteHeaderId, site_title } = Object.fromEntries(await request.formData()) as {
-            siteHeaderId: string,
-            site_title: string
-        };
+        const { site_title, nav_json, logo } = Object.fromEntries(await request.formData())
+        console.log(site_title, nav_json, logo, JSON.stringify(nav_json))
 
-        console.log(siteHeaderId, site_title)
-
-        if (!siteHeaderId || !site_title) return fail(403, { message: "Invalid request" })
-
-
-        const updatedHeader = null
-
-        console.log("Updated Header", updatedHeader)
-
-        if (!updatedHeader) return fail(500, { message: "Site title could not be updated" })
-
-        return {
-            message: "Site title updated",
+        const updateWithObj = {} as {
+            site_title?: string,
+            nav_json?: string,
+            logo?: string
         }
 
-    },
+        if (site_title) updateWithObj["site_title"] = site_title as string;
+        if (nav_json) updateWithObj["nav_json"] = nav_json as string;
+        if (logo != undefined) updateWithObj["logo"] = logo as string;
 
-    removeLogo: async ({ locals, request }) => {
-        const { siteHeaderId } = Object.fromEntries(await request.formData()) as {
-            siteHeaderId: string,
-        };
+        let message = "Updated Site Footer";
+        const updatedSiteHeader = await fetch(BackendApiEndpoints.USER_SITE_HEADER, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "JWT": parseTokenFromCookie(cookies)
+            },
+            body: JSON.stringify(updateWithObj)
 
+        }).then(res => res.json()).catch(err => {
+            message = "Failed to update site footer"
+        });
 
-        //TODO: Remove logo
-        const updatedHeader = null;
+        console.log("===== Updated Site Header =====")
+        console.log(updatedSiteHeader, updatedSiteHeader.siteHeader.logo)
+        console.log("===== Updated Site Header =====")
 
-        if (!updatedHeader) return fail(500, { message: "Logo could not be removed" })
-
-        return {
-            message: "Logo removed",
-        }
-    },
-
-    changeLogo: async ({ locals, request }) => {
-        const formData = await request.formData()
-
-        console.log(formData)
-
-        const updatedHeader = null;
-
-        if (!updatedHeader) return fail(500, { message: "Logo could not be updated" })
-
-        return {
-            message: "Logo updated",
-            // logo: updatedHeader?.logo
-        }
-    },
-    changeNavLinks: async ({ locals, request }) => {
-        const formData = await request.formData()
-
-        const updatedHeader = null;
-
-        if (!updatedHeader) return fail(500, { message: "Nav links could not be updated" })
-
-        return {
-            message: "Nav links updated",
-        }
+        return { message, logo: updatedSiteHeader.siteHeader.logo }
 
     }
 

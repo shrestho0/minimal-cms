@@ -1,20 +1,14 @@
 <script lang="ts">
 	import type { SiteFooterType } from '@/types/customizations';
 	import Logo from './Logo.svelte';
-	import Separator from '@/components/ui/separator/separator.svelte';
 
-	export let footerData: SiteFooterType = {
-		text: '(c) 2024 User Page Footer',
-		social_json: [
-			{ title: 'Facebook', href: '#', fa_icon: 'facebook' },
-			{ title: 'Twitter', href: '#', fa_icon: 'twitter' }
-		],
-		id: ''
-	};
+	export let footerData: SiteFooterType;
 </script>
 
-<footer class=" text-black dark:text-black">
-	<div class=" flex flex-col items-center justify-between border p-3 md:flex-row">
+<footer class="  text-black dark:text-black">
+	<div
+		class=" flex flex-col items-center justify-between border p-3 dark:border-border md:flex-row"
+	>
 		<div class="left">
 			<p>{footerData.text}</p>
 		</div>

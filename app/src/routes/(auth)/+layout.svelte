@@ -4,8 +4,12 @@
 	import { AppLinks } from '@/utils/app-links';
 	import { Button } from '@/components/ui/button';
 	import { page } from '$app/stores';
-	import { ModeWatcher } from 'mode-watcher';
+	import { ModeWatcher, setMode } from 'mode-watcher';
 	import LightSwitch from '@/ui/LightSwitch.svelte';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		setMode('dark');
+	});
 </script>
 
 <HeroWrapper />

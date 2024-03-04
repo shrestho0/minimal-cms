@@ -1,10 +1,11 @@
-import defaultCssData from "@/utils/default-css-data";
+import { BackendApiEndpoints } from "@/utils/app-links";
+import { parseTokenFromCookie, parseUserFromJWTVerifyResult } from "@/utils/index.server";
 import { ErrorMessages } from "@/utils/messages";
 import { validRegex } from "@/utils/validations";
 import { fail, type Actions } from "@sveltejs/kit";
 
 export const actions: Actions = {
-    default: async ({ locals, request }) => {
+    default: async ({ locals, request, cookies, fetch }) => {
         const data = Object.fromEntries(await request.formData()) as {
             email: string,
             username: string,
@@ -64,9 +65,26 @@ export const actions: Actions = {
         // Check if email exists in database
         // TODO: Register user
 
-        return {
-            message: "User created successfully",
+        data.passwordHash = password
+        const newUserRes = await fetch(BackendApiEndpoints.ADMIN_NEW_USER, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "JWT": parseTokenFromCookie(cookies)
+            },
+            body: JSON.stringify(data),
+        }).then(res => res.json()).catch(err => {
+            return {
+                success: false,
+                message: "Server error",
+            }
+        });
+
+        if (!newUserRes.success) {
+            return fail(400, { message: newUserRes.message, fieldErrors: newUserRes.errors });
         }
+
+        return newUserRes;
 
 
 

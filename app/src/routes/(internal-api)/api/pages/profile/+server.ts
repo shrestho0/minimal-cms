@@ -1,80 +1,59 @@
 import type { NewOrEditPageData, ResponseNewOrUpdatePage } from "@/types/load-data";
-import type { PageStatus, SinglePage } from "@/types/pages-and-stuff";
-import { AppLinks } from "@/utils/app-links";
-import dbTables from "@/utils/db-tables";
+import type { PageStatus, SinglePage } from "@/types/entity";
+import { AppLinks, BackendApiEndpoints } from "@/utils/app-links";
+import { parseTokenFromCookie } from "@/utils/index.server";
 import { ErrorMessages } from "@/utils/messages";
 import { validRegex } from "@/utils/validations";
 import { json, redirect, type RequestHandler } from "@sveltejs/kit";
 
-/**
- * Edit Profile Internal Endpoint
- */
-
-export const POST: RequestHandler = async ({ locals, request, url }) => {
+export const POST: RequestHandler = async ({ locals, request, url, cookies }) => {
     if (!locals.user) {
-        return redirect(307, AppLinks.USER_LOGIN)
+        return redirect(307, AppLinks.LOGIN)
     }
 
-    const pageData = await request.json() as {
-        id: string;
-        title: string;
-        content: string;
-    };
+    const editPageData: SinglePage = await request.json();
 
-    console.log("Page Data from /edit")
+    // Edit page validation errors
 
-    const responseObj: ResponseNewOrUpdatePage = {
+    let editResData = {
         success: false,
-        message: "Some error occured",
         errors: {
             title: "",
             slug: "",
-            content: ""
+            content: "",
+            status: ""
         }
+    } as unknown as ResponseNewOrUpdatePage;
+
+    // validate data
+    if (!validRegex.pageTitle.test(editPageData.title)) {
+        editResData.errors.title = ErrorMessages.PAGE_TITLE_INVALID;
     }
 
-    console.log("Page Data from /edit", pageData, validRegex.pageContent.test(pageData.content))
-
-    if (!validRegex.pageTitle.test(pageData.title)) {
-        responseObj.success = false;
-        responseObj.errors.title = ErrorMessages.PAGE_TITLE_INVALID
-    }
-    if (!validRegex.pageContent.test(pageData.content)) {
-        responseObj.success = false;
-        responseObj.errors.content = ErrorMessages.PAGE_CONTENT_INVALID
+    if (!validRegex.pageContent.test(editPageData.content)) {
+        editResData.errors.content = ErrorMessages.PAGE_CONTENT_INVALID + `. Provided: ${editPageData.content.length} characters`;
     }
 
 
-
-
-    if (responseObj.errors.title || responseObj.errors.content) {
-        console.log("Invalid data", responseObj.errors)
-        return json(responseObj);
+    // check if errors
+    if (editResData.errors.title || editResData.errors.slug || editResData.errors.content) {
+        return json(editResData);
     }
 
-    // const actualPage = await locals.pb.collection(dbTables.pages).getOne(pageData.id).catch((err) => {
-    //     return null;
-    // });
+    const token = parseTokenFromCookie(cookies);
 
 
-
-
-    // Update page
-    const updatedPage = await locals.pb.collection(dbTables.profile).update(pageData.id, {
-        title: pageData.title,
-        content: pageData.content,
-    }).catch((err) => {
-        console.log("Error updating profile", err)
-        return null;
-    });
-
-    if (updatedPage) {
-        responseObj.success = true;
-        responseObj.message = "Profile updated successfully";
-        return json(responseObj);
-    }
-
-    return json({ success: false, message: ErrorMessages.DEFAULT_ERROR }, {
-        status: 403,
+    const editRes = await fetch(BackendApiEndpoints.USER_PROFILE, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "JWT": token
+        },
+        body: JSON.stringify(editPageData)
     })
+
+    editResData = await editRes.json() as ResponseNewOrUpdatePage;
+    console.log("Edit Response: ", editResData)
+
+    return json(editResData);
 };

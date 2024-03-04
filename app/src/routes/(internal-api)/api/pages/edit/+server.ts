@@ -1,5 +1,5 @@
 import type { NewOrEditPageData, ResponseNewOrUpdatePage } from "@/types/load-data";
-import type { PageStatus, SinglePage } from "@/types/pages-and-stuff";
+import type { PageStatus, SinglePage } from "@/types/entity";
 import { AppLinks, BackendApiEndpoints } from "@/utils/app-links";
 import { parseTokenFromCookie } from "@/utils/index.server";
 import { ErrorMessages } from "@/utils/messages";
@@ -7,136 +7,61 @@ import { validRegex } from "@/utils/validations";
 import { json, redirect, type RequestHandler } from "@sveltejs/kit";
 
 export const POST: RequestHandler = async ({ locals, request, url, cookies }) => {
-    // if (!locals.user) {
-    //     return redirect(307, AppLinks.LOGIN)
-    // }
+    if (!locals.user) {
+        return redirect(307, AppLinks.LOGIN)
+    }
 
-    // const pageId = url.searchParams.get("pageId");
-    // // console.log("Page ID: ", pageId, url.searchParams)
-    // if (!pageId) {
-    //     return json({ pageExists: false, message: "Invalid page id. Accepts: ?pageId=[PAGE_ID]" })
-    // }
+    const pageId = url.searchParams.get("pageId");
+    // console.log("Page ID: ", pageId, url.searchParams)
+    if (!pageId) {
+        return json({ success: false, message: "Invalid page id. Accepts: ?pageId=[PAGE_ID]" })
+    }
 
+    const editPageData: SinglePage = await request.json();
 
-    // const pageData = await request.json() as {
-    //     oldSlug: string;
-    //     status: PageStatus
-    // } & SinglePage;
+    // Edit page validation errors
 
-    // console.log("Page Data from /edit")
+    let editResData = {
+        success: false,
+        errors: {
+            title: "",
+            slug: "",
+            content: "",
+            status: ""
+        }
+    } as unknown as ResponseNewOrUpdatePage;
 
-    // const responseObj: ResponseNewOrUpdatePage = {
-    //     success: false,
-    //     message: "Some error occured",
-    //     errors: {
-    //         title: "",
-    //         slug: "",
-    //         content: ""
-    //     }
-    // }
-
-    // // check if page exists and request user is the owner
-
-    // const resObj = await fetch(BackendApiEndpoints.USER_PAGES + `/${pageId}`, {
-    //     method: "GET",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         "JWT": parseTokenFromCookie(cookies)
-    //     }
-    // })
-
-    // const resJson = await resObj.json()
-
-    // if (!resJson.success) {
-    //     return json({
-    //         pageExists: false,
-    //         message: resJson.message
-    //     })
-    // }
-
-    // // check title, slug and content
-    // if (!validRegex.pageSlug.test(pageData.slug)) {
-    //     responseObj.errors.slug = ErrorMessages.PAGE_SLUG_INVALID
-    // }
-    // if (!validRegex.pageTitle.test(pageData.title)) {
-    //     responseObj.errors.title = ErrorMessages.PAGE_TITLE_INVALID
-    // }
-    // if (pageData.content?.length < 5) {
-    //     responseObj.errors.content = ErrorMessages.PAGE_CONTENT_INVALID
-    // }
+    // validate data
+    if (!validRegex.pageTitle.test(editPageData.title)) {
+        editResData.errors.title = ErrorMessages.PAGE_TITLE_INVALID;
+    }
+    if (!validRegex.pageSlug.test(editPageData.slug)) {
+        editResData.errors.slug = ErrorMessages.PAGE_SLUG_INVALID;
+    }
+    if (!validRegex.pageContent.test(editPageData.content)) {
+        editResData.errors.content = ErrorMessages.PAGE_CONTENT_INVALID + `. Provided: ${editPageData.content.length} characters`;
+    }
 
 
+    // check if errors
+    if (editResData.errors.title || editResData.errors.slug || editResData.errors.content) {
+        return json(editResData);
+    }
 
-    // if (pageData.oldSlug != pageData.slug) {
-    //     // check if new slug is unique for user
-    //     // const slugExists = await locals.pb.collection(dbTables.pages).getFirstListItem(`slug = "${pageData.slug}" && user = "${locals.user.id}"`).catch((err) => {
-    //     //     console.log("Error checking if slug exists", err)
-    //     //     return null;
-    //     // });
-
-    //     const resObj = await fetch(BackendApiEndpoints.USER_PAGES + `/${pageId}`, {
-    //         method: "GET",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "JWT": parseTokenFromCookie(cookies)
-    //         }
-    //     })
-
-    //     const resJson = await resObj.json()
-
-    //     if (!resJson.success) {
-    //         return json({
-    //             pageExists: false,
-    //             message: resJson.message
-    //         })
-    //     }
-
-    //     const slugExists = resJson.success;
-
-    //     if (slugExists) {
-    //         responseObj.errors.slug = "Slug already exists";
-    //     }
-    //     // else we ignore
-    // }
-
-    // console.log("Page Data from /edit", pageData)
+    const token = parseTokenFromCookie(cookies);
 
 
-    // if (responseObj.errors.slug || responseObj.errors.title || responseObj.errors.content) {
-    //     return json(responseObj);
-    // }
+    const editRes = await fetch(BackendApiEndpoints.USER_PAGES + `/${pageId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "JWT": token
+        },
+        body: JSON.stringify(editPageData)
+    })
 
-    // // Update page
-    // // const updatedPage = await locals.pb.collection(dbTables.pages).update(pageData.id, {
-    // //     title: pageData.title,
-    // //     slug: pageData.slug,
-    // //     content: pageData.content,
-    // //     status: pageData.status
-    // // }).catch((err) => {
-    // //     console.log("Error updating page", err)
-    // //     return null;
-    // // });
+    editResData = await editRes.json() as ResponseNewOrUpdatePage;
+    // console.log("Edit Response: ", editResData)
 
-    // const resObj2 = await fetch(BackendApiEndpoints.USER_PAGES + `/${pageId}`, {
-    //     method: "PATCH",
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         "JWT": parseTokenFromCookie(cookies)
-    //     },
-    //     body: JSON.stringify(pageData)
-    // })
-
-    // const updatedPage = await resObj2.json()
-
-    // if (updatedPage.success) {
-    //     responseObj.success = true;
-    //     responseObj.message = (updatedPage.slug == "/" ? "Profile" : 'Page') + " updated successfully";
-    //     return json(responseObj);
-    // }
-
-    // return json({ success: false, message: ErrorMessages.DEFAULT_ERROR }, {
-    //     status: 403,
-    // })
-
-    return json({ success: false, message: "Not implemented" })
+    return json(editResData);
 };

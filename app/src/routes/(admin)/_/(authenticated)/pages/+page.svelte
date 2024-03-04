@@ -6,9 +6,9 @@
 	import PreDebug from '@/dev/PreDebug.svelte';
 	import UserPanelItemWrapper from '@/ui/UserPanelItemWrapper.svelte';
 	import * as Table from '$lib/components/ui/table';
-	import type { SinglePage } from '@/types/pages-and-stuff';
+	import type { SinglePage } from '@/types/entity';
 	import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, CircleDotDashed } from 'lucide-svelte';
-	import type { User } from '@/types/users';
+	import type { User } from '@/types/entity';
 	import { beautiulDateTime } from '@/utils/common';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
 	import type { ActionResult } from '@sveltejs/kit';
@@ -132,7 +132,7 @@
 				<div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label for="status">Status</Label>
 					<select
-						class="border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
 						name="status"
 						bind:value={qparams.status.selected}
 					>
@@ -145,7 +145,7 @@
 				<div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label for="sort">Sort By</Label>
 					<select
-						class="border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
 						name="sort"
 						bind:value={qparams.sort.selected}
 					>
@@ -158,7 +158,7 @@
 				<div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label for="limit">Limit</Label>
 					<select
-						class="border-input placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-1 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
 						name="limit"
 						bind:value={qparams.limit.selected}
 					>

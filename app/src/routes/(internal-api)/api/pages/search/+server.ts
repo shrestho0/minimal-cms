@@ -1,11 +1,11 @@
 
+import { BackendApiEndpoints } from '@/utils/app-links';
+import { parseTokenFromCookie } from '@/utils/index.server';
 import { json } from '@sveltejs/kit';
-
-import dbTables from '$lib/utils/db-tables';
 
 import type { RequestHandler } from '@sveltejs/kit';
 
-export const GET: RequestHandler = async ({ url, locals }) => {
+export const GET: RequestHandler = async ({ url, locals, fetch, cookies }) => {
     const q = url.searchParams.get('q'); // query
     const t = url.searchParams.get('t'); // type
     if (!q) {
@@ -22,14 +22,27 @@ export const GET: RequestHandler = async ({ url, locals }) => {
     switch (t) {
         case 'page':
 
-            const pages = await locals.pb.collection(dbTables.pages).getFullList({
-                filter: `title ~ "${q}" || slug ~ "${q}"`,
-            });
+
+            const searchPageRes = await fetch(BackendApiEndpoints.USER_PAGES + "/search?q=" + q, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "JWT": parseTokenFromCookie(cookies)
+                }
+            }).then(r => r.json()).catch(e => {
+                console.error(e)
+                return {
+                    success: false,
+                    message: "Error fetching pages",
+                    items: []
+                }
+            })
+
 
             return json({
                 success: true,
                 query: q,
-                results: structuredClone(pages)
+                results: searchPageRes.items
             });
         default:
             return json({

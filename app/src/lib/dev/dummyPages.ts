@@ -1,4 +1,4 @@
-import type { SinglePage } from "@/types/pages-and-stuff";
+import type { SinglePage } from "@/types/entity";
 
 export const dummyPages: SinglePage[] = [
     { id: "1", title: 'First page', content: 'This is the first page', 'slug': 'first-page', user: "", status: 'published' },

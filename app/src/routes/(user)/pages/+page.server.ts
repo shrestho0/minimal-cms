@@ -1,4 +1,4 @@
-import type { SinglePage } from "@/types/pages-and-stuff";
+import type { SinglePage } from "@/types/entity";
 import type { Actions, PageServerLoad } from "./$types";
 import { dummyPages } from "@/dev/dummyPages";
 import { fail } from "@sveltejs/kit";

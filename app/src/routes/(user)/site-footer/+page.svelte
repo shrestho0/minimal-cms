@@ -4,7 +4,7 @@
 	import { Button } from '@/components/ui/button';
 	import Input from '@/components/ui/input/input.svelte';
 	import type { SingleSocialItem, SiteFooterType } from '@/types/customizations';
-	import type { User } from '@/types/users';
+	import type { User } from '@/types/entity';
 
 	import UserPanelItemWrapper from '@/ui/UserPanelItemWrapper.svelte';
 	import type { ActionResult } from '@sveltejs/kit';
@@ -60,7 +60,7 @@
 <UserPanelItemWrapper title="Footer Text">
 	<div class="sec flex flex-col gap-3 py-3">
 		<form
-			action="?/changeFooterText"
+			action="?/updateFooter"
 			class="grid w-full max-w-sm items-center gap-1.5"
 			method="post"
 			use:enhance={enhancedFormSubmission}
@@ -121,7 +121,7 @@
 			>{socialLinks?.length > 0 ? 'Add another link' : 'Add link'}
 		</Button>
 		{#if socialLinks?.length > 0}
-			<form action="?/changeSocialLinks" use:enhance={enhancedFormSubmission} method="post">
+			<form action="?/updateFooter" use:enhance={enhancedFormSubmission} method="post">
 				<input type="hidden" name="siteFooterId" value={siteFooter?.id} />
 				<input type="hidden" name="social_json" bind:value={social_json} />
 				<Button

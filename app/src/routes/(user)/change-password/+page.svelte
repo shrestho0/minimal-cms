@@ -35,11 +35,12 @@
 						duration: 3000,
 						position: 'top-right'
 					});
-					document.location.reload();
+					// document.location.reload();
 					break;
 				}
 			}
 			console.log(result);
+			isLoading = false;
 		};
 	}
 	$: {
@@ -97,9 +98,14 @@
 					{/if}
 					<Button
 						type="submit"
-						variant="outline"
-						class="w-full bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:text-white dark:hover:bg-blue-700"
+						variant="default"
+						class="w-full"
 						disabled={isLoading || btnDisabled}
+						on:click={() => {
+							setTimeout(() => {
+								isLoading = true;
+							});
+						}}
 					>
 						{#if isLoading}
 							<CircleDotDashed color="white" class="mr-2 h-4 w-4 animate-spin" />
