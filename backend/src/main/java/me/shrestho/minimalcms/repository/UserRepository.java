@@ -19,4 +19,16 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Query(value = "SELECT count(u.id) FROM user u WHERE DATE(u.created) = CURDATE()", nativeQuery = true)
     long countByCreatedToday();
 
+    @Query(value = "SELECT count(u.id) FROM user u WHERE (u.username LIKE %?1% OR u.email LIKE %?1%) AND role = 'USER'", nativeQuery = true)
+    long countRegularUserByQueryAndLimit(String userQuery, int limit, int offset);
+
+    @Query(value = "SELECT count(u.id) FROM user u WHERE (u.username LIKE %?1% OR u.email LIKE %?1%) AND role = 'ADMIN'", nativeQuery = true)
+    long countAdminUserByQueryAndLimit(String userQuery, int limit, int offset);
+
+    @Query(value = "SELECT * FROM user u WHERE (u.username LIKE %?1% OR u.email LIKE %?1%) AND role = 'USER' LIMIT ?2 OFFSET ?3", nativeQuery = true)
+    List<UserProjection> findRegularUserByQueryAndLimit(String userQuery, int limit, int offset);
+
+    @Query(value = "SELECT * FROM user u WHERE (u.username LIKE %?1% OR u.email LIKE %?1%) AND role = 'ADMIN' LIMIT ?2 OFFSET ?3", nativeQuery = true)
+    List<UserProjection> findAdminUserByQueryAndLimit(String userQuery, int limit, int offset);
+
 }

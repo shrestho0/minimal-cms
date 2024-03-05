@@ -62,11 +62,11 @@ public class PublicPageService {
         user.setPasswordHash(null);
         resObj.put("success", true);
         // Find Header
-        SiteHeader siteHeader = siteHeaderRepository.findByUser(user);
-        siteHeader.setUser(null);
+        SiteHeader siteHeader = siteHeaderRepository.findByUserId(user.getId());
+        // siteHeader.setUser(null);
 
-        SiteFooter siteFooter = siteFooterRepository.findByUser(user);
-        siteFooter.setUser(null);
+        SiteFooter siteFooter = siteFooterRepository.findByUserId(user.getId());
+        // siteFooter.setUser(null);
         resObj.put("siteHeader", siteHeader);
         resObj.put("siteFooter", siteFooter);
 
@@ -82,8 +82,8 @@ public class PublicPageService {
         user.setPasswordHash(null);
         resObj.put("success", true);
         // Find Style
-        SiteStyle siteStyle = siteStyleRepository.findByUser(user);
-        siteStyle.setUser(null);
+        SiteStyle siteStyle = siteStyleRepository.findByUserId(user.getId());
+        // siteStyle.setUser(null);
         System.out.println("siteStyle: " + siteStyle);
         resObj.put("siteStyle", siteStyle);
 

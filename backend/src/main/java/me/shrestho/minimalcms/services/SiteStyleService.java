@@ -19,7 +19,8 @@ public class SiteStyleService {
         // create profile
         SiteStyle siteStyle = new SiteStyle();
         siteStyle.setId(UUID.randomUUID().toString());
-        siteStyle.setUser(user);
+        // siteStyle.setUser(user);
+        siteStyle.setUserId(user.getId());
 
         siteStyle.setFontFamily("Poppins");
         siteStyle.setFontLoadUrl("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
@@ -35,8 +36,8 @@ public class SiteStyleService {
     public SiteStyle getSiteStyle(User user) {
         // get profile
         try {
-            SiteStyle siteStyle = siteStyleRepository.findByUser(user);
-            siteStyle.getUser().setPasswordHash(null);
+            SiteStyle siteStyle = siteStyleRepository.findByUserId(user.getId());
+            // siteStyle.getUser().setPasswordHash(null);
             return siteStyle;
 
         } catch (Exception e) {
@@ -55,11 +56,11 @@ public class SiteStyleService {
 
         Map<String, Object> resObj = null;
         try {
-            SiteStyle existingsiteStyle = siteStyleRepository.findByUser(user);
+            SiteStyle existingsiteStyle = siteStyleRepository.findByUserId(user.getId());
 
             if (existingsiteStyle == null) {
                 addSiteStyle(user);
-                existingsiteStyle = siteStyleRepository.findByUser(user);
+                existingsiteStyle = siteStyleRepository.findByUserId(user.getId());
             }
 
             System.out.print("\n\n=================== Style Update ===================\n\n");
@@ -86,6 +87,12 @@ public class SiteStyleService {
             resObj = Map.of("success", false, "message", "Site Style update failed");
         }
         return resObj;
+    }
+
+    public void deleteSiteStyleByUser(User user) throws Exception {
+
+        SiteStyle siteStyle = siteStyleRepository.findByUserId(user.getId());
+        siteStyleRepository.delete(siteStyle);
     }
 
 }

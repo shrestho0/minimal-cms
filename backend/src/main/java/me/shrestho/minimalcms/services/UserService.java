@@ -90,6 +90,34 @@ public class UserService {
         return userRepository.countByCreatedToday();
     }
 
+    public Map<String, Object> getByQueryAndLimit(String userQuery, int limit, int page) {
+        Map<String, Object> resObj = new HashMap<>();
+        int offset = (page - 1) * limit;
+        List<UserProjection> items = userRepository.findRegularUserByQueryAndLimit(userQuery, limit, offset);
+        long totalItems = userRepository.countRegularUserByQueryAndLimit(userQuery, limit, offset);
+        long totalPages = (long) Math.ceil((double) totalItems / limit);
+        resObj.put("totalItems", totalItems);
+        resObj.put("totalPages", totalPages);
+        resObj.put("page", page);
+        resObj.put("perPage", limit);
+        resObj.put("items", items);
+        return resObj;
+    }
+
+    public Map<String, Object> getAdminByQueryAndLimit(String userQuery, int limit, int page) {
+        Map<String, Object> resObj = new HashMap<>();
+        int offset = (page - 1) * limit;
+        List<UserProjection> items = userRepository.findAdminUserByQueryAndLimit(userQuery, limit, offset);
+        long totalItems = userRepository.countAdminUserByQueryAndLimit(userQuery, limit, offset);
+        long totalPages = (long) Math.ceil((double) totalItems / limit);
+        resObj.put("totalItems", totalItems);
+        resObj.put("totalPages", totalPages);
+        resObj.put("page", page);
+        resObj.put("perPage", limit);
+        resObj.put("items", items);
+        return resObj;
+    }
+
     // public Map<String, Object> create(User user) {
 
     // Map<String, Object> resObj = new HashMap<>();

@@ -64,7 +64,7 @@ public class PublicPageController {
             return new ResponseEntity<>(Map.of("success", false, "message", "Profile not found"), HttpStatus.NOT_FOUND);
         }
 
-        profile.setUser(null);
+        // profile.setUser(null);
 
         Map<String, Object> resObj = new HashMap<>();
         resObj.put("success", true);

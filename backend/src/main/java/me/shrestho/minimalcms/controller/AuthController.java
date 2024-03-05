@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import me.shrestho.minimalcms.entity.TokenBlacklisted;
 import me.shrestho.minimalcms.services.AuthService;
+import me.shrestho.minimalcms.utils.enums.UserRoles;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,7 +24,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> addUser(@RequestBody Map<String, Object> reqData) {
-        Map<String, Object> resMap = authService.register(reqData);
+        Map<String, Object> resMap = authService.register(reqData, UserRoles.USER);
 
         return new ResponseEntity<>(resMap, resMap.get("success").equals(true) ? HttpStatus.CREATED
                 : HttpStatus.BAD_REQUEST);

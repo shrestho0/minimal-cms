@@ -39,9 +39,10 @@ public class Profile {
     @Column(name = "content", nullable = false, length = 3000)
     private String content; // it already has a expiry date
 
-    @ManyToOne()
-    @JoinColumn(name = "user", nullable = false)
-    private User user;
+    // @ManyToOne() // should be onetoone
+    // @JoinColumn(name = "user", nullable = false)
+    // private User user;
+    private String userId; // manually hobe shob
 
     @CreatedDate
     @Column(name = "created")

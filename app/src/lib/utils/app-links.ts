@@ -33,9 +33,11 @@ const _BackendApiEndpoints = {
     PUBLIC_PAGE: "/page", // GET with /page/:username/:slug
     PUBLIC_PROFILE: "/profile", // GET with /profile/:username
 
-    ADMIN_NEW_USER: "/admin/new-user", // POST, requires ADMIN_ACCESS_TOKEN as JWT
-    ADMIN_CHANGE_PASSWORD: "/admin/change-password", // PATCH, requires ACCESS_TOKEN as JWT
     ADMIN_DASHBOARD: "/admin/dashboard", // GET, requires ADMIN_ACCESS_TOKEN as JWT
+    ADMIN_CHANGE_PASSWORD: "/admin/change-password", // PATCH, requires ACCESS_TOKEN as JWT
+    ADMIN_USERS: "/admin/users", // POST, requires ADMIN_ACCESS_TOKEN as JWT    
+    ADMIN_ADMINS: "/admin/admins", // POST, requires ADMIN_ACCESS_TOKEN as JWT  
+
 };
 
 

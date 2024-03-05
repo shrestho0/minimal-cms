@@ -7,11 +7,13 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import me.shrestho.minimalcms.entity.TokenBlacklisted;
 import me.shrestho.minimalcms.entity.User;
+import me.shrestho.minimalcms.repository.PageRepository;
 import me.shrestho.minimalcms.repository.TokenBlacklistedRepository;
 import me.shrestho.minimalcms.repository.UserRepository;
 import me.shrestho.minimalcms.utils.JwtUtils;
@@ -38,6 +40,9 @@ public class AuthService {
     @Autowired
     private SiteStyleService siteStyleService;
 
+    @Autowired
+    private PageService pageService;
+
     // @Autowired
     // private SiteFooter
 
@@ -47,7 +52,7 @@ public class AuthService {
     //////////////////////////////////
     /// Auth Section
     //////////////////////////////////
-    public Map<String, Object> register(Map<String, Object> newUserData) {
+    public Map<String, Object> register(Map<String, Object> newUserData, UserRoles role) {
         Map<String, Object> ResponseObj = new HashMap<String, Object>(
                 Map.of("success", false, "message", "All fields are required"));
 
@@ -71,7 +76,7 @@ public class AuthService {
         user.setPasswordHash(passwordHash);
 
         // Only role USER is allowed here
-        user.setRole(UserRoles.USER);
+        user.setRole(role);
 
         System.out.println(user);
 
@@ -105,11 +110,16 @@ public class AuthService {
 
             user.setId(UUID.randomUUID().toString());
             User newUser = userRepository.save(user);
+
             ResponseObj.put("success", true);
             ResponseObj.put("message", "User created successfully");
             ResponseObj.put("user", newUser);
 
             // Misc Stuff
+            if (role == UserRoles.ADMIN) {
+                return ResponseObj;
+            }
+
             try {
                 profileService.addProfile(newUser);
                 siteFooterService.addSiteFooter(newUser);
@@ -277,6 +287,51 @@ public class AuthService {
         ResponseObj.put("success", true);
         ResponseObj.put("message", "Token blacklisted successfully");
         return ResponseObj;
+    }
+
+    @Transactional
+    public Map<String, Object> deleteUserById(String userId) {
+
+        Map<String, Object> ResponseObj = new HashMap<String, Object>(
+                Map.of("success", false));
+
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            ResponseObj.put("message", "User not found");
+            return ResponseObj;
+        }
+
+        // delete pages with user
+        pageService.deletePageByUser(user);
+
+        if (user.getRole().equals(UserRoles.ADMIN)) {
+            // ResponseObj.put("message", "Admin cannot be deleted");
+            userRepository.delete(user);
+            ResponseObj.put("success", true);
+            ResponseObj.put("message", "Admin deleted successfully");
+            return ResponseObj;
+        }
+        try {
+            // delete siteHeader with userId
+            siteHeaderService.deleteSiteHeaderByUser(user);
+            // delete siteFooter with userId
+            siteFooterService.deleteSiteFooterByUser(user);
+            // delete siteStyle with userId
+            siteStyleService.deleteSiteStyleByUser(user);
+            // delete profile with userId
+            profileService.deleteProfileByUser(user);
+
+            userRepository.delete(user);
+            ResponseObj.put("success", true);
+            ResponseObj.put("message", "User deleted successfully");
+        } catch (Exception e) {
+
+            ResponseObj.put("message", "Error deleting user");
+            System.out.println(e);
+        }
+
+        return ResponseObj;
+
     }
 
 }

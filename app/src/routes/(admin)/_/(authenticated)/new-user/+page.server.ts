@@ -66,7 +66,7 @@ export const actions: Actions = {
         // TODO: Register user
 
         data.passwordHash = password
-        const newUserRes = await fetch(BackendApiEndpoints.ADMIN_NEW_USER, {
+        const newUserRes = await fetch(BackendApiEndpoints.ADMIN_USERS + `?role=${data.role}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

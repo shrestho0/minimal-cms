@@ -7,6 +7,6 @@ import me.shrestho.minimalcms.entity.User;
 
 public interface SiteStyleRepository extends JpaRepository<SiteStyle, String> {
 
-    SiteStyle findByUser(User user);
+    SiteStyle findByUserId(String userId);
 
 }

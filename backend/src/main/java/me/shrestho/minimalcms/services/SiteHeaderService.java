@@ -20,7 +20,8 @@ public class SiteHeaderService {
         // create profile
         SiteHeader siteHeader = new SiteHeader();
         siteHeader.setId(UUID.randomUUID().toString());
-        siteHeader.setUser(user);
+        // siteHeader.setUser(user);
+        siteHeader.setUserId(user.getId());
 
         siteHeader.setSite_title(user.getName() + " 's MCMS Site");
         String navJson = "[{\"title\":\"Home\",\"href\":\"/home\"},{\"title\":\"Contact\",\"href\":\"/\"},{\"title\":\"Blog\",\"href\":\"/\"}]";
@@ -39,8 +40,8 @@ public class SiteHeaderService {
     public SiteHeader getSiteHeader(User user) {
         // get profile
         try {
-            SiteHeader siteHeader = siteHeaderRepository.findByUser(user);
-            siteHeader.getUser().setPasswordHash(null);
+            SiteHeader siteHeader = siteHeaderRepository.findByUserId(user.getId());
+            // siteHeader.getUser().setPasswordHash(null);
             return siteHeader;
 
         } catch (Exception e) {
@@ -59,11 +60,11 @@ public class SiteHeaderService {
 
         Map<String, Object> resObj = null;
         try {
-            SiteHeader existingsiteHeader = siteHeaderRepository.findByUser(user);
+            SiteHeader existingsiteHeader = siteHeaderRepository.findByUserId(user.getId());
 
             if (existingsiteHeader == null) {
                 addSiteHeader(user);
-                existingsiteHeader = siteHeaderRepository.findByUser(user);
+                existingsiteHeader = siteHeaderRepository.findByUserId(user.getId());
             }
 
             System.out.print("\n\n=================== Header Update ===================\n\n");
@@ -88,6 +89,13 @@ public class SiteHeaderService {
             resObj = Map.of("success", false, "message", "Site Header update failed");
         }
         return resObj;
+    }
+
+    public void deleteSiteHeaderByUser(User user) throws Exception {
+
+        SiteHeader siteHeader = siteHeaderRepository.findByUserId(user.getId());
+        siteHeaderRepository.delete(siteHeader);
+
     }
 
 }

@@ -20,7 +20,8 @@ public class SiteFooterService {
         // create profile
         SiteFooter siteFooter = new SiteFooter();
         siteFooter.setId(UUID.randomUUID().toString());
-        siteFooter.setUser(user);
+        // siteFooter.setUser(user);
+        siteFooter.setUserId(user.getId());
 
         siteFooter.setText(user.getName() + "'s MCMS Site");
 
@@ -34,8 +35,8 @@ public class SiteFooterService {
     public SiteFooter getSiteFooter(User user) {
         // get profile
         try {
-            SiteFooter siteFooter = siteFooterRepository.findByUser(user);
-            siteFooter.getUser().setPasswordHash(null);
+            SiteFooter siteFooter = siteFooterRepository.findByUserId(user.getId());
+            // siteFooter.getUser().setPasswordHash(null);
             return siteFooter;
 
         } catch (Exception e) {
@@ -54,11 +55,11 @@ public class SiteFooterService {
 
         Map<String, Object> resObj = null;
         try {
-            SiteFooter existingsiteFooter = siteFooterRepository.findByUser(user);
+            SiteFooter existingsiteFooter = siteFooterRepository.findByUserId(user.getId());
 
             if (existingsiteFooter == null) {
                 addSiteFooter(user);
-                existingsiteFooter = siteFooterRepository.findByUser(user);
+                existingsiteFooter = siteFooterRepository.findByUserId(user.getId());
             }
 
             if (siteFooter.getText() != null) {
@@ -75,6 +76,11 @@ public class SiteFooterService {
             resObj = Map.of("success", false, "message", "Site Footer update failed");
         }
         return resObj;
+    }
+
+    public void deleteSiteFooterByUser(User user) throws Exception {
+        SiteFooter siteFooter = siteFooterRepository.findByUserId(user.getId());
+        siteFooterRepository.delete(siteFooter);
     }
 
 }

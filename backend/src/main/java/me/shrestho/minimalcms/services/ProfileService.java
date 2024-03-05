@@ -23,7 +23,8 @@ public class ProfileService {
         // create profile
         Profile profile = new Profile();
         profile.setId(UUID.randomUUID().toString());
-        profile.setUser(user);
+        // profile.setUser(user);
+        profile.setUserId(user.getId());
 
         profile.setTitle("{{name}} 's Profile");
         profile.setContent("Welcome to {{name}}'s MCMS Profile!");
@@ -35,8 +36,8 @@ public class ProfileService {
     public Profile getProfile(User user) {
         // get profile
         try {
-            Profile profile = profileRepository.findByUser(user);
-            profile.getUser().setPasswordHash(null);
+            Profile profile = profileRepository.findByUserId(user.getId());
+            // profile.getUser().setPasswordHash(null);
             return profile;
 
         } catch (Exception e) {
@@ -55,7 +56,7 @@ public class ProfileService {
 
         Map<String, Object> resObj = null;
         try {
-            Profile existingProfile = profileRepository.findByUser(user);
+            Profile existingProfile = profileRepository.findByUserId(user.getId());
             existingProfile.setTitle(profile.getTitle());
             existingProfile.setContent(profile.getContent());
             profileRepository.save(existingProfile);
@@ -64,6 +65,11 @@ public class ProfileService {
             resObj = Map.of("success", false, "message", "Profile update failed");
         }
         return resObj;
+    }
+
+    public void deleteProfileByUser(User user) throws Exception {
+        Profile profile = profileRepository.findByUserId(user.getId());
+        profileRepository.delete(profile);
     }
 
 }

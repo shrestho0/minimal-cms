@@ -10,7 +10,7 @@ export const load: PageServerLoad = async ({ locals, url, fetch, cookies }) => {
 
     let qu = url.searchParams.get('qu') || ''
 
-    const users = await fetch(BackendApiEndpoints.ADMIN_USERS + `?qu=${qu}&limit=${limit}&page=${page}`, {
+    const users = await fetch(BackendApiEndpoints.ADMIN_ADMINS + `?qu=${qu}&limit=${limit}&page=${page}`, {
         method: 'GET',
         headers: {
             "Content-Type": "application/json",
@@ -53,13 +53,11 @@ export const actions: Actions = {
 
         if (!deleteRes?.success) {
             return fail(400, {
-                message: deleteRes?.message || 'Failed to delete user'
+                message: deleteRes?.message || 'Failed to delete admin'
             })
         }
 
         return deleteRes
-
-
     },
     updateUser: async ({ request, locals }) => {
         const { userId, usernameX, emailX, nameX, passwordX } = Object.fromEntries(await request.formData()) as Record<string, string>

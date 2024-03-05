@@ -10,6 +10,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import { AppLinks } from '@/utils/app-links';
+	import * as Select from '$lib/components/ui/select';
 
 	let reqForm: HTMLFormElement;
 	let fieldErrors = {
@@ -33,7 +34,7 @@
 	const fields = [
 		{ name: 'email', placeholder: 'Email', type: 'email', value: '' },
 		{ name: 'username', placeholder: 'Username', type: 'username', value: '' },
-		{ name: 'name', placeholder: 'John Doe', type: 'text', value: '' },
+		{ name: 'name', placeholder: 'Full Name', type: 'text', value: '' },
 		{ name: 'password', placeholder: 'Password', type: 'password', value: '' },
 		{
 			name: 'passwordConfirm',
@@ -43,6 +44,9 @@
 			value: ''
 		}
 	];
+
+	const userRoles = ['USER', 'ADMIN'];
+	let selectedRole = 'USER';
 
 	let isLoading = false;
 	let finalErrorMessage = '';
@@ -102,6 +106,8 @@
 		fields[3].value = fields[1].value;
 		// passwordConfirm
 		fields[4].value = fields[1].value;
+
+		selectedRole = 'USER';
 	}
 </script>
 
@@ -114,12 +120,13 @@
 		bind:this={reqForm}
 		method="post"
 		action=""
-		class=" flex max-w-lg flex-col gap-4"
+		class=" flex max-w-lg flex-col gap-4 py-2"
 		use:enhance={enhancedSubmission}
 	>
 		{#each fields as field}
-			<Label for={field.name}>{field.placeholder}</Label>
+			<!-- <Label for={field.name}>{field.placeholder}</Label> -->
 			<Input
+				placeholder={field.placeholder}
 				type={field.type}
 				id={field.name}
 				name={field.name}
@@ -132,6 +139,16 @@
 				</p>
 			{/if}
 		{/each}
+
+		<select
+			name="role"
+			bind:value={selectedRole}
+			class="border-input ring-offset-background placeholder:text-muted-foreground focus:ring-ring flex w-[180px] items-center justify-between whitespace-nowrap rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+		>
+			{#each userRoles as role}
+				<option value={role}>{role}</option>
+			{/each}
+		</select>
 
 		{#if finalErrorMessage}
 			<p>{finalErrorMessage}</p>

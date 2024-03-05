@@ -360,4 +360,9 @@ public class PageService {
         return pageRepository.countByCreatedToday();
     }
 
+    public void deletePageByUser(User user) {
+        // pageRepository.deleteByUser(user);
+        pageRepository.deleteAllByUser(user);
+    }
+
 }

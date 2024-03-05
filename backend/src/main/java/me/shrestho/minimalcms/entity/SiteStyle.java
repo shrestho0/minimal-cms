@@ -44,9 +44,10 @@ public class SiteStyle {
     @Column(name = "styleJson", nullable = false, length = 3000)
     private String styleJson; // it'll be json
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user", nullable = false)
-    private User user;
+    // @OneToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "user", nullable = false)
+    // private User user;
+    private String userId; // manually hobe shob
 
     @CreatedDate
     @Column(name = "created")

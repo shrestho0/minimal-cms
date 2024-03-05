@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "SiteHeader", indexes = {
+@Table(name = "site_header", indexes = {
 
 // user and page slug should be unique
 // add user_username as index
@@ -44,9 +44,10 @@ public class SiteHeader {
     @Column(name = "logo", nullable = true)
     private String logo; // logo url for simplicity
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user", nullable = false)
-    private User user;
+    // @OneToOne(cascade = CascadeType.ALL)
+    // @JoinColumn(name = "user", nullable = false)
+
+    private String userId; // manually hobe shob
 
     @CreatedDate
     @Column(name = "created")

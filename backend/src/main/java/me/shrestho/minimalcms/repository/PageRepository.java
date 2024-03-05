@@ -50,4 +50,6 @@ public interface PageRepository extends JpaRepository<Page, String> {
     @Query(value = "SELECT count(p.id) FROM page p WHERE DATE(p.created) = CURDATE()", nativeQuery = true)
     long countByCreatedToday();
 
+    void deleteAllByUser(User user);
+
 }
