@@ -5,12 +5,14 @@
 	import Label from '@/components/ui/label/label.svelte';
 	import PreDebug from '@/dev/PreDebug.svelte';
 	import UserPanelItemWrapper from '@/ui/UserPanelItemWrapper.svelte';
-	import * as Alert from '$lib/components/ui/alert';
-	import { CircleDotDashed } from 'lucide-svelte';
+	// import * as Alert from '$lib/components/ui/alert';
+	import { CircleDotDashed, X } from 'lucide-svelte';
 	import { invalidateAll } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import { AppLinks } from '@/utils/app-links';
 	import * as Select from '$lib/components/ui/select';
+	import type { User } from '@/types/entity';
+	import Alert from '@/components/ui/alert/alert.svelte';
 
 	let reqForm: HTMLFormElement;
 	let fieldErrors = {
@@ -76,6 +78,9 @@
 					});
 
 					typeof fieldErrors.reset == 'function' && fieldErrors.reset();
+					reqForm?.reset();
+					newUserData = result?.data?.user;
+					showNewUserMessageArea = true;
 					break;
 				}
 			}
@@ -109,7 +114,33 @@
 
 		selectedRole = 'USER';
 	}
+
+	let showNewUserMessageArea = false;
+	let newUserData: User | undefined = undefined;
 </script>
+
+{#if showNewUserMessageArea}
+	<Alert class="flex items-center justify-between">
+		<div class="left">
+			<h2 class="py-2 text-lg">New User Created</h2>
+			<div>
+				<p>Username: {newUserData?.username}</p>
+				<p>Email: {newUserData?.email}</p>
+				<p>Name: {newUserData?.name}</p>
+				<p>Role: {newUserData?.role}</p>
+			</div>
+		</div>
+		<Button
+			variant="outline"
+			on:click={() => {
+				showNewUserMessageArea = false;
+				newUserData = undefined;
+			}}
+		>
+			<X class="h-6 w-6" />
+		</Button>
+	</Alert>
+{/if}
 
 <UserPanelItemWrapper title="New User">
 	<div>
@@ -122,6 +153,9 @@
 		action=""
 		class=" flex max-w-lg flex-col gap-4 py-2"
 		use:enhance={enhancedSubmission}
+		on:submit={() => {
+			if (fieldErrors?.reset && typeof fieldErrors?.reset === 'function') fieldErrors.reset();
+		}}
 	>
 		{#each fields as field}
 			<!-- <Label for={field.name}>{field.placeholder}</Label> -->
@@ -143,7 +177,7 @@
 		<select
 			name="role"
 			bind:value={selectedRole}
-			class="border-input ring-offset-background placeholder:text-muted-foreground focus:ring-ring flex w-[180px] items-center justify-between whitespace-nowrap rounded-md border bg-transparent px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-1 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
+			class="flex w-[180px] items-center justify-between whitespace-nowrap rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1"
 		>
 			{#each userRoles as role}
 				<option value={role}>{role}</option>

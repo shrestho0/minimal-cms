@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import me.shrestho.minimalcms.entity.Page;
 import me.shrestho.minimalcms.entity.User;
 import me.shrestho.minimalcms.services.AuthService;
 import me.shrestho.minimalcms.services.PageService;
@@ -131,13 +130,25 @@ public class ProtectedAdminController {
     }
 
     //////////////////////////////////
-    /// Delete User (protected admin controller)
+    /// Delete User
     //////////////////////////////////
 
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<?> deleteUser(@RequestAttribute("auth_user") User admin,
             @PathVariable("userId") String userId) {
         Map<String, Object> resMap = authService.deleteUserById(userId);
+
+        return new ResponseEntity<>(resMap,
+                resMap.get("success").equals(true) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    //////////////////////////////////
+    /// Update user
+    //////////////////////////////////
+    @PatchMapping("/users/{userId}")
+    public ResponseEntity<?> updateUser(@RequestAttribute("auth_user") User admin,
+            @PathVariable("userId") String userId, @RequestBody Map<String, Object> reqData) {
+        Map<String, Object> resMap = userService.updateUserById(userId, reqData);
 
         return new ResponseEntity<>(resMap,
                 resMap.get("success").equals(true) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);

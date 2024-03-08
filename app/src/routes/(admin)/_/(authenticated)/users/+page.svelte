@@ -120,6 +120,12 @@
 			selectedUser = null;
 		};
 	}
+	let updateUserErrors = {
+		username: '',
+		email: '',
+		name: '',
+		password: ''
+	};
 	function enhancedUserUpdate() {
 		return async ({ result }: { result: ActionResult }) => {
 			// Do SOmething
@@ -140,6 +146,7 @@
 					break;
 				case 'failure':
 					updatedMessage = result?.data?.message || ErrorMessages.DEFAULT_ERROR;
+					updateUserErrors = result?.data?.errors || {};
 					// toast.error(result?.data?.message || ErrorMessages.DEFAULT_ERROR, {
 					// 	duration: 3000,
 					// 	position: 'top-right',
@@ -426,19 +433,39 @@
 					class="flex flex-col gap-3 text-black"
 					method="post"
 					use:enhance={enhancedUserUpdate}
+					on:submit={() => {
+						updateUserErrors = {
+							username: '',
+							email: '',
+							name: '',
+							password: ''
+						};
+					}}
 				>
 					<input type="hidden" name="userId" value={selectedUser.id} />
 					<div class="flex flex-col gap-2">
 						<Label for="usernameX">Username</Label>
 						<Input type="text" name="usernameX" placeholder={selectedUser.username} />
+
+						{#if updateUserErrors.username}
+							<p class="text-red-500">{updateUserErrors.username}</p>
+						{/if}
 					</div>
 					<div class="flex flex-col gap-2">
 						<Label for="emailX">Email</Label>
 						<Input type="email" name="emailX" placeholder={selectedUser.email} />
+
+						{#if updateUserErrors.email}
+							<p class="text-red-500">{updateUserErrors.email}</p>
+						{/if}
 					</div>
 					<div class="flex flex-col gap-2">
 						<Label for="nameX">Name</Label>
 						<Input type="text" name="nameX" placeholder={selectedUser.name} />
+
+						{#if updateUserErrors.name}
+							<p class="text-red-500">{updateUserErrors.name}</p>
+						{/if}
 					</div>
 
 					{#if showChangePasswordField}
@@ -451,6 +478,9 @@
 								minlength={8}
 								placeholder="**********"
 							/>
+							{#if updateUserErrors.password}
+								<p class="text-red-500">{updateUserErrors.password}</p>
+							{/if}
 						</div>
 					{/if}
 					<Button

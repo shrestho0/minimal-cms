@@ -118,36 +118,70 @@ public class UserService {
         return resObj;
     }
 
-    // public Map<String, Object> create(User user) {
+    public Map<String, Object> updateUserById(String userId, Map<String, Object> reqData) {
 
-    // Map<String, Object> resObj = new HashMap<>();
-    // // check user's username is unique
-    // if (userRepository.findByUsername(user.getUsername()) != null) {
-    // resObj.put("error", "Username already exists");
-    // }
-    // // check user's email is unique
-    // if (userRepository.findByEmail(user.getEmail()) != null) {
-    // resObj.put("error", "Email already exists");
-    // }
+        User originalUser = userRepository.findById(userId).orElse(null);
+        if (originalUser == null) {
+            Map<String, Object> resObj = new HashMap<>();
+            resObj.put("success", false);
+            resObj.put("message", "User not found");
+            return resObj;
+        }
 
-    // if (resObj.containsKey("error")) {
-    // resObj.put("success", false);
-    // return resObj;
-    // }
+        Map<String, Object> resObj = new HashMap<>();
+        resObj.put("success", false);
 
-    // user.setId(UUID.randomUUID().toString());
-    // user.setPasswordHash(BCrypt.hashpw(user.getPasswordHash(),
-    // BCrypt.gensalt()));
+        Map<String, Object> errors = new HashMap<>();
 
-    // User newUser = userRepository.save(user);
+        // Parse Data
+        String username = (String) reqData.get("username");
+        String email = (String) reqData.get("email");
+        String name = (String) reqData.get("name");
+        String password = (String) reqData.get("password");
 
-    // if (newUser == null) {
-    // resObj.put("message", "Failed to create user");
-    // resObj.put("success", false);
-    // return resObj;
-    // }
+        if (username != null) {
+            if (!originalUser.getUsername().equals(username)) {
+                if (userRepository.findByUsername(username) != null) {
+                    errors.put("username", "Username already exists");
+                } else {
+                    originalUser.setUsername(username);
+                }
+            }
+        }
 
-    // return resObj;
-    // }
+        if (email != null) {
+            if (!originalUser.getEmail().equals(email)) {
+                if (userRepository.findByEmail(email) != null) {
+                    errors.put("email", "Email already exists");
+                } else {
+                    originalUser.setEmail(email);
+                }
+            }
+        }
+
+        if (name != null) {
+            originalUser.setName(name);
+        }
+
+        if (password != null) {
+            originalUser.setPasswordHash(BCrypt.hashpw(password, BCrypt.gensalt()));
+        }
+
+        if (errors.size() > 0) {
+            resObj.put("errors", errors);
+            return resObj;
+        }
+
+        try {
+            userRepository.save(originalUser);
+            resObj.put("success", true);
+            resObj.put("message", "User updated successfully");
+        } catch (Exception e) {
+            resObj.put("message", "Failed to update user");
+        }
+
+        return resObj;
+
+    }
 
 }
