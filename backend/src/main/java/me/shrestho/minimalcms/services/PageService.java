@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import me.shrestho.minimalcms.entity.Page;
@@ -16,7 +16,6 @@ import me.shrestho.minimalcms.repository.UserRepository;
 import me.shrestho.minimalcms.utils.Utils;
 import me.shrestho.minimalcms.utils.enums.PageStatus;
 import me.shrestho.minimalcms.utils.projections.UserPagesProjection;
-import me.shrestho.minimalcms.utils.projections.UserProjection;
 
 @Service
 public class PageService {
@@ -363,6 +362,132 @@ public class PageService {
     public void deletePageByUser(User user) {
         // pageRepository.deleteByUser(user);
         pageRepository.deleteAllByUser(user);
+    }
+
+    // public Map<String, Object> findPagesForAdmin(List<User> users, String
+    // pageQuery, String status, int limit,
+    // int page) {
+
+    // Map<String, Object> resObj = new HashMap<String, Object>();
+    // resObj.put("totalItems", 0);
+    // resObj.put("totalPages", 0);
+    // resObj.put("page", page);
+    // resObj.put("items", null);
+    // resObj.put("perPage", limit);
+
+    // if (users == null || users.size() == 0) {
+    // return resObj;
+    // }
+
+    // // Do Stuff here
+    // // List<UserPagesProjection> items = pageRepository.findByUser(users,
+    // pageQuery,
+    // // status, limit, page);
+
+    // return resObj;
+
+    // }
+
+    public Map<String, Object> findPagesForAdminWithoutUser(int page, int limit, String status, String pageQuery,
+            String userQuery) {
+
+        Map<String, Object> resObj = new HashMap<String, Object>();
+        resObj.put("totalItems", 0);
+        resObj.put("totalPages", 0);
+        resObj.put("page", page);
+        resObj.put("items", null);
+        resObj.put("perPage", limit);
+
+        // Do Stuff here
+        List<Page> items = null;
+        long totalItems = 0;
+
+        if (status.equals("all") || status.equals("")) {
+
+            if (userQuery.equals("")) {
+                items = pageRepository.findByFilterForAdmin(pageQuery, (page - 1) * limit, limit);
+                totalItems = pageRepository.countByFilterForAdmin(pageQuery);
+            } else {
+                System.out.println("\n===Searching for pages with user restriction without status" + status + " ===\n");
+                totalItems = pageRepository.countByFilterAndUserIdForAdmin(userQuery, pageQuery);
+                items = pageRepository.findByFilterAndUserIdForAdmin(userQuery, pageQuery, (page - 1) * limit, limit);
+            }
+
+        } else if (status.equals("draft") || status.equals("published") || status.equals("banned")) {
+            if (userQuery.equals("")) {
+
+                items = pageRepository.findByFilterAndStatusForAdmin(pageQuery, status, (page
+                        - 1) * limit, limit);
+                totalItems = pageRepository.countByFilterAndStatusForAdmin(pageQuery, status);
+            } else {
+                System.out.println("\n===Searching for pages with user restriction and status " + status + " ===\n");
+                totalItems = pageRepository.countByFilterAndUserIdAndStatusForAdmin(userQuery, pageQuery, status);
+                items = pageRepository.findByFilterAndUserIdAndStatusForAdmin(userQuery, pageQuery, status, (page
+                        - 1) * limit, limit);
+            }
+
+        }
+
+        if (items == null || items.size() == 0) {
+            return resObj;
+        }
+
+        long totalPages = (long) Math.ceil((double) totalItems / limit);
+
+        resObj.put("totalItems", totalItems);
+        resObj.put("totalPages", totalPages);
+
+        // remove password hash from users
+        for (Page singlePage : items) {
+            singlePage.getUser().setPasswordHash(null);
+        }
+
+        resObj.put("items", items);
+
+        return resObj;
+
+    }
+
+    public Map<String, Object> updatePageStatusById(String pageId, Page updateTo) {
+        Map<String, Object> resObj = new HashMap<>();
+        resObj.put("success", false);
+        // find page
+        Page originalPage = pageRepository.findById(pageId).orElse(null);
+        if (originalPage == null) {
+            resObj.put("message", "Page not found");
+            return resObj;
+        }
+
+        originalPage.setStatus(updateTo.getStatus());
+        Page updatedPage = pageRepository.save(originalPage);
+        resObj.put("success", true);
+        resObj.put("message", "Page status updated successfully");
+        resObj.put("page", updatedPage);
+
+        return resObj;
+    }
+
+    public Map<String, Object> deletePageById(String pageId) {
+        Map<String, Object> resObj = new HashMap<>();
+        resObj.put("success", false);
+        // find page
+        Page originalPage = pageRepository.findById(pageId).orElse(null);
+        if (originalPage == null) {
+            resObj.put("message", "Page not found");
+            return resObj;
+        }
+
+        try {
+            pageRepository.delete(originalPage);
+            resObj.put("success", true);
+            resObj.put("message", "Page deleted successfully");
+        } catch (Exception e) {
+            resObj.put("message", e.getMessage());
+            return resObj;
+        }
+
+        return resObj;
+
     }
 
 }

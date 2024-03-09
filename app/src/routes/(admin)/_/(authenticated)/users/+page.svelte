@@ -38,30 +38,9 @@
 		url.searchParams.set('qu', params.qu);
 		url.searchParams.set('limit', params.limit.value.toString());
 		return url.toString();
-
-		// let url = $page.url.toString();
-
-		// if (url.includes('page=')) {
-		// 	url = url.replace(/page=\d+/, `page=${number}`);
-		// } else if (url.includes('?')) {
-		// 	url = url + `&page=${number}`;
-		// } else {
-		// 	url = url + `?page=${number}`;
-		// }
-
-		// return url;
 	}
 
 	const params = {
-		// sort: {
-		// 	options: [
-		// 		{ value: '-created', label: 'Created (DESC)' },
-		// 		{ value: 'created', label: 'Created (ASC)' },
-		// 		{ value: '-updated', label: 'Updated (DESC)' },
-		// 		{ value: 'updated', label: 'Updated (ASC)' }
-		// 	],
-		// 	value: '-created'
-		// },
 		page: $page.url.searchParams.get('page') || 1,
 		limit: {
 			options: [5, 10, 25, 50],
@@ -177,7 +156,7 @@
 						name="qu"
 						type="text"
 						bind:value={params.qu}
-						placeholder="Search for user, with user's id, name, email, username"
+						placeholder="Search for user, with name, email, username"
 					/>
 				</div>
 				<div class="col-span-1 grid w-full max-w-sm items-center gap-1.5">
@@ -261,7 +240,7 @@
 								class="flex items-center justify-center gap-1"
 								variant="outline"
 								size="sm"
-								href={'/_/pages/?qu=' + item.username}
+								href={'/_/pages/?qu=' + item.id}
 								>Pages
 								<ExternalLink class="h-4 w-4 " />
 							</Button>

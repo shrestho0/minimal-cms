@@ -257,14 +257,14 @@
 									deleteModalOpen = true;
 								}}>Delete</Button
 							>
-							<Button
+							<!-- <Button
 								class="flex items-center justify-center gap-1"
 								variant="outline"
 								size="sm"
 								href={'/_/pages/?qu=' + item.username}
 								>Pages
 								<ExternalLink class="h-4 w-4 " />
-							</Button>
+							</Button> -->
 						</Table.Cell>
 					</Table.Row>
 				{/each}

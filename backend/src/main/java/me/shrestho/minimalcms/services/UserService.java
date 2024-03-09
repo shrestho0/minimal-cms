@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import me.shrestho.minimalcms.entity.User;
 import me.shrestho.minimalcms.repository.UserRepository;
+import me.shrestho.minimalcms.utils.enums.UserRoles;
 import me.shrestho.minimalcms.utils.projections.UserProjection;
 
 @Service
@@ -181,6 +182,14 @@ public class UserService {
         }
 
         return resObj;
+
+    }
+
+    public List<User> findAllUserByQuery(String userQuery) {
+        String likeQuery = "%" + userQuery + "%";
+        UserRoles role = UserRoles.USER;
+        return userRepository.findByNameLikeOrUsernameLikeOrIdEqualsAndRoleEquals(likeQuery, likeQuery, userQuery,
+                role);
 
     }
 

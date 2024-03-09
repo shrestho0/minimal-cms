@@ -1,72 +1,56 @@
-import type { SinglePage } from "@/types/entity";
 import type { Actions, PageServerLoad } from "./$types";
-import { dummyPages } from "@/dev/dummyPages";
+import type { User } from "@/types/entity";
 import { fail } from "@sveltejs/kit";
-
-export const load: PageServerLoad = async ({ locals, url }) => {
+import { BackendApiEndpoints } from "@/utils/app-links";
+import { parseTokenFromCookie } from "@/utils/index.server";
+import { validRegex } from "@/utils/validations";
+export const load: PageServerLoad = async ({ locals, url, fetch, cookies }) => {
     let page = Number.parseInt(url.searchParams.get('page') || '1')
-    let status = url.searchParams.get('status') || 'all'
     let limit = Number.parseInt(url.searchParams.get('limit') || '5')
-    let sort = url.searchParams.get('sort') || '-created'
-    let q = url.searchParams.get('q')?.trim()?.toLowerCase() || ''
-    let qu = url.searchParams.get('qu')?.trim()?.toLowerCase() || ''
 
+    let q = url.searchParams.get('q') || ''
+    let qu = url.searchParams.get('qu') || ''
+    let status = url.searchParams.get('status') || 'all'
 
+    const users = await fetch(BackendApiEndpoints.ADMIN_PAGES + `?qu=${qu}&q=${q}&limit=${limit}&page=${page}&status=${status}`, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+            "JWT": parseTokenFromCookie(cookies)
+        }
+    }).then(res => res.json()).catch(err => {
+        console.error(err)
+        return {
+            page: page,
+            totalPages: 0,
+            totalItems: 0,
+            perPage: limit,
+            items: []
 
+        }
+    })
 
-    let filter = '';
-    // if (qu) {
-    //     filter += `(user.id~"${qu}" || user.username~"${qu}" || user.email~"${qu}" || user.name~"${qu}")`
-    // }
-
-    // if (q) {
-    //     q = q.toLowerCase()
-    //     if (q) filter += " &&"
-    //     filter += `( id~"${q}" ||  title~"${q}" || content~"${q}" || slug~"${q}" ) `
-    // }
-
-
-    // if (qu) {
-    //     filter += ` ${filter ? ' && ' : ''} ( user.id~"${q}" || user.username~"${q}" || user.email~"${q}" || user.name~"${q}") `
-    // }
-
-    if (q && qu) {
-        filter = ` (id~"${q}" || title~"${q}" || content~"${q}" || slug~"${q}") && (user.id~"${qu}" || user.username~"${qu}" || user.email~"${qu}" || user.name~"${qu}")`
-    } else if (q) {
-        filter = ` (id~"${q}" || title~"${q}" || content~"${q}" || slug~"${q}")`
-    } else if (qu) {
-        filter = ` (user.id~"${qu}" || user.username~"${qu}" || user.email~"${qu}" || user.name~"${qu}")`
-    }
-
-
-    if (status && status != 'all') {
-        if (filter) filter += ' &&'
-        filter += `(status = "${status}")`
-    }
-
-    // if (status && status != 'all') {
-    //     filter += `${filter ? '&&' : ''} (status = "${status})"`
-    // }
-
-
-    return {
-        totalItem: 100,
-        items: dummyPages,
-        page,
-        limit,
-        perPage: limit,
-    }
+    // console.log(JSON.stringify(users))
+    return users;
 
 
 };
 
+
 export const actions: Actions = {
-    deletePage: async ({ locals, request }) => {
+    deletePage: async ({ locals, request, fetch, cookies }) => {
 
         const { pageId } = Object.fromEntries(await request.formData())
 
         // Todo: Delete Page
-        const pageDeleted = null
+        const pageDeleted = await fetch(BackendApiEndpoints.ADMIN_PAGES + `/${pageId}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+                "JWT": parseTokenFromCookie(cookies)
+            },
+
+        })
 
         if (!pageDeleted) {
             return fail(403, {
@@ -79,11 +63,20 @@ export const actions: Actions = {
             message: "Page deleted successfully"
         }
     },
-    updateStatus: async ({ locals, request }) => {
+    updateStatus: async ({ locals, request, cookies, fetch }) => {
         const { pageId, status } = Object.fromEntries(await request.formData())
 
         // TODO: Update Page Status
-        const pageUpdated = null;
+        const pageUpdated = await fetch(BackendApiEndpoints.ADMIN_PAGES + `/${pageId}`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "JWT": parseTokenFromCookie(cookies)
+            },
+            body: JSON.stringify({
+                status: status
+            })
+        })
 
         if (!pageUpdated) {
             return fail(403, {

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import me.shrestho.minimalcms.entity.User;
+import me.shrestho.minimalcms.utils.enums.UserRoles;
 import me.shrestho.minimalcms.utils.projections.UserProjection;
 
 public interface UserRepository extends JpaRepository<User, String> {
@@ -30,5 +31,10 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     @Query(value = "SELECT * FROM user u WHERE (u.username LIKE %?1% OR u.email LIKE %?1%) AND role = 'ADMIN' LIMIT ?2 OFFSET ?3", nativeQuery = true)
     List<UserProjection> findAdminUserByQueryAndLimit(String userQuery, int limit, int offset);
+
+    List<User> findByNameLikeOrUsernameLikeAndRoleEquals(String userQuery, String userQuery2, UserRoles role);
+
+    List<User> findByNameLikeOrUsernameLikeOrIdEqualsAndRoleEquals(String likeQuery, String likeQuery2,
+            String likeQuery3, UserRoles role);
 
 }

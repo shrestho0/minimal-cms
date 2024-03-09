@@ -52,4 +52,34 @@ public interface PageRepository extends JpaRepository<Page, String> {
 
     void deleteAllByUser(User user);
 
+    // for admins
+    // no order by
+    @Query(value = "SELECT p.* FROM page p WHERE p.title LIKE %?1% OR p.content LIKE %?1% OR p.slug LIKE %?1% LIMIT ?2, ?3", nativeQuery = true)
+    List<Page> findByFilterForAdmin(String q, int offset, int limit);
+
+    @Query(value = "SELECT count(p.id) FROM page p WHERE p.title LIKE %?1% OR p.content LIKE %?1% OR p.slug LIKE %?1%", nativeQuery = true)
+    long countByFilterForAdmin(String q);
+
+    @Query(value = "SELECT p.* FROM page p WHERE (p.title LIKE %?1% OR p.content LIKE %?1% OR p.slug LIKE %?1%) AND p.status = ?2 LIMIT ?3, ?4", nativeQuery = true)
+    List<Page> findByFilterAndStatusForAdmin(String q, String status, int offset, int limit);
+
+    @Query(value = "SELECT count(p.id) FROM page p WHERE (p.title LIKE %?1% OR p.content LIKE %?1% OR p.slug LIKE %?1%) AND p.status = ?2", nativeQuery = true)
+    long countByFilterAndStatusForAdmin(String pageQuery, String status);
+
+    @Query(value = "SELECT count(p.id) FROM page p WHERE p.user = ?1 AND (p.title LIKE %?2% OR p.content LIKE %?2% OR p.slug LIKE %?2%  )", nativeQuery = true)
+    long countByFilterAndUserIdForAdmin(String userId, String q);
+
+    // no order by
+    @Query(value = "SELECT p.* FROM page p WHERE p.user = ?1 AND (p.title LIKE %?2% OR p.content LIKE %?2% OR p.slug LIKE %?2% ) LIMIT ?3, ?4", nativeQuery = true)
+    List<Page> findByFilterAndUserIdForAdmin(String userId, String q, int offset, int limit);
+
+    @Query(value = "SELECT count(p.id) FROM page p WHERE p.user = ?1 AND (p.title LIKE %?2% OR p.content LIKE %?2% OR p.slug LIKE %?2%  ) AND p.status = ?3", nativeQuery = true)
+    long countByFilterAndUserIdAndStatusForAdmin(String userId, String q, String status);
+
+    // no order by
+    @Query(value = "SELECT p.* FROM page p WHERE p.user = ?1 AND (p.title LIKE %?2% OR p.content LIKE %?2% OR p.slug LIKE %?2% ) AND p.status = ?3 LIMIT ?4, ?5", nativeQuery = true)
+    List<Page> findByFilterAndUserIdAndStatusForAdmin(String userId, String q, String status,
+            int offset,
+            int limit);
+
 }

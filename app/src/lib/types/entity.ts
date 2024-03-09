@@ -30,13 +30,10 @@ export type SinglePage = {
     title: string;
     slug: string;
     content: string;
-    user: string;
+    user: User;
     status: PageStatus;
     created: string;
     updated: string;
-    expand?: {
-        user?: User
-    }
 }
 
 export interface Profile {

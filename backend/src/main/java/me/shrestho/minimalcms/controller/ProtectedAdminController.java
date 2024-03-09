@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import me.shrestho.minimalcms.entity.Page;
 import me.shrestho.minimalcms.entity.User;
 import me.shrestho.minimalcms.services.AuthService;
 import me.shrestho.minimalcms.services.PageService;
@@ -149,6 +150,56 @@ public class ProtectedAdminController {
     public ResponseEntity<?> updateUser(@RequestAttribute("auth_user") User admin,
             @PathVariable("userId") String userId, @RequestBody Map<String, Object> reqData) {
         Map<String, Object> resMap = userService.updateUserById(userId, reqData);
+
+        return new ResponseEntity<>(resMap,
+                resMap.get("success").equals(true) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    //////////////////////////////////
+    /// List Pages (Search & Filters)
+    /// ?status=&limit=5&qu=&q=&page=1
+    //////////////////////////////////
+
+    @GetMapping("/pages")
+    public ResponseEntity<?> listPages(
+            @RequestAttribute("auth_user") User admin,
+            @RequestParam("page") int page,
+            @RequestParam("limit") int limit,
+
+            @RequestParam("status") String status,
+            @RequestParam("qu") String userQuery, // takes user.id only
+            @RequestParam("q") String pageQuery) {
+
+        // filter with status after all done for simplicity
+        Map<String, Object> resObj = new HashMap<>();
+
+        resObj = pageService.findPagesForAdminWithoutUser(page, limit, status, pageQuery, userQuery);
+
+        return new ResponseEntity<>(resObj, HttpStatus.OK);
+    }
+
+    //////////////////////////////////
+    /// Update Page Status, Ban, Unban
+    //////////////////////////////////
+
+    @PatchMapping("/pages/{pageId}")
+    public ResponseEntity<?> updatePageStatus(@RequestAttribute("auth_user") User admin,
+            @PathVariable("pageId") String pageId, @RequestBody Page updateTo) {
+
+        Map<String, Object> resMap = pageService.updatePageStatusById(pageId, updateTo);
+
+        return new ResponseEntity<>(resMap,
+                resMap.get("success").equals(true) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    //////////////////////////////////
+    /// Delete Page
+    //////////////////////////////////
+
+    @DeleteMapping("/pages/{pageId}")
+    public ResponseEntity<?> deletePage(@RequestAttribute("auth_user") User admin,
+            @PathVariable("pageId") String pageId) {
+        Map<String, Object> resMap = pageService.deletePageById(pageId);
 
         return new ResponseEntity<>(resMap,
                 resMap.get("success").equals(true) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);

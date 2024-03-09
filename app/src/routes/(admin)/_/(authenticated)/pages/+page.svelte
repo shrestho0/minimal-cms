@@ -7,7 +7,14 @@
 	import UserPanelItemWrapper from '@/ui/UserPanelItemWrapper.svelte';
 	import * as Table from '$lib/components/ui/table';
 	import type { SinglePage } from '@/types/entity';
-	import { ArrowLeft, ArrowRight, ChevronLeft, ChevronRight, CircleDotDashed } from 'lucide-svelte';
+	import {
+		ArrowLeft,
+		ArrowRight,
+		ChevronLeft,
+		ChevronRight,
+		CircleDotDashed,
+		ExternalLink
+	} from 'lucide-svelte';
 	import type { User } from '@/types/entity';
 	import { beautiulDateTime } from '@/utils/common';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
@@ -36,8 +43,10 @@
 	};
 
 	let deleteModalOpen = false;
+	let viewDetailsModal = false;
 	let banUnbanModalOpen = false;
 	let deletingPage = false;
+
 	let banningOrUnbanningPage = false;
 	let selectedItem: SinglePage | null = null;
 
@@ -73,17 +82,13 @@
 	}
 
 	function sanitizePaginationLink(number: number) {
-		let url = $page.url.toString();
-
-		if (url.includes('page=')) {
-			url = url.replace(/page=\d+/, `page=${number}`);
-		} else if (url.includes('?')) {
-			url = url + `&page=${number}`;
-		} else {
-			url = url + `?page=${number}`;
-		}
-
-		return url;
+		// params Obj to URL
+		const url = new URL($page.url);
+		url.searchParams.set('page', number.toString());
+		url.searchParams.set('q', qparams.q);
+		url.searchParams.set('qu', qparams.qu);
+		url.searchParams.set('limit', qparams.limit.selected.toString());
+		return url.toString();
 	}
 
 	// let nextPageUrl = sanitizePaginationLink(data.page + 1);
@@ -142,7 +147,7 @@
 					</select>
 				</div>
 				<!-- order by -->
-				<div class="grid w-full max-w-sm items-center gap-1.5">
+				<!-- <div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label for="sort">Sort By</Label>
 					<select
 						class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
@@ -154,7 +159,7 @@
 							<option value={item.value}>{item.name}</option>
 						{/each}
 					</select>
-				</div>
+				</div> -->
 				<div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label for="limit">Limit</Label>
 					<select
@@ -171,7 +176,7 @@
 			<Input
 				name="qu"
 				type="text"
-				placeholder="Search for page, with user id, username or name"
+				placeholder="Search for page, with user id"
 				bind:value={qparams.qu}
 			/>
 			<Input
@@ -232,11 +237,11 @@
 							<Button
 								variant="outline"
 								size="sm"
-								data-sveltekit-reload
-								target="_blank"
-								href={'/' + item?.expand?.user?.username + '/' + item.slug}>View</Button
+								on:click={() => {
+									selectedItem = item;
+									viewDetailsModal = !viewDetailsModal;
+								}}>View Details</Button
 							>
-
 							<Button
 								variant="default"
 								size="sm"
@@ -254,6 +259,17 @@
 								}}
 								size="sm">Delete</Button
 							>
+							<Button
+								class="flex gap-2 "
+								variant="outline"
+								size="sm"
+								data-sveltekit-reload
+								target="_blank"
+								href={'/' + item?.user?.username + '/' + item.slug}
+							>
+								<ExternalLink class="h-4 w-4" />
+								Visit
+							</Button>
 						</Table.Cell>
 					</Table.Row>
 				{/each}
@@ -301,6 +317,48 @@
 	{/if}
 	<!-- <PreDebug {data} /> -->
 </UserPanelItemWrapper>
+
+<AlertDialog.Root bind:open={viewDetailsModal}>
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Page Details:</AlertDialog.Title>
+		</AlertDialog.Header>
+		<AlertDialog.Description class="font-sm ">
+			<table class="w-full text-black">
+				<tr>
+					<td class="w-1/4">ID</td>
+					<td>{selectedItem?.id}</td>
+				</tr>
+				<tr>
+					<td class="w-1/4">Title</td>
+					<td>{selectedItem?.title}</td>
+				</tr>
+				<tr>
+					<td class="w-1/4">Slug</td>
+					<td>{selectedItem?.slug}</td>
+				</tr>
+				<tr>
+					<td class="w-1/4">Created</td>
+					<td>{selectedItem && beautiulDateTime(selectedItem.created)}</td>
+				</tr>
+
+				<tr>
+					<td class="w-1/4">Updated</td>
+					<td>{selectedItem && beautiulDateTime(selectedItem.updated)}</td>
+				</tr>
+
+				<tr>
+					<td class="w-1/4">Owner Id</td>
+					<td>{selectedItem && selectedItem.user.id}</td>
+				</tr>
+			</table>
+		</AlertDialog.Description>
+		<AlertDialog.Footer>
+			<Button href={'/_/users' + '?qu=' + selectedItem?.user?.username}>Modify Page Owner</Button>
+			<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>
 
 <AlertDialog.Root bind:open={deleteModalOpen}>
 	<AlertDialog.Content>

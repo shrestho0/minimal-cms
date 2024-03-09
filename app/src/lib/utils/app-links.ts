@@ -37,6 +37,7 @@ const _BackendApiEndpoints = {
     ADMIN_CHANGE_PASSWORD: "/admin/change-password", // PATCH, requires ACCESS_TOKEN as JWT
     ADMIN_USERS: "/admin/users", // POST, requires ADMIN_ACCESS_TOKEN as JWT    
     ADMIN_ADMINS: "/admin/admins", // POST, requires ADMIN_ACCESS_TOKEN as JWT  
+    ADMIN_PAGES: "/admin/pages", // GET, requires ADMIN_ACCESS_TOKEN as JWT and query params: q, qu, limit, page, status || PATCH (to ban) required /{pageId}, DELETE required /{pageId} 
 
 };
 
