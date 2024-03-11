@@ -1,4 +1,5 @@
 import { fontFamily } from "tailwindcss/defaultTheme";
+import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette';
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -55,10 +56,57 @@ const config = {
 				sm: "calc(var(--radius) - 4px)"
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans]
+				// sans: [...fontFamily.sans]
+				sans: [
+					"Poppins", "sans-serif",
+					{
+						fontFeatureSettings: '"cv11", "ss01"',
+						fontVariationSettings: '"opsz" 32'
+					},
+				],
+
+			},
+			animation: {
+				// ...other animations
+				spotlight: 'spotlight 2s ease .75s 1 forwards',
+				scroll:
+					'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite',
+
+			},
+			keyframes: {
+				// ... other keyframes
+				spotlight: {
+					'0%': {
+						opacity: 0,
+						transform: 'translate(-72%, -62%) scale(0.5)'
+					},
+					'100%': {
+						opacity: 1,
+						transform: 'translate(-50%,-40%) scale(1)'
+					}
+				},
+				scroll: {
+					to: {
+						transform: 'translate(calc(-50% - 0.5rem))'
+					}
+				}
 			}
+
 		}
 	},
 };
+
+
+// // This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).
+// function addVariablesForColors({ addBase, theme }: any) {
+// 	let allColors = flattenColorPalette(theme('colors'));
+// 	let newVars = Object.fromEntries(
+// 		Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+// 	);
+
+// 	addBase({
+// 		':root': newVars
+// 	});
+// }
 
 export default config;

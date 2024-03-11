@@ -1,14 +1,89 @@
-<svelte:head>
-    <title>mCMS</title> 
-</svelte:head>
 <script>
 	import Hero from '@/ui/Hero.svelte';
 	import Faqs from './Faqs.svelte';
 	import NavbarHomePage from '@/ui/NavbarHomePage.svelte';
+	import Sparkles from '@/components/ui/Sparkles/Sparkles.svelte';
+	import SparklesHeroSection from '@/ui/SparklesHeroSection.svelte';
+	import HeroWrapper from '@/ui/HeroWrapper.svelte';
+	import Spotlight from '@/components/ui/Spotlight/Spotlight.svelte';
+	import TabsSection from '@/ui/TabsSection.svelte';
+	import TextGenerateEffect from '@/components/ui/TextGenerateEffect/TextGenerateEffect.svelte';
+	import { fade, slide } from 'svelte/transition';
+	import InfiniteQuoteSection from '@/ui/InfiniteQuoteSection.svelte';
+	import Button from '@/components/ui/button/button.svelte';
+	import { spring } from 'svelte/motion';
+	import { onMount } from 'svelte';
+
+	// temp x-buttons delayed loading
+	let loadXButtons = false;
+	onMount(() => {
+		setTimeout(() => {
+			loadXButtons = true;
+		}, 2000);
+	});
 </script>
 
+<svelte:head>
+	<title>mCMS</title>
+</svelte:head>
+
 <NavbarHomePage />
-<Hero />
+
+<section class=" relative">
+	<div
+		class="bg-grid-white/[0.02] font-poppins relative flex h-[40rem] overflow-hidden rounded-md px-16 antialiased md:items-center md:justify-center lg:px-32"
+	>
+		<Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+		<div class=" relative z-10 mx-auto w-full max-w-7xl p-4 pt-20 md:pt-0">
+			<!-- <h2
+			class="bg-opacity-50 bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-center text-4xl font-bold text-transparent md:text-7xl"
+		> -->
+			<TextGenerateEffect
+				className="text-center "
+				motionClassName="font-light"
+				words="The road to freedom starts from here"
+			/>
+			<TextGenerateEffect
+				words=" mCMS "
+				className="bg-opacity-50 tracking-widest bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-center text-4xl font-bold text-transparent md:text-7xl"
+			/>
+
+			<!-- mCMS -->
+
+			<!-- <br /> -->
+			<!-- </h2> -->
+
+			<p class="mx-auto mt-6 max-w-lg text-center text-base font-normal">
+				<!-- Make your place in the Internet -->
+				<TextGenerateEffect
+					className="text-md tracking-wide "
+					motionClassName="   font-light"
+					words="         An idiot admires complexity, a genius admires simplicity.   Make simple web pages with markdown."
+				/>
+			</p>
+
+			<div class="x-buttons my-3 flex items-center justify-center gap-4">
+				<!-- Load these buttons after previous designs are loaded-->
+				<div>Github Button</div>
+				<div>Other Button</div>
+			</div>
+		</div>
+	</div>
+
+	<Sparkles
+		minSize={0.8}
+		maxSize={2}
+		particleDensity={300}
+		particleColor="#FFFFFF"
+		className="w-full h-auto my-40 absolute inset-0 z-0 opacity-45"
+	/>
+</section>
+
+<TabsSection />
+<InfiniteQuoteSection />
+<!-- <Hero /> -->
+
+<!-- <SparklesHeroSection /> -->
 <Faqs />
 <!-- 
 <div id="debug" class="mb-32">

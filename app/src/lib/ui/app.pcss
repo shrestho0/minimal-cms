@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -74,13 +76,14 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Poppins', sans-serif;
   }
 
 }
 
 
 /* Custom scrollbar */
-::-webkit-scrollbar-track {
+/* ::-webkit-scrollbar-track {
 	border: none;
 	background-color: white;
 }
@@ -92,7 +95,19 @@
 
 ::-webkit-scrollbar-thumb {
 	background-color: #000000;
+} */
+
+::-webkit-scrollbar-track {
+  display: none;
 }
+
+::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
+
+::-webkit-scrollbar-thumb {
+  display: none;}
 
 /* .dark {
 	::-webkit-scrollbar-track {
@@ -124,3 +139,39 @@
 	color: black;
 	background: white;
 }
+/* 
+.poppins-light {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins-extrabold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+} */

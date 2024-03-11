@@ -1,9 +1,13 @@
 <script>
+	import Sparkles from '@/components/ui/Sparkles/Sparkles.svelte';
 	import HeroWrapper from './HeroWrapper.svelte';
 	import Link from './Link.svelte';
 </script>
 
 <HeroWrapper>
+	<div
+		class="absolute inset-0 h-full w-full bg-transparent [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"
+	></div>
 	<div class=" pt-20 sm:pt-32">
 		<div class="mx-auto max-w-7xl">
 			<div class="mx-auto max-w-2xl text-center">

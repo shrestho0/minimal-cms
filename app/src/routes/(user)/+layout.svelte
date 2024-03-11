@@ -9,11 +9,10 @@
 	import SidePanel from '@/ui/SidePanel.svelte';
 	import { customizationPages, userPanelPages } from '@/utils/authenticated-links';
 	import { toTitleCase } from '@/utils/common';
+	import { fade, slide } from 'svelte/transition';
+	import type { Admin, User } from '@/types/entity';
 	export let data: {
-		user: {
-			name: string;
-			email: string;
-		};
+		user: User | Admin;
 	};
 
 	function sanitizeTitle(title: string) {
