@@ -107,9 +107,9 @@
 		<a
 			on:click={handleAnchorClick}
 			href={AppLinks.HOME}
-			class="focus:shadow-outline flex items-center gap-3 rounded-lg text-lg font-semibold tracking-widest text-gray-900 focus:outline-none"
+			class="focus:shadow-outline flex items-center gap-3 rounded-lg text-lg font-semibold tracking-widest text-white focus:outline-none"
 		>
-			<Logo />
+			<Logo className="text-white/90" />
 		</a>
 		<div class="flex items-center justify-center gap-2">
 			<!-- <LightSwitch className="flex md:hidden" /> -->
@@ -177,7 +177,7 @@
 						<a
 							href={'#' + items.id}
 							on:click={handleAnchorClick}
-							class="rounded-md px-3 py-1.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+							class="rounded-md px-3 py-1.5 text-sm font-semibold text-white transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
 							{selectedIdx != undefined && selectedIdx == idx ? 'underline' : ''}
 							">{items.title}</a
 						>
@@ -198,14 +198,17 @@
 			<!-- <Link href="/login" style="outline">Login</Link> -->
 			<!-- <Link href="/register">Register</Link> -->
 			{#if $page?.data.user}
-				<Button data-sveltekit-reload href={AppLinks.USER_DASHBOARD} variant="outline"
-					>Dashboard</Button
+				<Button
+					data-sveltekit-reload
+					href={AppLinks.USER_DASHBOARD}
+					variant="outline"
+					class="bg-transparent text-white/90">Dashboard</Button
 				>
-				<Logout />
+				<Logout btnClasses="bg-transparent text-white/90" />
 			{:else if $page?.data.admin}
 				<Button href={AppLinks.ADMIN_DASHBOARD} variant="outline">Dashboard</Button>
 			{:else}
-				<Button href="/login" variant="default">Login</Button>
+				<Button href="/login" variant="outline" class="bg-transparent text-white/90">Login</Button>
 				<Button href="/register" variant="outline">Register</Button>
 			{/if}
 		</div>
