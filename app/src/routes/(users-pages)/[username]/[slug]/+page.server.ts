@@ -28,13 +28,13 @@ export const load: PageServerLoad = async ({ locals, fetch, params }) => {
 
     // page.page.content = page.page.content.replace(/{{username}}/g, username);
 
-    if (page.page.status == "draft" && locals?.user?.id != page.owner.id) {
+    if (page.page.status == "draft" && locals?.user?.id != page.owner.id && !locals.admin) {
         return error(403, {
             message: ErrorMessages.PAGE_NOT_PUBLIC
         });
     }
 
-    if (page.page.status == "banned" && locals?.user?.id != page.owner.id) {
+    if (page.page.status == "banned" && locals?.user?.id != page.owner.id && !locals.admin) {
         return error(403, {
             message: ErrorMessages.PAGE_BANNED
         });

@@ -5,8 +5,9 @@
 	import UserPageHeader from '@/ui/UserPageHeader.svelte';
 	import UserPageFooter from '@/ui/UserPageFooter.svelte';
 	import type { SiteFooterType, SiteHeaderType } from '@/types/customizations';
-	import type { SinglePage } from '@/types/entity';
+	import type { SinglePage, PageStatus } from '@/types/entity';
 	import UserPageTitle from '@/ui/UserPageTitle.svelte';
+	import Alert from '@/components/ui/alert/alert.svelte';
 
 	export let data: {
 		siteFooter: SiteFooterType;
@@ -33,6 +34,20 @@
 	/>
 </svelte:head>
 {#if !loading}
+	{#if data?.pageContent?.status != 'published'}
+		<div class="flex w-full items-center justify-center py-4">
+			{#if data?.pageContent?.status == 'draft'}
+				<Alert variant="default">
+					<p>This page is a draft and is not yet published.</p>
+				</Alert>
+			{:else if data?.pageContent?.status == 'banned'}
+				<Alert variant="destructive">
+					<p>This page is banned.</p>
+				</Alert>
+			{/if}
+		</div>
+	{/if}
+
 	<UserPageTitle title={data?.pageContent?.title} />
 	<Markdown source={data?.pageContent.content} />
 {:else}

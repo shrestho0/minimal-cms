@@ -8,6 +8,7 @@
 	import UserPageHeader from '@/ui/UserPageHeader.svelte';
 	import UserPageFooter from '@/ui/UserPageFooter.svelte';
 	import { ModeWatcher, mode, setMode } from 'mode-watcher';
+	import { Alert } from '@/components/ui/alert';
 
 	let tempMode: 'light' | 'dark' = 'dark';
 	onMount(() => {
@@ -23,6 +24,7 @@
 		setMode(tempMode);
 	});
 	export let data: {
+		pageContent: any;
 		siteHeader: any;
 		siteFooter: any;
 	};
@@ -36,6 +38,7 @@
 		href="/api/site-style?u={$page.url.pathname?.split('/')[1]}&v={Math.random()}"
 	/>
 </svelte:head>
+
 <div class=" bg-white dark:bg-white">
 	<div class="flex h-screen flex-col">
 		<UserPageHeader headerData={data?.siteHeader} />

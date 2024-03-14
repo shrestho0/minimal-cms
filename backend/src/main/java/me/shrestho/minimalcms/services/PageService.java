@@ -182,7 +182,7 @@ public class PageService {
                     + (page - 1) * limit);
             resObj.put("totalItems", count);
             resObj.put("items", items);
-            resObj.put("totalPages", (int) Math.ceil(count / limit));
+            resObj.put("totalPages", (int) Math.ceil(count / limit) + 1);
 
         } else if (status.equals("draft") || status.equals("published") || status.equals("banned")) {
             Integer count = pageRepository.countByFilterAndStatus(

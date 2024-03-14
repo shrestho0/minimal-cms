@@ -97,9 +97,9 @@
 
 <div
 	class="fixed z-50 mx-auto flex w-full max-w-screen-xl flex-col {onMobile && navbareKajHobe
-		? 'bg-gray-50 dark:bg-stone-950'
+		? 'bg-stone-950'
 		: onMobile && open
-			? 'bg-gray-50 dark:bg-stone-950'
+			? 'bg-stone-950'
 			: ''} px-4 md:flex-row md:items-center md:justify-between md:bg-transparent md:px-6 md:pt-2 lg:px-8"
 >
 	<div class="flex flex-row items-center justify-between p-4">

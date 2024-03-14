@@ -15,7 +15,7 @@
 	import { onMount } from 'svelte';
 	import { Github } from 'lucide-svelte';
 	import LightSwitch from '@/ui/LightSwitch.svelte';
-	import GradientButton from '@/ui/GradientButton.svelte';
+	import GradientButton from '@/ui/GradientATag.svelte';
 
 	// temp x-buttons delayed loading
 	let loadXButtons = false;
@@ -72,7 +72,31 @@
 				{#if loadXButtons}
 					<div in:fade class="x-buttons mt-4 flex h-16 items-center justify-center gap-4">
 						<!-- Load these buttons after previous designs are loaded-->
-						<GradientButton />
+						<GradientButton title="Github Link" href="https://github.com/shrestho0/minimal-cms">
+							<div slot="left">
+								<Github size={20} />
+							</div>
+						</GradientButton>
+
+						<GradientButton title="Start Now" href="/register">
+							<div slot="right">
+								<svg
+									width="16"
+									height="16"
+									viewBox="0 0 24 24"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										stroke="currentColor"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="1.5"
+										d="M10.75 8.75L14.25 12L10.75 15.25"
+									></path>
+								</svg>
+							</div>
+						</GradientButton>
 						<!-- <Button
 							variant="default"
 							class="flex gap-2 border border-white/90 bg-transparent py-4 "

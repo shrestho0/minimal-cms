@@ -8,12 +8,10 @@
 	import Separator from '@/components/ui/separator/separator.svelte';
 	import SidePanel from '@/ui/SidePanel.svelte';
 	import { adminPanelPages, userPanelPages } from '@/utils/authenticated-links';
+	import type { Admin } from '@/types/entity';
 	export let data: {
-		admin: {
-			email: string;
-		};
+		admin: Admin;
 	};
-
 	function sanitizeTitle(title: string) {
 		// - to space
 		title = title.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
@@ -39,7 +37,7 @@
 			<PageHeaderBlock
 				user={data?.admin}
 				title={sanitizeTitle($page.url.pathname)}
-				pages={userPanelPages}
+				pages={adminPanelPages}
 			/>
 			<PageContentBlock>
 				<slot />
