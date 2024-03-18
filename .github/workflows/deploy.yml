@@ -1,0 +1,30 @@
+name: MCMS Backend Deployment
+
+on:
+  push:
+    branches:
+      - main # Modify this to match your branch name
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+
+      - name: Deploy to Ubuntu server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}                                                                                                                      script: |
+            cd /root/minimal-cms
+
+            pm2 stop mcms-backend
+            pm2 delete mcms-backend
+
+            git pull --force                                                                                                                                                                                                                                                                                                      chmod a+x build_and_run.sh                                                                                                                                 pm2 start build_and_run.sh --name "mcms-backend"                                                                                                                                                                                                                                                                      echo "Complete xD"                                                                                                                                                           
