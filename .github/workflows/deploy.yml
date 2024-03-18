@@ -28,4 +28,13 @@ jobs:
             pm2 stop mcms-backend
             pm2 delete mcms-backend
 
-            git pull --force                                                                                                                                                                                                                                                                                                      chmod a+x build_and_run.sh                                                                                                                                 pm2 start build_and_run.sh --name "mcms-backend"                                                                                                                                                                                                                                                                      echo "Complete xD"                                                                                                                                                           
+            git pull --force
+            chmod a+x build_and_run.sh
+            pm2 start build_and_run.sh --name "mcms-backend"
+
+            pm2 list
+            
+
+            echo "Complete xD" 
+
+
