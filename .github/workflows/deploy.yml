@@ -21,7 +21,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}                                                                                                                      script: |
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
             cd /root/minimal-cms
 
             pm2 stop mcms-backend
