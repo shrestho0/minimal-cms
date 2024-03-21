@@ -20,10 +20,11 @@
 	let openedIdx: number | null = null;
 </script>
 
-<div id="faqs" class="mx-auto max-w-5xl select-none px-6 py-24 sm:py-36 lg:px-8 lg:py-52 dark:bg-stone-950">
-	<div class="mx-auto divide-y divide-gray-900/10 dark:divide-gray-100/10">
-		<h2 class="text-2xl font-bold leading-10 tracking-tight text-gray-900 dark:text-white">FAQs</h2>
-		<dl class="mt-10 space-y-6 divide-y divide-gray-900/10 dark:divide-gray-100/10">
+<div id="faqs" class="mx-auto max-w-5xl select-none py-24 sm:py-36  lg:py-52    px-6  lg:px-8   ">
+	<!--  px-6  lg:px-8  -->
+	<div class="mx-auto divide-y divide-gray-100/10  ">
+		<h2 class="text-2xl font-bold leading-10 tracking-tight text-white">FAQs</h2>
+		<dl class="mt-10 space-y-6 divide-y divide-gray-100/10 ">
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			{#each faqs as faq, idx}
 				<!-- svelte-ignore a11y-interactive-supports-focus -->
@@ -38,7 +39,7 @@
 					<dt>
 						<button
 							type="button"
-							class="flex w-full items-start justify-between text-left text-gray-900 dark:text-white"
+							class="flex w-full items-start justify-between text-left text-white"
 						>
 							<span class="text-base font-semibold leading-7">{faq.title}</span>
 							<span class="ml-6 flex h-7 items-center">
@@ -52,7 +53,7 @@
 					</dt>
 					{#if openedIdx === idx}
 						<dd in:slide out:slide class="mt-2 pr-12" id="faq-0">
-							<span class="text-base leading-7 text-gray-600 dark:text-gray-100">
+							<span class="  leading-7 text-white/80">
 								{faq.description}
 							</span>
 						</dd>

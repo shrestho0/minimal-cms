@@ -1,150 +1,113 @@
-<script>
-	import Hero from '@/ui/Hero.svelte';
-	import Faqs from './Faqs.svelte';
+<script lang="ts">
 	import NavbarHomePage from '@/ui/NavbarHomePage.svelte';
-	import Sparkles from '@/components/ui/Sparkles/Sparkles.svelte';
-	import SparklesHeroSection from '@/ui/SparklesHeroSection.svelte';
-	import HeroWrapper from '@/ui/HeroWrapper.svelte';
-	import Spotlight from '@/components/ui/Spotlight/Spotlight.svelte';
-	import TabsSection from '@/ui/TabsSection.svelte';
-	import TextGenerateEffect from '@/components/ui/TextGenerateEffect/TextGenerateEffect.svelte';
-	import { fade, slide } from 'svelte/transition';
+	import Faqs from './Faqs.svelte';
+	import InfiniteMovingCards from '@/components/ui/InfiniteMovingCards/InfiniteMovingCards.svelte';
 	import InfiniteQuoteSection from '@/ui/InfiniteQuoteSection.svelte';
+	import WhatsIncludedSection from '@/ui/WhatsIncludedSection.svelte';
 	import Button from '@/components/ui/button/button.svelte';
-	import { spring } from 'svelte/motion';
-	import { onMount } from 'svelte';
-	import { Github } from 'lucide-svelte';
-	import LightSwitch from '@/ui/LightSwitch.svelte';
-	import GradientButton from '@/ui/GradientATag.svelte';
+	import { ArrowRightToLine, ExternalLink, HeartHandshake } from 'lucide-svelte';
 
-	// temp x-buttons delayed loading
-	let loadXButtons = false;
-	onMount(() => {
-		setTimeout(() => {
-			loadXButtons = true;
-		}, 2000);
-	});
+	console.log('hwllo');
 </script>
 
-<svelte:head>
-	<title>mCMS</title>
-</svelte:head>
+<div class=" lg:container">
+	<NavbarHomePage />
+</div>
+<span class="hero-gradient"></span>
 
-<div class="h-screen w-full bg-black">
-	<section class="  relative mx-auto max-w-screen-xl bg-black">
-		<NavbarHomePage />
-		<div
-			class="bg-grid-white/[0.02] font-poppins relative flex h-[40rem] overflow-hidden rounded-md px-16 antialiased md:items-center md:justify-center lg:px-32"
-		>
-			<Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
-			<div class=" relative z-10 mx-auto w-full max-w-7xl p-4 pt-20 text-center md:pt-0">
-				<!-- <h2
-			class="bg-opacity-50 bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-center text-4xl font-bold text-transparent md:text-7xl"
-		> -->
-				<!-- <TextGenerateEffect
-				className="text-center "
-				motionClassName="font-light"
-				words="The road to freedom starts from here"
-			/> -->
-				<!-- <TextGenerateEffect
-				words=" mCMS "
-				className="bg-opacity-50 tracking-widest bg-gradient-to-b from-neutral-50 to-neutral-400 bg-clip-text text-center text-4xl font-bold text-transparent md:text-7xl"
-			/> -->
-				<TextGenerateEffect
-					words=" mCMS "
-					motionClassName="relative z-10 bg-gradient-to-tr from-neutral-200 to-neutral-600 bg-clip-text text-center
-				font-sans text-3xl md:text-7xl font-bold text-transparent  "
-				/>
+<main class="home-bg">
+    
 
-				<!-- mCMS -->
-
-				<!-- <br /> -->
-				<!-- </h2> -->
-
-				<p class="mx-auto mt-6 max-w-lg text-center text-base font-normal">
-					<!-- Make your place in the Internet -->
-					<TextGenerateEffect
-						className="text-md tracking-wide "
-						motionClassName=" text-white  font-light"
-						words="         An idiot admires complexity, a genius admires simplicity. Make simple web pages with markdown."
-					/>
-				</p>
-				{#if loadXButtons}
-					<div in:fade class="x-buttons mt-4 flex h-16 items-center justify-center gap-4">
-						<!-- Load these buttons after previous designs are loaded-->
-						<GradientButton title="Github Link" href="https://github.com/shrestho0/minimal-cms">
-							<div slot="left">
-								<Github size={20} />
-							</div>
-						</GradientButton>
-
-						<GradientButton title="Start Now" href="/register">
-							<div slot="right">
-								<svg
-									width="16"
-									height="16"
-									viewBox="0 0 24 24"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<path
-										stroke="currentColor"
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="1.5"
-										d="M10.75 8.75L14.25 12L10.75 15.25"
-									></path>
-								</svg>
-							</div>
-						</GradientButton>
-						<!-- <Button
-							variant="default"
-							class="flex gap-2 border border-white/90 bg-transparent py-4 "
-						>
-							<Github size={24} /> Find on Github
-						</Button>
-						<Button class="flex gap-2 border border-white/90 bg-transparent py-4 " href="/register"
-							>Get Started</Button
-						> -->
-					</div>
-				{:else}
-					<div class="mt-4 h-16">&nbsp;</div>
-				{/if}
+<div class=" container max-w-5xl   pt-48">
+	<div class="  grid grid-cols-1 md:grid-cols-2 mx-auto select-none     ">
+		<div class="left-side space-y-8">
+			<div class="big-text montserrat text-6xl font-bold text-[#D9D9D9]">
+				Make simple
+				<br />
+				web pages
+				<br />
+				with markdown
+			</div>
+			<div class="smaller-text break-words text-lg text-white/50">
+				An idiot admires complexity, a genius admires simplicity. Make simple web pages with
+				markdown
+				<!-- </span> -->
 			</div>
 		</div>
-
-		<Sparkles
-			minSize={0.8}
-			maxSize={2}
-			particleDensity={300}
-			particleColor="#FFFFFF"
-			className="w-full h-auto my-40 absolute inset-0 z-0 opacity-45"
-		/>
-	</section>
+		<div
+			class="items-right flex justify-end grayscale-0 transition-all duration-500 hover:grayscale"
+		>
+			<img src="/right-image.png" alt="" class=" h-[350px] w-auto pr-6 pt-6" />
+			<img
+				class="  absolute h-[370px] rounded-xl grayscale"
+				src="https://www.shuttle.rs/_next/image?url=%2Fimages%2Fsections%2Fhero%2Fbg.png&w=750&q=75"
+				alt=""
+			/>
+		</div>
+	</div>   
 </div>
-<LightSwitch />
-<TabsSection />
-<InfiniteQuoteSection />
-<!-- <Hero /> -->
 
-<!-- <SparklesHeroSection /> -->
+
+<WhatsIncludedSection/>
+<InfiniteQuoteSection />
 <Faqs />
-<!-- 
-<div id="debug" class="mb-32">
-	<div>Temp site urls for testing</div>
-	<ul>
-		Links:
-		<li>
-			- <a href="/login">User Login</a>
-		</li>
-		<li>
-			- <a href="/register">User Register</a>
-		</li>
-		<li>
-			- <a href="/_/login">Admin Login</a>
-		</li>
-		<li>
-			- <a href="/a/b">Concept: User's page</a>
-		</li>
-	</ul>
-</div> -->
+<div class="mx-auto max-w-5xl   px-6  lg:px-8  text-[#D9D9D9] w-full h-56">
+
+<div id="contribute" class=" grid grid-cols-1 md:grid-cols-2">
+    <div class="left-side ">
+        <div class="big-text montserrat text-4xl font-semibold text-[#D9D9D9]">
+            Get started with
+            <br>
+            mCMS now
+        </div>
+    </div>
+    <div class="   ">
+        <div class="xtext ">Keep notes, share your thoughts, track tasks and do everything can be done with markdown effortlessly here.</div>
+        <div class="buttons py-4 flex items-center  gap-4 ">
+            <a href="/register" class=" flex bg-[#5F5BF1] border border-[#5F5BF1] hover:bg-[#5F5BF1]/80 p-2.5 rounded text-white/90 items-center justify-center gap-1">
+            Get Started <ExternalLink class="w-4 h-4"/>
+            </a>
+
+            <a href="https://github.com/shrestho0/minimal-cms" class=" flex border  p-2.5 rounded text-white/90 items-center justify-center gap-1">
+                Contribute <HeartHandshake class="w-4 h-4"/>
+                </a>
+        </div>
+    </div>
+
+</div>
+<hr>
+<div class="flex items-center justify-center pt-8">
+    copyright (c) mCMS 2024. All rights reserved. Built with <span class="text-[#5F5BF1] font-bold ">&nbsp;{'<3'}&nbsp;</span> by &nbsp; <a href="https://github.com/shrestho0" class=" underline hover:text-white">shrestho0</a>.
+</div>
+</div>
+
+</main>
+
+
+<style>
+	.home-bg {
+		background: rgb(16, 16, 25);
+		background: -moz-linear-gradient(180deg, rgba(16, 16, 25, 1) 50%, rgba(34, 38, 60, 1) 100%);
+		background: -webkit-linear-gradient(180deg, rgba(16, 16, 25, 1) 50%, rgba(34, 38, 60, 1) 100%);
+		background: linear-gradient(180deg, rgba(16, 16, 25, 1) 50%, rgba(34, 38, 60, 1) 100%);
+	}
+
+	.home-bg-rev {
+		background: rgb(34, 38, 60);
+		background: -moz-linear-gradient(180deg, rgba(34, 38, 60, 1) 50%, rgba(16, 16, 25, 1) 100%);
+		background: -webkit-linear-gradient(180deg, rgba(34, 38, 60, 1) 50%, rgba(16, 16, 25, 1) 100%);
+		background: linear-gradient(180deg, rgba(34, 38, 60, 1) 50%, rgba(16, 16, 25, 1) 100%);
+	}
+
+	.hero-gradient {
+		background: radial-gradient(circle 50vh at 50% 25%, #101019, #5f5bf1 60%);
+		filter: blur(180px);
+		height: 30vh;
+		opacity: 1;
+		position: fixed;
+		top: -5vh;
+		left: 0vw;
+		width: 100%;
+		/* z-index: -1; */
+	}
+</style>

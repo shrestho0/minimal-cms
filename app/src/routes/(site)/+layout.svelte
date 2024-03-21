@@ -5,6 +5,6 @@
 		setMode('dark');
 	});
 </script>
-
-<slot />
-<!-- <ModeWatcher defaultMode="dark" /> -->
+ 
+ 	<slot />
+ <!-- <ModeWatcher defaultMode="dark" /> -->

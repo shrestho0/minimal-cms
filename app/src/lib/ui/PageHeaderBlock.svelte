@@ -12,7 +12,7 @@
 	import SidePanel from './SidePanel.svelte';
 	import { Alert } from '@/components/ui/alert';
 	import { UserRole, type Admin, type PageStatus, type User } from '@/types/entity';
-	import Page from '../../routes/(site)/+page.svelte';
+	import Page from '../../routes/(site)/__+page.svelte';
 
 	export let user: User | Admin;
 	export let title = '';
