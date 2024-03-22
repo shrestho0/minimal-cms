@@ -10,19 +10,19 @@
 	import { ModeWatcher, mode, setMode } from 'mode-watcher';
 	import { Alert } from '@/components/ui/alert';
 
-	let tempMode: 'light' | 'dark' = 'dark';
-	onMount(() => {
-		mode.subscribe((val) => {
-			tempMode = val as 'light' | 'dark';
-		});
+	// let tempMode: 'light' | 'dark' = 'dark';
+	// onMount(() => {
+	// 	mode.subscribe((val) => {
+	// 		tempMode = val as 'light' | 'dark';
+	// 	});
 
-		console.log('mounted');
-		setMode('light');
-		loading = false;
-	});
-	onDestroy(() => {
-		setMode(tempMode);
-	});
+	// 	console.log('mounted');
+	// 	setMode('light');
+	// 	loading = false;
+	// });
+	// onDestroy(() => {
+	// 	setMode(tempMode);
+	// });
 	export let data: {
 		pageContent: any;
 		siteHeader: any;

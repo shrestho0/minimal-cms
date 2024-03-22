@@ -1,10 +1,12 @@
 <script>
 	import { ModeWatcher, setMode, mode } from 'mode-watcher';
 	import { onMount } from 'svelte';
-	onMount(() => {
-		setMode('dark');
-	});
+
 </script>
- 
+
+
+
+ <span class="hero-gradient"></span>
+
  	<slot />
  <!-- <ModeWatcher defaultMode="dark" /> -->

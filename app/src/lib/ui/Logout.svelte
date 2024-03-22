@@ -13,6 +13,7 @@
 </script>
 
 <form
+class={formClasses}
 	action="/logout"
 	method="post"
 	use:enhance={() => {

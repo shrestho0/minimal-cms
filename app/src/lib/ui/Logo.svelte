@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { AppLinks } from '@/utils/app-links';
 
-	export let className = 'text-gray-900 dark:text-white';
+	export let className = 'text-gray-900';
 </script>
 
 <a

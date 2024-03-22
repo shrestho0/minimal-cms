@@ -14,7 +14,6 @@
 		open = !open;
 	}
 
-	export let showMenuItems = true;
 
 	export const menuitems = [
 		{
@@ -32,8 +31,7 @@
 		{
 			title: 'Contribute',
 			id: 'contribute'
-		},
-
+		}
 	] as Array<{ title: string; id: string }>;
 
 	let innerWidth: number;
@@ -93,17 +91,18 @@
 </script>
 
 <svelte:window bind:innerWidth bind:scrollY />
-<div class="fixed z-50 mx-auto grid w-full grid-cols-12 p-4 backdrop-blur">
-	<div class="col-span-2 w-full flex justify-center  ">
-		<a
-			on:click={handleAnchorClick}
-			href={AppLinks.HOME}
-			class=""
-		>
+<div
+	class="fixed left-0 z-50 mx-auto grid w-full grid-cols-2 md:grid-cols-12 {navbareKajHobe
+		? 'border-b border-gray-100/80 bg-primary/50'
+		: ''} p-4 backdrop-blur"
+>
+	<div class="col-span-1 flex w-full items-center md:col-span-2 md:justify-center">
+		<a on:click={handleAnchorClick} href={AppLinks.HOME} class="">
 			<Logo className="text-white/90" />
 		</a>
 	</div>
-	<div class="col-span-7 relative text-center"
+	<div
+		class="relative hidden text-center md:col-span-7 md:flex items-center justify-center "
 		role="button"
 		tabindex="0"
 		on:click={() => {
@@ -121,26 +120,98 @@
 			>
 		{/each}
 	</div>
-	<div class="col-span-3 ">	{#if $page?.data.user}
-		<Button
-			data-sveltekit-reload
-			href={AppLinks.USER_DASHBOARD}
-			variant="outline"
-			class="bg-transparent text-white/90">Dashboard</Button
-		>
-		<Logout btnClasses="bg-transparent text-white/90" />
-	{:else if $page?.data.admin}
-		<Button href={AppLinks.ADMIN_DASHBOARD} variant="outline">Dashboard</Button>
-	{:else}
-		<Button href="/login" variant="outline" class="bg-transparent text-white/90">Login</Button>
-		<Button href="/register" variant="outline">Register</Button>
-	{/if}</div>
-</div>
 
-<style>
-	/* .backdrop-blur {
-    --tw-backdrop-blur: blur(8px);
-    -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-    backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)
-} */
-</style>
+
+	<div class="block w-full text-right md:hidden">
+		<button
+			class="relative h-10 w-10 text-gray-500 focus:outline-none md:hidden"
+			on:click={toggleMobileMenu}
+		>
+			<span class="sr-only">Open main menu</span>
+			<div class="absolute left-1/2 top-1/2 block w-5 -translate-x-1/2 -translate-y-1/2 transform">
+				<span
+					aria-hidden="true"
+					class=" {open
+						? 'rotate-45'
+						: '-translate-y-1.5'}  absolute block h-0.5 w-5 transform bg-current transition duration-200 ease-in-out"
+				>
+				</span>
+				<span
+					aria-hidden="true"
+					class="{open
+						? 'opacity-0'
+						: ''} absolute block h-0.5 w-5 transform bg-current transition duration-200 ease-in-out"
+				>
+				</span>
+				<span
+					aria-hidden="true"
+					class="{open
+						? '-rotate-45'
+						: 'translate-y-1.5'} absolute block h-0.5 w-5 transform bg-current transition duration-200 ease-in-out"
+				>
+				</span>
+			</div>
+		</button>
+
+		{#if open}
+		<div
+			role="button"
+			on:click={() => {
+				if (onMobile) toggleMobileMenu();
+			}}
+			tabindex="0"
+			on:keypress
+
+			in:slide
+			out:slide
+
+
+			class="mobile-menu focus:shadow-outline absolute left-0 w-full flex-col text-left transition-all ease-out flex my-3 py-6 items-center gap-3 rounded-lg border-gray-100/80 bg-primary/80 text-lg font-semibold tracking-widest text-white focus:outline-none"
+		>
+			{#each menuitems as items, idx (items.title)}
+				<a
+					href={'#' + items.id}
+					on:click={handleAnchorClick}
+					class="rounded-md px-3 py-1.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+			{selectedIdx != undefined && selectedIdx == idx ? 'underline' : ''}
+			">{items.title}</a
+				>
+			{/each}
+
+			{#if $page?.data.user}
+			<Button
+				data-sveltekit-reload
+				href={AppLinks.USER_DASHBOARD}
+				variant="outline"
+				class="w-full bg-transparent text-white/90">Dashboard</Button
+			>
+			<Logout formClasses="w-full " btnClasses="w-full bg-transparent text-white/90" />
+		{:else if $page?.data.admin}
+			<Button href={AppLinks.ADMIN_DASHBOARD} variant="outline">Dashboard</Button>
+		{:else}
+			<Button href="/login" variant="outline" class="bg-transparent  w-full text-white/90">Login</Button>
+			<Button href="/register" class="w-full text-black" variant="outline">Register</Button>
+		{/if}
+		</div>
+		{/if}
+	</div>
+
+	
+	<div class=" col-span-3 hidden gap-3 md:flex">
+		{#if $page?.data.user}
+			<Button
+				data-sveltekit-reload
+				href={AppLinks.USER_DASHBOARD}
+				variant="outline"
+				class="bg-transparent text-white/90">Dashboard</Button
+			>
+			<Logout btnClasses="bg-transparent text-white/90" />
+		{:else if $page?.data.admin}
+			<Button href={AppLinks.ADMIN_DASHBOARD} variant="outline">Dashboard</Button>
+		{:else}
+			<Button href="/login" variant="outline" class="bg-transparent text-white/90">Login</Button>
+			<Button href="/register" variant="outline">Register</Button>
+		{/if}
+	</div>
+
+</div>

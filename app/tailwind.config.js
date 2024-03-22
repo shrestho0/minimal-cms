@@ -16,6 +16,8 @@ const config = {
 		},
 		extend: {
 			colors: {
+				"new-accent": "#5F5BF1",
+				"new-ui": "#D9D9D9",
 				border: "hsl(var(--border) / <alpha-value>)",
 				input: "hsl(var(--input) / <alpha-value>)",
 				ring: "hsl(var(--ring) / <alpha-value>)",

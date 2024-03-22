@@ -44,7 +44,7 @@
 			error: fieldErrors.passwordConfirm,
 			value: ''
 		}
-	];
+	] as any;
 
 	function populateRandomData(idx: number) {
 		const randomData = dummyData[idx];
@@ -97,11 +97,11 @@
 	}
 </script>
 
-<div class="flex h-[80%] flex-col items-center justify-center space-y-6 lg:p-6 lg:pt-0">
+<div class="flex h-[80%] flex-col items-center text-new-ui justify-center space-y-6 lg:p-6 lg:pt-0">
 	<div class="flex flex-col gap-8 md:gap-16">
 		<div class="flex flex-col space-y-2 text-center">
-			<h1 class="text-2xl font-semibold tracking-tight">Create an account</h1>
-			<p class="text-sm text-muted-foreground">Fill out the form below to create your account</p>
+			<h1 class="text-3xl text-white  font-semibold tracking-tight ">Create an account</h1>
+			<p class="text-sm ">Fill out the form below to create your account</p>
 		</div>
 		<DummyDataSection {populateRandomData} />
 
@@ -155,7 +155,7 @@
 							</Alert.Description>
 						</Alert.Root>
 					{/if}
-					<Button type="submit" disabled={isLoading}>
+					<Button type="submit" disabled={isLoading} class="bg-new-accent hover:bg-new-accent/80 text-new-ui">
 						{#if isLoading}
 							<CircleDotDashed
 								class=" mr-2 h-4 w-4 animate-spin stroke-white dark:stroke-stone-950"
@@ -166,7 +166,7 @@
 				</div>
 			</form>
 		</div>
-		<p class="px-8 text-center text-sm text-muted-foreground">
+		<p class="px-8 text-center text-sm ">
 			By clicking continue, you agree to our{' '}
 			<a href="/terms" class="underline underline-offset-4 hover:text-primary">
 				Terms of Service

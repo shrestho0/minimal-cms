@@ -48,7 +48,7 @@
 	const fields = [
 		{ name: 'email', placeholder: 'Email', type: 'email', value: '' },
 		{ name: 'password', placeholder: 'Password', type: 'password', value: '' }
-	];
+	] as any;
 
 	function populateRandomData(idx: number) {
 		const randomData = dummyData[idx];
@@ -63,11 +63,11 @@
 	}
 </script>
 
-<div class="flex h-[80%] flex-col items-center justify-center space-y-6 lg:p-6 lg:pt-0">
+<div class="flex  flex-col items-center text-new-ui justify-center space-y-6 lg:p-6 lg:pt-0">
 	<div class="flex flex-col gap-8 md:gap-16">
 		<div class="flex flex-col space-y-2 text-center">
-			<h1 class="text-2xl font-semibold tracking-tight">Login to your account</h1>
-			<p class="text-muted-foreground text-sm">Enter email and password below to login</p>
+			<h1 class="text-3xl text-white font-semibold tracking-tight ">Login to your account</h1>
+			<p class=" text-sm">Enter email and password below to login</p>
 		</div>
 
 		<DummyDataSection {populateRandomData} />
@@ -109,7 +109,7 @@
 							</Alert.Description>
 						</Alert.Root>
 					{/if}
-					<Button type="submit" disabled={isLoading}>
+					<Button class=" bg-new-accent hover:bg-new-accent/80 text-new-ui" type="submit" disabled={isLoading}>
 						{#if isLoading}
 							<CircleDotDashed
 								class="mr-2 h-4 w-4 animate-spin stroke-white dark:stroke-stone-950"
@@ -120,7 +120,7 @@
 				</div>
 			</form>
 		</div>
-		<p class="text-muted-foreground px-8 text-center text-sm">
+		<p class="  px-8 text-center text-sm">
 			By clicking continue, you agree to our{' '}
 			<a href="/terms" class="hover:text-primary underline underline-offset-4">
 				Terms of Service

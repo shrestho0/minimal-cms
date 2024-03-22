@@ -7,18 +7,15 @@
  
 @layer base {
   :root {
+ 
 
-    /*
-    Custom
-    */
-    --brand: 162 84% 54%
     --background: 0 0% 5%;
 
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
  
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted: 0 0% 85%;
+    --muted-foreground: 0 0% 16%;
  
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
@@ -67,24 +64,7 @@
 
 }
 
-
-
-/* font-family: 'Poppins', sans-serif; */
-
-/* Custom scrollbar */
-/* ::-webkit-scrollbar-track {
-	border: none;
-	background-color: white;
-}
-
-::-webkit-scrollbar {
-	width: 10px;
-	background-color: white;
-}
-
-::-webkit-scrollbar-thumb {
-	background-color: #000000;
-} */
+ 
 
 ::-webkit-scrollbar-track {
   display: none;
@@ -97,21 +77,7 @@
 
 ::-webkit-scrollbar-thumb {
   display: none;}
-
-/* .dark {
-	::-webkit-scrollbar-track {
-		border: none;
-		background-color: rgb(12 10 9);
-	}
-	::-webkit-scrollbar {
-		width: 10px;
-		background-color: rgb(12 10 9);
-	}
-	::-webkit-scrollbar-thumb {
-		background-color: white;
-	}
-} */
-
+ 
 ::-moz-selection {
 	color: white;
 	background: black;
@@ -127,40 +93,32 @@
 .dark ::selection {
 	color: black;
 	background: white;
-}
-/* 
-.poppins-light {
-  font-family: "Poppins", sans-serif;
-  font-weight: 300;
-  font-style: normal;
+} 
+
+
+ .hero-gradient {
+	background: radial-gradient(circle 50vh at 50% 25%, #101019, #5f5bf1 60%);
+	filter: blur(180px);
+	height: 30vh;
+	opacity: 1;
+	position: fixed;
+	top: -5vh;
+	left: 0vw;
+	width: 100%;
 }
 
-.poppins-regular {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
+	.home-bg {
+		background: rgb(16, 16, 25);
+		background: -moz-linear-gradient(180deg, rgba(16, 16, 25, 1) 50%, rgba(34, 38, 60, 1) 100%);
+		background: -webkit-linear-gradient(180deg, rgba(16, 16, 25, 1) 50%, rgba(34, 38, 60, 1) 100%);
+		background: linear-gradient(180deg, rgba(16, 16, 25, 1) 50%, rgba(34, 38, 60, 1) 100%);
+	}
 
-.poppins-medium {
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-}
+	.home-bg-rev {
+		background: rgb(34, 38, 60);
+		background: -moz-linear-gradient(180deg, rgba(34, 38, 60, 1) 50%, rgba(16, 16, 25, 1) 100%);
+		background: -webkit-linear-gradient(180deg, rgba(34, 38, 60, 1) 50%, rgba(16, 16, 25, 1) 100%);
+		background: linear-gradient(180deg, rgba(34, 38, 60, 1) 50%, rgba(16, 16, 25, 1) 100%);
+	}
 
-.poppins-semibold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-style: normal;
-}
-
-.poppins-bold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.poppins-extrabold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 800;
-  font-style: normal;
-} */
+  
