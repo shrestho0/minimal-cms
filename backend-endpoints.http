@@ -1,0 +1,266 @@
+
+
+@host = http://127.0.0.1:3069
+
+@userDashboard = user/dashboard
+@userPages = user/pages
+@userProfile = user/profile
+@userSiteFooter = user/site-footer
+@userSiteHeader = user/site-header
+@userSiteStyle = user/site-style
+
+### Tokens 
+@userAccessToken = 
+@userRefToken = 
+
+@adminAccessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBQ0NFU1MiLCJyb2xlIjoiQURNSU4iLCJjcmVhdGVkIjoiMjAyNC0wMy0yNFQwMjowNzo1MiIsImlzcyI6Im1jbXMiLCJuYW1lIjoiYWRtaW5YIiwiaWQiOiJlOWI2YTA1ZC0yZTA3LTQ3OTItYTIzNi1iNTZlZDg5NjMzZjMiLCJleHAiOjE3MTEyMzIxMDksInVwZGF0ZWQiOiIyMDI0LTAzLTI0VDAyOjIyOjAzIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiYWRtaW5YIn0.SxTyVZ8bwiZ-zrDJQnO-1GRuB7G-OMrI4iIHrCDg9XE
+@adminRefreshToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJSRUZSRVNIIiwicm9sZSI6IkFETUlOIiwiY3JlYXRlZCI6IjIwMjQtMDMtMjRUMDI6MDc6NTIiLCJpc3MiOiJtY21zIiwibmFtZSI6ImFkbWluWCIsImlkIjoiZTliNmEwNWQtMmUwNy00NzkyLWEyMzYtYjU2ZWQ4OTYzM2YzIiwiZXhwIjoxNzExNjYyMzA5LCJ1cGRhdGVkIjoiMjAyNC0wMy0yNFQwMjoyMjowMyIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJ1c2VybmFtZSI6ImFkbWluWCJ9._k3iGCP2Auuk68mL4DJBogtFduDZtCUT-b8L8_VuHaY
+
+@user_username = test02
+@user_email = test02@example.com
+@user_password = test02@example.com
+
+@admin_email = admin@example.com
+@admin_password = admin@example.com
+
+
+########## Authentication ##########
+
+### Register
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+	"name": "{{user_username}}",
+	"email": "{{user_email}}",
+	"username": "{{user_username}}",
+	"password": "{{user_password}}",
+	"passwordConfirm": "{{user_password}}"
+}
+
+
+
+### User Login
+POST {{host}}/auth/tokens
+Content-Type: application/json
+
+{
+	"email": "{{user_email}}",
+	"password": "{{user_password}}"
+}
+
+### Admin Login
+POST {{host}}/auth/tokens
+Content-Type: application/json
+
+{
+	"email": "{{admin_email}}",
+	"password": "{{admin_password}}"
+}
+
+### Auth Refresh
+POST {{host}}/auth/refresh
+Content-Type: application/json
+JWT: {{userRefToken}}
+
+
+### Admin change password
+POST {{host}}/admin/change-password
+Content-Type: application/json
+JWT: {{userAccessToken}}
+
+{
+	"oldPassword": "admin@example.com",
+	"password": "admin@example.com",
+	"passwordConfirm": "admin@example.com"	
+}
+
+### User change password
+POST {{host}}/user/change-password
+Content-Type: application/json
+JWT: {{userAccessToken}}
+
+{
+	"oldPassword": "admin@example.com",
+	"password": "admin@example.com",
+	"passwordConfirm": "admin@example.com"	
+}
+
+### Logout
+
+POST {{host}}/auth/logout
+Content-Type: application/json
+JWT: {{userRefToken}}
+
+
+
+
+
+
+########## User's Dashboard ##########
+GET {{host}}/{{userDashboard}}
+JWT: {{userAccessToken}}
+
+########## User's Pages Management ##########
+
+
+
+
+### List / Filter Pages
+
+GET {{host}}/{{userPages}}?page=1&limit=5&q=&status=all
+Content-Type: application/json
+JWT: {{userAccessToken}}
+
+### Create Page
+POST {{host}}/{{userPages}}
+Content-Type: application/json
+JWT: {{userAccessToken}}
+
+{
+	"title": "New Page ...",
+	"content": "# hello, world!\n## welcome to mCMS",
+	"slug": "test_new_page",
+	"status": "draft"
+}
+
+
+@pageId = 2b74333d-e46a-4847-b057-18ee1efe8d0b
+
+
+#### Get Page
+GET {{host}}/{{userPages}}
+
+### Pages [Delete]
+PATCH {{host}}/{{userPages}}/{{pageId}}
+Content-Type: application/json
+JWT: {{userAccessToken}}
+
+{
+ 	"title": "new page edited",
+	"status": "published",
+	"slug": "abcd123"
+}
+
+
+### Pages [Delete]
+DELETE {{host}}/{{userPages}}
+Content-Type: application/json
+JWT: {{userAccessToken}}
+
+{
+	"id": "{{pageId}}"
+}
+
+
+ 
+
+
+########## User's Profile Management ##########
+
+### Get Profile
+GET {{host}}/{{userProfile}}
+JWT: {{userAccessToken}}
+
+### Update Profile
+PATCH {{host}}/{{userProfile}}
+JWT: {{userAccessToken}}
+Content-Type: application/json
+
+{
+	"title": "updated profile",
+	"content": "# profile updated "
+}
+
+
+########## User's Site Header Management ##########
+
+### Get Site Footer
+GET {{host}}/{{userSiteHeader}}
+JWT: {{userAccessToken}}
+
+### Update Site Footer
+PATCH {{host}}/{{userSiteHeader}}
+JWT: {{userAccessToken}}
+Content-Type: application/json
+
+{
+	"site_title": "abcd"
+}
+
+
+########## User's Site Footer Management ##########
+
+### Get Site Footer
+GET {{host}}/{{userSiteFooter}}
+JWT: {{userAccessToken}}
+
+### Update Site Footer
+PATCH {{host}}/{{userSiteFooter}}
+JWT: {{userAccessToken}}
+Content-Type: application/json
+
+{
+	"text": "abcd"
+}
+
+
+########## User's Site Style Management ##########
+
+### Get Site Footer
+GET {{host}}/{{userSiteStyle}}
+JWT: {{userAccessToken}}
+
+### Update Site Footer
+PATCH {{host}}/{{userSiteStyle}}
+JWT: {{userAccessToken}}
+Content-Type: application/json
+
+{
+	"fontFamily": "Montserrat",
+	"fontLoadUrl": "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+}
+
+
+
+
+
+########## Public Endpoints ##########
+
+### Public Profile Content
+GET {{host}}/profile/{{user_username}}
+
+### Public User's Page Content
+@pageSlug = abcd123
+GET {{host}}/page/{{user_username}}/{{pageSlug}}
+
+### Public Designs
+GET {{host}}/design/{{user_username}}
+
+### Public Stuff [Header, Footer]
+GET {{host}}/stuff/{{user_username}}
+
+
+
+########## Admin Managements ##########
+
+### Admin Data
+GET {{host}}/admin/
+JWT: {{adminAccessToken}}
+
+### Admin Dashboard
+GET {{host}}/admin/dashboard
+JWT: {{adminAccessToken}}
+
+
+########## Admin User Management ##########
+
+### List Users
+GET {{host}}/admin/users?qu=com&limit=5&page=1
+JWT: {{adminAccessToken}}
+
+### List Pages (qu = user id)
+GET {{host}}/admin/pages?status=draft&limit=5&q=&page=1&qu=
+JWT: {{adminAccessToken}}
+
+
