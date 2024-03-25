@@ -13,8 +13,8 @@
 @userAccessToken = 
 @userRefToken = 
 
-@adminAccessToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJBQ0NFU1MiLCJyb2xlIjoiQURNSU4iLCJjcmVhdGVkIjoiMjAyNC0wMy0yNFQwMjowNzo1MiIsImlzcyI6Im1jbXMiLCJuYW1lIjoiYWRtaW5YIiwiaWQiOiJlOWI2YTA1ZC0yZTA3LTQ3OTItYTIzNi1iNTZlZDg5NjMzZjMiLCJleHAiOjE3MTEyMzIxMDksInVwZGF0ZWQiOiIyMDI0LTAzLTI0VDAyOjIyOjAzIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoiYWRtaW5YIn0.SxTyVZ8bwiZ-zrDJQnO-1GRuB7G-OMrI4iIHrCDg9XE
-@adminRefreshToken = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJSRUZSRVNIIiwicm9sZSI6IkFETUlOIiwiY3JlYXRlZCI6IjIwMjQtMDMtMjRUMDI6MDc6NTIiLCJpc3MiOiJtY21zIiwibmFtZSI6ImFkbWluWCIsImlkIjoiZTliNmEwNWQtMmUwNy00NzkyLWEyMzYtYjU2ZWQ4OTYzM2YzIiwiZXhwIjoxNzExNjYyMzA5LCJ1cGRhdGVkIjoiMjAyNC0wMy0yNFQwMjoyMjowMyIsImVtYWlsIjoiYWRtaW5AZXhhbXBsZS5jb20iLCJ1c2VybmFtZSI6ImFkbWluWCJ9._k3iGCP2Auuk68mL4DJBogtFduDZtCUT-b8L8_VuHaY
+@adminAccessToken = 
+@adminRefreshToken = 
 
 @user_username = test02
 @user_email = test02@example.com
@@ -70,9 +70,9 @@ Content-Type: application/json
 JWT: {{userAccessToken}}
 
 {
-	"oldPassword": "admin@example.com",
-	"password": "admin@example.com",
-	"passwordConfirm": "admin@example.com"	
+	"oldPassword": "{{admin_password}}",
+	"password": "hello@@1234",
+	"passwordConfirm": "hello@@1234"	
 }
 
 ### User change password
@@ -81,9 +81,9 @@ Content-Type: application/json
 JWT: {{userAccessToken}}
 
 {
-	"oldPassword": "admin@example.com",
-	"password": "admin@example.com",
-	"passwordConfirm": "admin@example.com"	
+	"oldPassword": "{{user_password}}",
+	"password": "hello@@1234",
+	"passwordConfirm": "hello@@1234"	
 }
 
 ### Logout
