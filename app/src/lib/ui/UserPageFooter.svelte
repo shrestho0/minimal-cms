@@ -17,7 +17,7 @@
 				{#if footerData?.social_json?.length > 0}
 					{#each footerData.social_json as item}
 						<li>
-							<a href={item.href} class="text-black hover:text-black/80">
+							<a href={item.href} class="text-black hover:text-black/80 text-[20px]">
 								{#if item.fa_icon}
 									<i class=" fa-brands fa-{item.fa_icon}"></i>
 								{:else}

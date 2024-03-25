@@ -26,7 +26,7 @@
 			<ul class="flex items-center gap-3">
 				{#each headerData.nav_json as item}
 					<li>
-						<a class="text-white hover:text-white/80" href={item.href}>{item.title}</a>
+						<a class="text-white hover:text-white/80 text-[20px]" href={item.href}>{item.title}</a>
 					</li>
 				{/each}
 			</ul>
