@@ -10,7 +10,7 @@
 		class=" flex flex-col items-center justify-between border p-3 dark:border-border md:flex-row"
 	>
 		<div class="left">
-			<p style="text-black">{footerData.text}</p>
+			<p class="text-black">{footerData.text}</p>
 		</div>
 		<nav>
 			<ul class="flex items-center justify-center gap-2">
