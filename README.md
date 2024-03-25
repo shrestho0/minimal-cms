@@ -12,6 +12,7 @@ DETAILS ON DESCRIPTION.md
 | README.md - this file
 | minimal-cms-schema-diagram.svg - Schema Diagram
 | minimal-cms-wireframe-diagram.svg - Wireframe Diagram
+| build_and_run.sh - Bash Script to build and run backend
 | .github/workflows/deploy.yml - Github Action for Backend Deployment
 ```
 
