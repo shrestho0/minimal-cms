@@ -1,6 +1,11 @@
 
 
-@host = http://127.0.0.1:3069
+@localHost = http://127.0.0.1:3069
+@prodHost = http://172.104.44.175:3069
+
+### Define Host URL here
+@host = {{prodHost}}
+
 
 @userDashboard = user/dashboard
 @userPages = user/pages
@@ -9,7 +14,7 @@
 @userSiteHeader = user/site-header
 @userSiteStyle = user/site-style
 
-### Tokens 
+### Tokens (tokens can be found from [/auth/tokens]'s or [/auth/refresh]'s  response)
 @userAccessToken = 
 @userRefToken = 
 
@@ -21,7 +26,7 @@
 @user_password = test02@example.com
 
 @admin_email = admin@example.com
-@admin_password = admin@example.com
+@admin_password = ANOTHER_VERY_SECURE_PASSWORD
 
 
 ########## Authentication ##########

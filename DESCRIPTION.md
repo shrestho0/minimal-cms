@@ -14,7 +14,7 @@ User registers to the system and gets a user panel. User can manage web pages. W
 
 **Module 2:** User Pages and Profile Management
 
-- Users will be able to create web pages and save to draft or publish page. (draft pages will only visible to the owner of the page)
+- Users will be able to create web pages and save to draft or publish page.
 - User will be able to delete their web pages.
 - User pages filters
 - Users will be able to update contents of their web pages.

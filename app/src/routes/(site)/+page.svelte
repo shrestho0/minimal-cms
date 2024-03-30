@@ -47,8 +47,8 @@
 	<WhatsIncludedSection />
 	<InfiniteQuoteSection />
 	<Faqs />
-	<div class="mx-auto  w-full max-w-5xl px-6 text-[#D9D9D9] lg:px-8">
-		<div id="contribute" class=" grid grid-cols-1 gap-3 md:grid-cols-2">
+	<div class="mx-auto w-full max-w-5xl px-6 text-[#D9D9D9] lg:px-8">
+		<div id="contribute" class=" grid grid-cols-1 gap-3 p-[2rem] md:grid-cols-2">
 			<div class="left-side">
 				<div class="big-text montserrat text-4xl font-semibold text-[#D9D9D9]">
 					Get started with
@@ -80,18 +80,17 @@
 		</div>
 		<hr class="col-span-2" />
 
-	<div class="  w-full flex flex-col gap-2 py-4  items-center   justify-center  ">
-		<div>
-			Copyright &copy; mCMS 2024. All rights reserved. 
+		<div class="  flex w-full flex-col items-center justify-center gap-2 py-4">
+			<div>Copyright &copy; mCMS 2024. All rights reserved.</div>
+			<div>
+				Built with <span class="font-bold text-[#5F5BF1]">&nbsp;{'<3'}&nbsp;</span> by &nbsp;<a
+					href="https://github.com/shrestho0"
+					class=" underline hover:text-[#D9D9D9]">shrestho0</a
+				>.
+			</div>
 		</div>
-		<div>Built with <span
-			class="font-bold text-[#5F5BF1]">&nbsp;{'<3'}&nbsp;</span
-			> by &nbsp;<a href="https://github.com/shrestho0" class=" underline hover:text-[#D9D9D9]">shrestho0</a>.
-		</div>
-	</div>
 	</div>
 </main>
 
 <style>
-
 </style>

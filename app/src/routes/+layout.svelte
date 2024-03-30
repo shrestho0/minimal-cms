@@ -6,6 +6,7 @@
 	import { tweened } from 'svelte/motion';
 	import { fade, fly, slide } from 'svelte/transition';
 	import '$lib/ui/app.pcss';
+	import { mode, setMode } from 'mode-watcher';
 
 	// progress bar value
 	const p = tweened(0, {
@@ -56,6 +57,7 @@
 	}
 
 	onMount(() => {
+		setMode('light');
 		loading = false;
 	});
 </script>

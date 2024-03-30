@@ -14,6 +14,7 @@
 		open = !open;
 	}
 
+	export let errorPage = false;
 
 	export const menuitems = [
 		{
@@ -93,16 +94,16 @@
 <svelte:window bind:innerWidth bind:scrollY />
 <div
 	class="fixed left-0 z-50 mx-auto grid w-full grid-cols-2 md:grid-cols-12 {navbareKajHobe
-		? 'border-b border-gray-100/80 bg-primary/50'
+		? 'bg-primary/50 border-b border-gray-100/80'
 		: ''} p-4 backdrop-blur"
 >
 	<div class="col-span-1 flex w-full items-center md:col-span-2 md:justify-center">
 		<a on:click={handleAnchorClick} href={AppLinks.HOME} class="">
-			<Logo className="text-white/90" />
+			<Logo className="text-new-ui" />
 		</a>
 	</div>
 	<div
-		class="relative hidden text-center md:col-span-7 md:flex items-center justify-center "
+		class="relative hidden items-center justify-center text-center md:col-span-7 md:flex"
 		role="button"
 		tabindex="0"
 		on:click={() => {
@@ -120,8 +121,6 @@
 			>
 		{/each}
 	</div>
-
-
 	<div class="block w-full text-right md:hidden">
 		<button
 			class="relative h-10 w-10 text-gray-500 focus:outline-none md:hidden"
@@ -154,49 +153,47 @@
 		</button>
 
 		{#if open}
-		<div
-			role="button"
-			on:click={() => {
-				if (onMobile) toggleMobileMenu();
-			}}
-			tabindex="0"
-			on:keypress
-
-			in:slide
-			out:slide
-
-
-			class="mobile-menu focus:shadow-outline absolute left-0 w-full flex-col text-left transition-all ease-out flex my-3 py-6 items-center gap-3 rounded-lg border-gray-100/80 bg-primary/80 text-lg font-semibold tracking-widest text-white focus:outline-none"
-		>
-			{#each menuitems as items, idx (items.title)}
-				<a
-					href={'#' + items.id}
-					on:click={handleAnchorClick}
-					class="rounded-md px-3 py-1.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+			<div
+				role="button"
+				on:click={() => {
+					if (onMobile) toggleMobileMenu();
+				}}
+				tabindex="0"
+				on:keypress
+				in:slide
+				out:slide
+				class="mobile-menu focus:shadow-outline bg-primary/80 absolute left-0 my-3 flex w-full flex-col items-center gap-3 rounded-lg border-gray-100/80 py-6 text-left text-lg font-semibold tracking-widest text-white transition-all ease-out focus:outline-none"
+			>
+				{#each menuitems as items, idx (items.title)}
+					<a
+						href={'#' + items.id}
+						on:click={handleAnchorClick}
+						class="rounded-md px-3 py-1.5 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
 			{selectedIdx != undefined && selectedIdx == idx ? 'underline' : ''}
 			">{items.title}</a
-				>
-			{/each}
+					>
+				{/each}
 
-			{#if $page?.data.user}
-			<Button
-				data-sveltekit-reload
-				href={AppLinks.USER_DASHBOARD}
-				variant="outline"
-				class="w-full bg-transparent text-white/90">Dashboard</Button
-			>
-			<Logout formClasses="w-full " btnClasses="w-full bg-transparent text-white/90" />
-		{:else if $page?.data.admin}
-			<Button href={AppLinks.ADMIN_DASHBOARD} variant="outline">Dashboard</Button>
-		{:else}
-			<Button href="/login" variant="outline" class="bg-transparent  w-full text-white/90">Login</Button>
-			<Button href="/register" class="w-full text-black" variant="outline">Register</Button>
-		{/if}
-		</div>
+				{#if $page?.data.user}
+					<Button
+						data-sveltekit-reload
+						href={AppLinks.USER_DASHBOARD}
+						variant="outline"
+						class="w-full bg-transparent text-white/90">Dashboard</Button
+					>
+					<Logout formClasses="w-full " btnClasses="w-full bg-transparent text-white/90" />
+				{:else if $page?.data.admin}
+					<Button href={AppLinks.ADMIN_DASHBOARD} variant="outline">Dashboard</Button>
+				{:else}
+					<Button href="/login" variant="outline" class="w-full  bg-transparent text-white/90"
+						>Login</Button
+					>
+					<Button href="/register" class="w-full text-black" variant="outline">Register</Button>
+				{/if}
+			</div>
 		{/if}
 	</div>
 
-	
 	<div class=" col-span-3 hidden gap-3 md:flex">
 		{#if $page?.data.user}
 			<Button
@@ -213,5 +210,4 @@
 			<Button href="/register" variant="outline">Register</Button>
 		{/if}
 	</div>
-
 </div>
