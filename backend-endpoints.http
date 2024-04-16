@@ -5,7 +5,7 @@
 
 ### Define Host URL here
 @host = {{prodHost}}
-
+# @host = {{localHost}}
 
 @userDashboard = user/dashboard
 @userPages = user/pages

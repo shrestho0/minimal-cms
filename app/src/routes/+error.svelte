@@ -20,36 +20,38 @@
 <div class="home-bg h-screen w-full p-8">
 	<div class="flex w-full items-center justify-between p-4 md:p-8">
 		<Logo className="text-new-ui  " />
-		<div class="text-new-ui z-10 flex items-center justify-center gap-3">
+		<div class="z-10 flex items-center justify-center gap-3 text-new-ui">
 			{#if $page?.data?.user}
 				<Button
 					href={AppLinks.USER_DASHBOARD}
 					variant="outline"
-					class="text-new-ui  bg-transparent ">Dashboard</Button
+					class="bg-transparent  text-new-ui ">Dashboard</Button
 				>{:else}
 				<!-- <LightSwitch /> -->
-				<Button href={AppLinks.USER_REGISTER} variant="outline" class="text-new-ui bg-transparent"
+				<Button href={AppLinks.USER_REGISTER} variant="outline" class="bg-transparent text-new-ui"
 					>Register</Button
 				>
-				<Button href={AppLinks.LOGIN} variant="outline" class="text-new-ui  bg-transparent "
+				<Button href={AppLinks.LOGIN} variant="outline" class="bg-transparent  text-new-ui "
 					>Login</Button
 				>
 			{/if}
 		</div>
 	</div>
-	<div class="text-new-ui mx-auto flex h-[80%] flex-col items-center justify-center px-5">
+	<div class="mx-auto flex h-[80%] flex-col items-center justify-center px-5 text-new-ui">
 		<div class="max-w-md text-center">
+			<!-- 
 			<h2 class="mb-8 text-9xl font-bold">
 				<span class="sr-only">Error</span> <span class=" text-white/90">{$page.status}</span>
 			</h2>
+			-->
 			<p class="text-3xl font-semibold md:text-3xl">Sorry, {$page.error?.message}</p>
-			<p class=" text-new-ui/90 mb-8 mt-4 text-lg">
+			<p class=" mb-8 mt-4 text-lg text-new-ui/90">
 				But dont worry, you can find plenty of other things on our homepage.
 			</p>
 			<a
 				rel="noopener noreferrer"
 				href="/"
-				class="btn hover:bg-new-accent ml-4 rounded border p-2 hover:text-white">Back to homepage</a
+				class="btn ml-4 rounded border p-2 hover:bg-new-accent hover:text-white">Back to homepage</a
 			>
 		</div>
 	</div>
