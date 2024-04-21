@@ -43,6 +43,7 @@ public class PublicPageService {
         if (page != null) {
             page.setUser(null);
             resObj.put("success", true);
+            user.setPasswordHash(null); // to hide password hash
             resObj.put("owner", user);
             resObj.put("page", page);
         } else {
