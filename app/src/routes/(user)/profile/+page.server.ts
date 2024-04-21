@@ -7,9 +7,9 @@ import { dummyPages } from "@/dev/dummyPages";
 import { parseTokenFromCookie } from "@/utils/index.server";
 
 export const load: PageServerLoad = async ({ locals, params, fetch, cookies }) => {
-    if (!locals?.user) {
-        redirect(307, AppLinks.LOGIN);
-    }
+    // if (!locals?.user) {
+    //     redirect(307, AppLinks.LOGIN);
+    // }
 
     const resObj = {
         pageExists: false,

@@ -17,7 +17,7 @@
 				{#if footerData?.social_json?.length > 0}
 					{#each footerData.social_json as item}
 						<li>
-							<a href={item.href} class="text-black hover:text-black/80 text-[20px]">
+							<a href={item.href} class="text-[20px] text-black hover:text-black/80">
 								{#if item.fa_icon}
 									<i class=" fa-brands fa-{item.fa_icon}"></i>
 								{:else}
@@ -30,8 +30,8 @@
 			</ul>
 		</nav>
 		<div class="w-auto">
-			<div class="flex items-center justify-center gap-3">
-				Powered By <Logo className="text-black dark:text-black" />
+			<div class="flex items-center justify-center gap-1">
+				Powered By<Logo className="text-black dark:text-black" />
 			</div>
 		</div>
 	</div>

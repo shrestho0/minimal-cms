@@ -19,7 +19,7 @@
 		console.log('mounted: profile page', data);
 		setTimeout(() => {
 			loading = false;
-		}, 1000);
+		}, 500);
 	});
 </script>
 
@@ -31,9 +31,14 @@
 		crossorigin="anonymous"
 		referrerpolicy="no-referrer"
 	/>
+	<title>
+		{data?.pageContent?.title} | {data?.siteHeader?.site_title
+			? data?.siteHeader?.site_title
+			: 'mCMS'}
+	</title>
 </svelte:head>
 {#if !loading}
-	<UserPageTitle title={data?.pageContent?.title} />
+	<!-- <UserPageTitle title={data?.pageContent?.title} /> -->
 	<Markdown source={data?.pageContent.content} />
 {:else}
 	<div class=" flex h-full items-center justify-center bg-white dark:bg-white">

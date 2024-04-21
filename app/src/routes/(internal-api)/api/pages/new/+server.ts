@@ -1,6 +1,7 @@
 import type { RequestNewPage } from "@/types/load-data";
 import { AppLinks, BackendApiEndpoints } from "@/utils/app-links";
 import { parseTokenFromCookie } from "@/utils/index.server";
+import { ErrorMessages } from "@/utils/messages";
 import { validRegex } from "@/utils/validations";
 import { json, redirect, type RequestHandler } from "@sveltejs/kit";
 
@@ -15,15 +16,28 @@ export const POST: RequestHandler = async ({ locals, request, url, fetch, cookie
 
     // Validations
     const errors = { title: "", slug: "", content: "", }
+    // if (!validRegex.pageSlug.test(slug)) {
+    //     errors.slug = "Invalid Slug. Slug should be 3-20 characters long and can contain a-z A-Z 0-9 - ."
+    // }
     if (!validRegex.pageSlug.test(slug)) {
-        errors.slug = "Invalid Slug. Slug should be 3-20 characters long and can contain a-z A-Z 0-9 - ."
+        errors.slug = ErrorMessages.PAGE_SLUG_INVALID;
     }
+    // if (!validRegex.pageTitle.test(title)) {
+    //     errors.title = "Invalid Title. Title should be 5-20 characters long"
+    // }
+    // validate data
     if (!validRegex.pageTitle.test(title)) {
-        errors.title = "Invalid Title. Title should be 5-20 characters long"
+        errors.title = ErrorMessages.PAGE_TITLE_INVALID;
     }
-    if (content?.length < 5) {
-        errors.content = "Content should be 5-1000 characters long"
+    // if (content?.length < 5) {
+    //     errors.content = "Content should be 5-1000 characters long"
+    // }
+
+
+    if (!validRegex.pageContent.test(content)) {
+        errors.content = ErrorMessages.PAGE_CONTENT_INVALID + `. Provided: ${content.length} characters`;
     }
+
     if (errors.title || errors.slug || errors.content) {
         return json({ success: false, message: "", errors }, {
             status: 400,
